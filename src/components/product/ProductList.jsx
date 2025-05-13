@@ -1,20 +1,27 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaFilter, FaTimes, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { FaFilter, FaTimes, FaSortAmountDown, FaSortAmountUp, FaSearch } from 'react-icons/fa';
+import gsap from 'gsap';
 
 export default function ProductList({ initialProducts, selectedCategory }) {
   const [products, setProducts] = useState(initialProducts || []);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState(initialProducts || []);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const productListRef = useRef(null);
+  // Make sure products are visible by default
+  const isInView = useInView(productListRef, { once: true, amount: 0.1, initialInView: true });
   
   // Check for touch device on client-side only
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window);
   }, []);
+  
   const [filters, setFilters] = useState({
     category: selectedCategory || '',
     minPrice: '',
@@ -22,6 +29,57 @@ export default function ProductList({ initialProducts, selectedCategory }) {
     inStock: false,
     sortBy: 'newest',
   });
+  
+  // Add background particle effect - with error handling
+  useEffect(() => {
+    try {
+      if (!productListRef.current) return;
+      
+      const container = productListRef.current;
+      const particles = [];
+      const particleCount = 15; // Reduced count for better performance
+      
+      // Create particles
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'absolute rounded-full bg-purple-500/5 pointer-events-none';
+        
+        // Random size
+        const size = Math.random() * 100 + 50;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        container.appendChild(particle);
+        particles.push(particle);
+        
+        // Animate each particle
+        gsap.to(particle, {
+          x: (Math.random() - 0.5) * 100,
+          y: (Math.random() - 0.5) * 100,
+          opacity: Math.random() * 0.3 + 0.1,
+          duration: Math.random() * 20 + 10,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: Math.random() * 5
+        });
+      }
+      
+      return () => {
+        particles.forEach(particle => {
+          gsap.killTweensOf(particle);
+          particle.remove();
+        });
+      };
+    } catch (error) {
+      console.error('Error in particle effect:', error);
+      // Continue without particles if there's an error
+    }
+  }, []);
 
   // Apply filters whenever they change
   useEffect(() => {
@@ -32,6 +90,16 @@ export default function ProductList({ initialProducts, selectedCategory }) {
       result = result.filter(product => 
         product.category && 
         product.category.toLowerCase() === filters.category.toLowerCase()
+      );
+    }
+    
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(product => 
+        (product.name && product.name.toLowerCase().includes(query)) ||
+        (product.description && product.description.toLowerCase().includes(query)) ||
+        (product.category && product.category.toLowerCase().includes(query))
       );
     }
 
@@ -141,26 +209,80 @@ export default function ProductList({ initialProducts, selectedCategory }) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.1,
+        delayChildren: 0.2
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
+    hidden: (i) => ({
+      y: 50,
+      opacity: 0,
+      scale: 0.9,
+      rotateX: -10
+    }),
+    visible: (i) => ({
       y: 0,
-      opacity: 1
-    }
+      opacity: 1,
+      scale: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+        delay: i * 0.05
+      }
+    })
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div ref={productListRef} className="container mx-auto px-4 py-8 relative overflow-hidden">
+      {/* Search bar */}
+      <motion.div 
+        className="mb-6 relative"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className={`relative transition-all duration-300 ${isSearchFocused ? 'ring-2 ring-purple-500' : ''}`}>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+            className="w-full bg-gray-800 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          
+          {searchQuery && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+              onClick={() => setSearchQuery('')}
+            >
+              <FaTimes />
+            </motion.button>
+          )}
+        </div>
+      </motion.div>
+      
       {/* Filter toggle button (mobile) */}
-      <div className="md:hidden mb-4">
-        <button
+      <motion.div 
+        className="md:hidden mb-4"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <motion.button
           onClick={() => setIsFilterOpen(!isFilterOpen)}
           className="flex items-center justify-center w-full py-2 bg-gray-800 text-white rounded-lg"
+          whileHover={{ scale: 1.02, backgroundColor: '#4B5563' }}
+          whileTap={{ scale: 0.98 }}
         >
           {isFilterOpen ? (
             <>
@@ -171,18 +293,19 @@ export default function ProductList({ initialProducts, selectedCategory }) {
               <FaFilter className="mr-2" /> Show Filters
             </>
           )}
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Filters sidebar */}
         <AnimatePresence>
           {(isFilterOpen || !isTouchDevice) && (
             <motion.aside
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 'auto', opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              className="md:w-64 bg-gray-800 rounded-lg p-4 overflow-hidden"
+              initial={{ width: 0, opacity: 0, x: -50 }}
+              animate={{ width: 'auto', opacity: 1, x: 0 }}
+              exit={{ width: 0, opacity: 0, x: -50 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="md:w-64 bg-gray-800 rounded-lg p-4 overflow-hidden shadow-lg border border-gray-700"
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white">Filters</h2>
@@ -271,56 +394,120 @@ export default function ProductList({ initialProducts, selectedCategory }) {
         {/* Product grid */}
         <div className="flex-1">
           {/* Results info */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2 sm:mb-0">
-              {filters.category || 'All Products'}
-              <span className="text-gray-400 text-lg ml-2">
-                ({filteredProducts.length} items)
+          <motion.div 
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <motion.h2 
+              className="text-2xl font-bold text-white mb-2 sm:mb-0"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <span className="relative">
+                {searchQuery ? `Search: "${searchQuery}"` : (filters.category || 'All Products')}
+                <motion.div 
+                  className="absolute -bottom-1 left-0 h-0.5 bg-purple-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                />
               </span>
-            </h2>
+              <motion.span 
+                className="text-gray-400 text-lg ml-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                ({filteredProducts.length} items)
+              </motion.span>
+            </motion.h2>
             
-            <div className="flex items-center">
+            <motion.div 
+              className="flex items-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               <span className="text-gray-400 mr-2 hidden sm:inline">Sort:</span>
-              <select
+              <motion.select
                 name="sortBy"
                 value={filters.sortBy}
                 onChange={handleFilterChange}
-                className="bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 10 }}
               >
                 <option value="newest">Newest</option>
                 <option value="price-low-high">Price: Low to High</option>
                 <option value="price-high-low">Price: High to Low</option>
                 <option value="rating">Highest Rated</option>
-              </select>
-            </div>
-          </div>
+              </motion.select>
+            </motion.div>
+          </motion.div>
 
           {filteredProducts.length > 0 ? (
             <motion.div
               variants={containerVariants}
               initial="hidden"
-              animate="visible"
+              animate="visible" // Always show products
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
-              {filteredProducts.map((product) => (
-                <motion.div key={product._id} variants={itemVariants}>
+              {filteredProducts.map((product, index) => (
+                <motion.div 
+                  key={product._id || index} 
+                  variants={itemVariants}
+                  custom={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 24,
+                    delay: index * 0.05 // Staggered animation
+                  }}
+                >
                   <ProductCard product={product} />
                 </motion.div>
               ))}
             </motion.div>
           ) : (
-            <div className="bg-gray-800 rounded-lg p-8 text-center">
-              <h3 className="text-xl text-white mb-2">No products found</h3>
-              <p className="text-gray-400">
+            <motion.div 
+              className="bg-gray-800 rounded-lg p-8 text-center border border-gray-700 shadow-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.h3 
+                className="text-xl text-white mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                No products found
+              </motion.h3>
+              <motion.p 
+                className="text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
                 Try adjusting your filters or check back later for new products.
-              </p>
-              <button
+              </motion.p>
+              <motion.button
                 onClick={clearFilters}
                 className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                whileHover={{ scale: 1.05, backgroundColor: '#9333ea' }}
+                whileTap={{ scale: 0.95 }}
               >
                 Clear Filters
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           )}
         </div>
       </div>

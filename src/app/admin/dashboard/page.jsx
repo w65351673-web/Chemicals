@@ -50,7 +50,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <div className="fixed inset-y-0 left-0 w-64 bg-gray-800 shadow-lg z-10">
         <div className="p-6 bg-purple-600">
-          <h1 className="text-xl font-bold text-white">MidnightChems</h1>
+          <h1 className="text-xl font-bold text-white">Darkchemsite</h1>
           <p className="text-purple-200 text-sm">Admin Dashboard</p>
         </div>
         
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
           <p className="text-gray-400 mt-2">
-            Welcome to your MidnightChems admin dashboard
+            Welcome to your Darkchemsite admin dashboard
           </p>
         </div>
         

@@ -84,12 +84,25 @@ export default function CartProvider({ children }) {
     });
   };
 
-  const removeFromCart = (itemId, variantId = null) => {
+  const removeFromCart = (itemId, variantId = null, grams = null) => {
     setCart(prevCart => {
-      const updatedCart = prevCart.filter(
-        item => !(item.id === itemId && 
-          (variantId ? item.variant?._id === variantId : !item.variant))
-      );
+      const updatedCart = prevCart.filter(item => {
+        if (item.id !== itemId) return true;
+        // If variantId is provided and both variants have _id, compare _id
+        if (variantId && item.variant && item.variant._id) {
+          return item.variant._id !== variantId;
+        }
+        // If grams is provided, compare grams
+        if (grams && item.variant && item.variant.grams) {
+          return item.variant.grams !== grams;
+        }
+        // If no variant, remove if item.variant is falsy
+        if (!variantId && !grams && !item.variant) {
+          return false;
+        }
+        // Otherwise, keep item
+        return true;
+      });
       setCartAction('removed');
       return updatedCart;
     });

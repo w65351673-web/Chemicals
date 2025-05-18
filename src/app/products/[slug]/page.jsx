@@ -11,6 +11,10 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
+  const gramOptions = [15, 20, 25, 50, 100, 500, 1000];
+  const [selectedGrams, setSelectedGrams] = useState(15);
+  const calculateEuroPrice = (grams) => ((grams / 15) * 250).toFixed(2);
+
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -55,7 +59,20 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product, quantity, selectedVariant);
+      // Calculate the euro price for the selected grams
+      const euroPrice = parseFloat(calculateEuroPrice(selectedGrams));
+      // Build a cart item variant object for grams
+      const gramsVariant = {
+        grams: selectedGrams,
+        price: euroPrice,
+      };
+      addToCart(
+        {
+          ...product,
+        },
+        quantity,
+        gramsVariant
+      );
     }
   };
 
@@ -173,32 +190,24 @@ export default function ProductDetailPage() {
               </span>
             </div>
 
-            {/* Price variants */}
-            {product.priceVariants && product.priceVariants.length > 0 ? (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">Select Quantity</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {product.priceVariants.map((variant, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedVariant(variant)}
-                      className={`p-3 rounded-lg border ${
-                        selectedVariant === variant
-                          ? 'border-purple-500 bg-purple-900/30'
-                          : 'border-gray-700 bg-gray-800'
-                      } hover:border-purple-500 transition-colors`}
-                    >
-                      <div className="text-white font-medium">{variant.quantity}g</div>
-                      <div className="text-purple-400">${variant.price.toFixed(2)}</div>
-                    </button>
-                  ))}
-                </div>
+            {/* Euro price dropdown for grams selection */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-white mb-2">Choose quantity</h3>
+              <select
+                className="w-full bg-gray-700 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-2"
+                value={selectedGrams}
+                onChange={e => setSelectedGrams(Number(e.target.value))}
+              >
+                {gramOptions.map(g => (
+                  <option key={g} value={g}>{g}g</option>
+                ))}
+              </select>
+              <div className="text-2xl font-bold text-purple-400">
+                €{calculateEuroPrice(selectedGrams)}
+                <span className="ml-2 text-base text-gray-400">({selectedGrams}g)</span>
               </div>
-            ) : (
-              <div className="text-2xl font-bold text-white mb-6">
-                ${product.price?.toFixed(2) || 'Price not available'}
-              </div>
-            )}
+            </div>
+
 
             {/* Quantity selector */}
             <div className="mb-6">

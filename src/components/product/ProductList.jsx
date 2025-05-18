@@ -7,8 +7,8 @@ import { FaFilter, FaTimes, FaSortAmountDown, FaSortAmountUp, FaSearch } from 'r
 import gsap from 'gsap';
 
 export default function ProductList({ initialProducts, selectedCategory }) {
-  const [products, setProducts] = useState(initialProducts || []);
-  const [filteredProducts, setFilteredProducts] = useState(initialProducts || []);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,6 +16,14 @@ export default function ProductList({ initialProducts, selectedCategory }) {
   const productListRef = useRef(null);
   // Make sure products are visible by default
   const isInView = useInView(productListRef, { once: true, amount: 0.1, initialInView: true });
+  
+  // Initialize products from props
+  useEffect(() => {
+    if (initialProducts && initialProducts.length > 0) {
+      setProducts(initialProducts);
+      setFilteredProducts(initialProducts);
+    }
+  }, [initialProducts]);
   
   // Check for touch device on client-side only
   useEffect(() => {
@@ -29,6 +37,16 @@ export default function ProductList({ initialProducts, selectedCategory }) {
     inStock: false,
     sortBy: 'newest',
   });
+  
+  // Update filters when selectedCategory changes
+  useEffect(() => {
+    if (selectedCategory !== filters.category) {
+      setFilters(prev => ({
+        ...prev,
+        category: selectedCategory || ''
+      }));
+    }
+  }, [selectedCategory]);
   
   // Add background particle effect - with error handling
   useEffect(() => {
@@ -83,14 +101,25 @@ export default function ProductList({ initialProducts, selectedCategory }) {
 
   // Apply filters whenever they change
   useEffect(() => {
+    if (!products || products.length === 0) return;
+    
     let result = [...products];
-
+    
     // Filter by category (case-insensitive)
     if (filters.category) {
-      result = result.filter(product => 
-        product.category && 
-        product.category.toLowerCase() === filters.category.toLowerCase()
-      );
+      result = result.filter(product => {
+        if (!product.category) return false;
+        
+        const productCategory = product.category.toLowerCase();
+        const filterCategory = filters.category.toLowerCase();
+        
+        // Special case for 'research chemicals' to also match 'other'
+        if (filterCategory === 'research chemicals') {
+          return productCategory === 'research chemicals' || productCategory === 'other';
+        }
+        
+        return productCategory === filterCategory;
+      });
     }
     
     // Filter by search query
@@ -184,7 +213,7 @@ export default function ProductList({ initialProducts, selectedCategory }) {
     }
 
     setFilteredProducts(result);
-  }, [filters, products]);
+  }, [filters, products, searchQuery]);
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;

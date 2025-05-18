@@ -98,7 +98,7 @@ export default function CartPage() {
                           </Link>
                           {item.variant && (
                             <div className="text-gray-400 text-sm">
-                              {item.variant.quantity}g
+                              {item.variant.grams ? `${item.variant.grams}g` : (item.variant.quantity ? `${item.variant.quantity}g` : '')}
                             </div>
                           )}
                         </div>
@@ -107,7 +107,7 @@ export default function CartPage() {
 
                     {/* Price */}
                     <div className="col-span-2 text-white text-center">
-                      ${item.price.toFixed(2)}
+                      €{item.price.toFixed(2)}
                     </div>
 
                     {/* Quantity */}
@@ -138,9 +138,9 @@ export default function CartPage() {
 
                     {/* Total */}
                     <div className="col-span-2 text-white text-right flex items-center justify-end">
-                      <span className="mr-4">${(item.price * item.quantity).toFixed(2)}</span>
+                      <span className="mr-4">€{(item.price * item.quantity).toFixed(2)}</span>
                       <button
-                        onClick={() => removeFromCart(item.id, item.variant?._id)}
+                        onClick={() => removeFromCart(item.id, item.variant?._id, item.variant?.grams)}
                         className="text-gray-400 hover:text-red-500"
                       >
                         <FaTrash />
@@ -175,7 +175,7 @@ export default function CartPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-400">
                   <span>Subtotal</span>
-                  <span className="text-white">${cartTotal.toFixed(2)}</span>
+                  <span className="text-white">€{cartTotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-400">
                   <span>Shipping</span>
@@ -183,7 +183,7 @@ export default function CartPage() {
                 </div>
                 <div className="border-t border-gray-700 pt-3 flex justify-between">
                   <span className="text-lg font-semibold text-white">Total</span>
-                  <span className="text-lg font-semibold text-white">${cartTotal.toFixed(2)}</span>
+                  <span className="text-lg font-semibold text-white">€{cartTotal.toFixed(2)}</span>
                 </div>
               </div>
 

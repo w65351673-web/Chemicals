@@ -682,7 +682,7 @@ function FeaturedProductsSection({ products = [] }) {
                           whileHover={{ scale: 1.1, color: '#a855f7' }}
                           transition={{ type: 'spring', stiffness: 400 }}
                         >
-                          ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
+                          €{typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
                         </motion.span>
                         
                         {product.countInStock > 0 ? (

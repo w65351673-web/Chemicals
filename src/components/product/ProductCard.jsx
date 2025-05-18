@@ -187,7 +187,7 @@ export default function ProductCard({ product }) {
             className="text-white"
             whileHover={{ scale: 1.05 }}
           >
-            <span className="font-bold text-lg">${lowestPrice.toFixed(2)}</span>
+            <span className="font-bold text-lg">€{lowestPrice.toFixed(2)}</span>
             {product.priceVariants && product.priceVariants.length > 1 && (
               <span className="text-gray-400 text-sm ml-1">and up</span>
             )}

@@ -99,11 +99,11 @@ export default async function ProductsPage({ searchParams }) {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            {selectedCategory ? `${selectedCategory}` : 'All Products'}
+            {selectedCategory ? `€{selectedCategory}` : 'All Products'}
           </h1>
           <p className="text-gray-400 max-w-2xl mx-auto">
             {selectedCategory 
-              ? `Browse our premium collection of ${selectedCategory.toLowerCase()}.`
+              ? `Browse our premium collection of €{selectedCategory.toLowerCase()}.`
               : 'Browse our premium collection of research chemicals, cannabinoids, stimulants, and benzos.'}
           </p>
         </div>

@@ -8,15 +8,20 @@ const nextConfig = {
       { hostname: 'plus.unsplash.com' },
       { hostname: 'source.unsplash.com' }
     ],
-    unoptimized: true,
+    // Don't set unoptimized to true for Vercel as it uses their image optimization
+    unoptimized: false,
   },
-  // Fix font loading issues
+  // Fix experimental flags for Next.js 15.3.2
   experimental: {
-    serverActions: true,
-    optimizeFonts: false
+    // Use the correct format for serverActions in Next.js 15.3.2
+    serverActions: {
+      bodySizeLimit: '2mb'
+    }
   },
-  // Output static files for better Vercel compatibility
+  // Output standalone for better Vercel compatibility
   output: 'standalone',
+  // Add transpilePackages for Three.js and related packages
+  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']
 }
 
 module.exports = nextConfig

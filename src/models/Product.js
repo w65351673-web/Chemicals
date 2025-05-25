@@ -14,10 +14,10 @@ const productSchema = new mongoose.Schema({
   category: { 
     type: String, 
     required: true,
-    // Allow any string for category to avoid enum validation issues
+    // Allow only specific categories
     validate: {
       validator: function(v) {
-        return ['cannabinoids', 'benzos', 'other', 'research chemicals'].includes(v.toLowerCase());
+        return ['cannabinoids', 'benzos', 'research chemicals'].includes(v.toLowerCase());
       },
       message: props => `${props.value} is not a valid category`
     }

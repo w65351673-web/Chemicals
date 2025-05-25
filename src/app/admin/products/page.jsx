@@ -8,11 +8,13 @@ import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // For specific operations like delete
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null); // For success/error messages
 
   const fetchProducts = async (page = 1, search = '') => {
     setLoading(true);
@@ -48,25 +50,62 @@ export default function AdminProducts() {
     if (!productToDelete) return;
     
     try {
+      setIsLoading(true); // Show loading state
+      
       const res = await fetch(`/api/admin/products/${productToDelete._id}`, {
         method: 'DELETE',
       });
       
       if (res.ok) {
+        // Success - remove product from list
         setProducts(products.filter(p => p._id !== productToDelete._id));
         setShowDeleteModal(false);
         setProductToDelete(null);
+        setAlertMessage({ type: 'success', text: 'Product deleted successfully' });
       } else {
-        const error = await res.json();
-        console.error('Failed to delete product:', error);
+        // Handle error response
+        let errorMessage = 'Failed to delete product';
+        try {
+          const errorData = await res.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          // If parsing JSON fails, use status text
+          errorMessage = `Failed to delete product: ${res.statusText}`;
+        }
+        
+        setAlertMessage({ type: 'error', text: errorMessage });
+        console.error(errorMessage);
       }
     } catch (error) {
-      console.error('Error deleting product:', error);
+      // Handle network/unexpected errors
+      const errorMessage = `Error deleting product: ${error.message || 'Unknown error'}`;
+      setAlertMessage({ type: 'error', text: errorMessage });
+      console.error(errorMessage);
+    } finally {
+      setIsLoading(false); // Hide loading state
     }
   };
 
+  // Clear alert message after 5 seconds
+  useEffect(() => {
+    if (alertMessage) {
+      const timer = setTimeout(() => {
+        setAlertMessage(null);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [alertMessage]);
+
   return (
     <div>
+      {/* Alert Message */}
+      {alertMessage && (
+        <div className={`mb-4 p-4 rounded-md ${alertMessage.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          {alertMessage.text}
+        </div>
+      )}
+      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Products</h1>
         <Link 

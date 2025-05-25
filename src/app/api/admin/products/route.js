@@ -103,6 +103,23 @@ export async function POST(request) {
       // Handle JSON data
       productData = await request.json();
       
+      // Normalize category to ensure it's one of the valid options
+      if (productData.category) {
+        // Convert to lowercase for consistent validation
+        productData.category = productData.category.toLowerCase();
+        
+        // Ensure it's one of the valid categories
+        const validCategories = ['cannabinoids', 'benzos', 'research chemicals'];
+        if (!validCategories.includes(productData.category)) {
+          // Default to a valid category if invalid one is provided
+          console.warn(`Invalid category provided: ${productData.category}. Defaulting to 'research chemicals'.`);
+          productData.category = 'research chemicals';
+        }
+      } else {
+        // Default category if none provided
+        productData.category = 'research chemicals';
+      }
+      
       // Images are already URLs in this case
       imageUrls = productData.images || [];
     } else if (contentType && contentType.includes('multipart/form-data')) {
@@ -114,7 +131,25 @@ export async function POST(request) {
       const slug = formData.get('slug');
       const description = formData.get('description');
       const price = parseFloat(formData.get('price'));
-      const category = formData.get('category');
+      
+      // Normalize category to ensure it's one of the valid options
+      let category = formData.get('category');
+      if (category) {
+        // Convert to lowercase for consistent validation
+        category = category.toLowerCase();
+        
+        // Ensure it's one of the valid categories
+        const validCategories = ['cannabinoids', 'benzos', 'research chemicals'];
+        if (!validCategories.includes(category)) {
+          // Default to a valid category if invalid one is provided
+          console.warn(`Invalid category provided: ${category}. Defaulting to 'research chemicals'.`);
+          category = 'research chemicals';
+        }
+      } else {
+        // Default category if none provided
+        category = 'research chemicals';
+      }
+      
       const countInStock = parseInt(formData.get('countInStock'));
       const featured = formData.get('featured') === 'true';
       

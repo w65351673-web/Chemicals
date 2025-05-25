@@ -26,7 +26,7 @@ export default function ProductForm({ product = null }) {
   const [success, setSuccess] = useState('');
   
   // Categories available in the store
-  const categories = ['cannabinoids', 'benzos', 'other'];
+  const categories = ['cannabinoids', 'benzos', 'research chemicals'];
   
   useEffect(() => {
     if (product) {
@@ -222,7 +222,7 @@ export default function ProductForm({ product = null }) {
           
           <div>
             <label className="block text-gray-400 mb-2" htmlFor="price">
-              Price ($)*
+              Price (€)*
             </label>
             <input
               type="number"

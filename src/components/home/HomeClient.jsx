@@ -12,7 +12,8 @@ import { useCart } from '@/components/cart/CartProvider';
 import gsap from 'gsap';
 
 // Import our custom animation components
-import ParticleBackground from '@/components/animations/ParticleBackground';
+import EnhancedParticles from '@/components/animations/EnhancedParticles';
+import MoleculeModel3D from '@/components/animations/MoleculeModel3D';
 import FloatingElement from '@/components/animations/FloatingElement';
 import TypedText from '@/components/animations/TypedText';
 import ScrollReveal from '@/components/animations/ScrollReveal';
@@ -23,8 +24,8 @@ import GlowingButton from '@/components/animations/GlowingButton';
 export default function HomeClient({ featuredProducts = [] }) {
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-black relative">
-      {/* Background Animations */}
-      <ParticleBackground />
+      {/* Enhanced Background Animations */}
+      <EnhancedParticles />
       <ChemicalReaction />
       
       {/* WhatsApp Icon (Left) */}
@@ -89,7 +90,7 @@ function HeroCarousel() {
     },
     {
       image: '/images/MA_0449a.webp',
-      title: 'Fast & Discreet Shipping',
+      title: "Fast & Discreet Shipping",
       subtitle: 'Secure packaging and reliable delivery worldwide',
       cta: 'Learn More',
       link: '/about'
@@ -165,8 +166,13 @@ function HeroCarousel() {
 
   return (
     <section className="relative h-screen overflow-hidden hero-container">
-      {/* Molecule Animation in Background */}
-      <div className="absolute inset-0 z-0 opacity-40">
+      {/* 3D Molecule Model Animation */}
+      <div className="absolute inset-0 z-0 opacity-70">
+        <MoleculeModel3D />
+      </div>
+      
+      {/* Classic Molecule Animation as fallback/additional layer */}
+      <div className="absolute inset-0 z-0 opacity-30">
         <MoleculeAnimation />
       </div>
       

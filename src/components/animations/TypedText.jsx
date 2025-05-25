@@ -41,7 +41,9 @@ export default function TypedText({
 
   const typeNextCharacter = () => {
     if (index.current < text.length) {
-      setDisplayedText(prev => prev + text.charAt(index.current));
+      // Ensure we're adding the correct character
+      const nextChar = text.charAt(index.current);
+      setDisplayedText(prev => prev + nextChar);
       index.current += 1;
       
       // Schedule next character

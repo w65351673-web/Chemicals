@@ -40,26 +40,46 @@ function convertToPlainObject(doc) {
 async function getProducts(searchParams) {
   await dbConnect();
   
+  // First await the entire searchParams object
+  const params = await searchParams;
+  
+  // Now safely extract values
+  const category = params?.category || null;
+  const search = params?.search || null;
+  const sort = params?.sort || 'createdAt';
+  const order = params?.order || 'desc';
+  
   // Build query based on parameters
   let query = {};
   
-  if (searchParams.category) {
-    // Special case for 'research chemicals' to also match 'other'
-    if (searchParams.category.toLowerCase() === 'research chemicals') {
-      query.category = { $in: [/^research chemicals$/i, /^other$/i] };
+  if (category) {
+    console.log('Filtering by category:', category);
+    
+    // Handle 'research chemicals' category with multiple approaches to ensure it works
+    if (category.toLowerCase() === 'research chemicals') {
+      // Try multiple approaches to match research chemicals
+      query.$or = [
+        // Exact match (case-sensitive)
+        { category: 'research chemicals' },
+        // Exact match (case-insensitive regex)
+        { category: { $regex: /^research chemicals$/i } },
+        // Partial match (case-insensitive)
+        { category: { $regex: /research chemicals/i } }
+      ];
+      console.log('Using enhanced research chemicals filter with multiple matching strategies');
     } else {
       // Make category filtering case-insensitive for other categories
-      query.category = { $regex: new RegExp('^' + searchParams.category + '$', 'i') };
+      query.category = { $regex: new RegExp('^' + category + '$', 'i') };
     }
   }
   
-  if (searchParams.search) {
-    query.name = { $regex: searchParams.search, $options: 'i' };
+  if (search) {
+    query.name = { $regex: search, $options: 'i' };
   }
   
   // Execute query with sorting
-  const sortField = searchParams.sort || 'createdAt';
-  const sortOrder = searchParams.order === 'asc' ? 1 : -1;
+  const sortField = sort;
+  const sortOrder = order === 'asc' ? 1 : -1;
   
   const sortOptions = {};
   sortOptions[sortField] = sortOrder;
@@ -91,8 +111,11 @@ function ProductsLoading() {
 }
 
 export default async function ProductsPage({ searchParams }) {
+  // First await the entire searchParams object
+  const params = await searchParams;
+  
   const products = await getProducts(searchParams);
-  const selectedCategory = searchParams.category || '';
+  const selectedCategory = params?.category || '';
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">

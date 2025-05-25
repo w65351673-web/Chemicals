@@ -104,22 +104,35 @@ export default function ProductList({ initialProducts, selectedCategory }) {
     if (!products || products.length === 0) return;
     
     let result = [...products];
+    console.log('Starting filtering with', result.length, 'products');
+    console.log('Current filters:', filters);
     
     // Filter by category (case-insensitive)
-    if (filters.category) {
+    if (filters.category && filters.category !== '') {
+      console.log('Filtering by category:', filters.category);
       result = result.filter(product => {
-        if (!product.category) return false;
+        if (!product.category) {
+          console.log(`Product ${product.name} has no category, excluding`);
+          return false;
+        }
         
         const productCategory = product.category.toLowerCase();
         const filterCategory = filters.category.toLowerCase();
         
-        // Special case for 'research chemicals' to also match 'other'
+        // Special handling for research chemicals
         if (filterCategory === 'research chemicals') {
-          return productCategory === 'research chemicals' || productCategory === 'other';
+          const matches = productCategory === 'research chemicals';
+          console.log(`Research chemicals filter: ${product.name} (${productCategory}) matches? ${matches}`);
+          return matches;
         }
         
-        return productCategory === filterCategory;
+        // Direct match for all other categories
+        const matches = productCategory === filterCategory;
+        console.log(`Category filter: ${product.name} (${productCategory}) matches ${filterCategory}? ${matches}`);
+        return matches;
       });
+    } else {
+      console.log('No category filter applied, showing all products');
     }
     
     // Filter by search query
@@ -217,20 +230,59 @@ export default function ProductList({ initialProducts, selectedCategory }) {
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFilters({
-      ...filters,
-      [name]: type === 'checkbox' ? checked : value,
-    });
+    
+    // Log the filter change for debugging
+    console.log(`Filter changed: ${name} = ${value}`);
+    
+    // Special handling for category changes
+    if (name === 'category') {
+      // When selecting All Categories, reset to empty string
+      const categoryValue = value === '' ? '' : value;
+      
+      // Update URL with the new category if possible
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        if (categoryValue) {
+          url.searchParams.set('category', categoryValue);
+        } else {
+          url.searchParams.delete('category');
+        }
+        
+        // Reload the page to get fresh products from the server
+        // This ensures we get all products when All Categories is selected
+        window.location.href = url.toString();
+        return; // Stop here since we're reloading the page
+      }
+      
+      setFilters({
+        ...filters,
+        category: categoryValue
+      });
+    } else {
+      // Handle other filter changes normally
+      setFilters({
+        ...filters,
+        [name]: type === 'checkbox' ? checked : value,
+      });
+    }
   };
 
   const clearFilters = () => {
+    // Reset filters to default values
     setFilters({
-      category: selectedCategory || '',
+      category: '',
       minPrice: '',
       maxPrice: '',
       inStock: false,
       sortBy: 'newest',
     });
+    
+    // Reset URL parameters and reload page to get all products
+    if (typeof window !== 'undefined') {
+      // Create a new URL without any search parameters
+      const url = new URL(window.location.pathname, window.location.origin);
+      window.location.href = url.toString();
+    }
   };
 
   const containerVariants = {
@@ -360,7 +412,6 @@ export default function ProductList({ initialProducts, selectedCategory }) {
                   <option value="research chemicals">Research Chemicals</option>
                   {/* Stimulants category removed as requested by owners */}
                   <option value="benzos">Benzos</option>
-                  <option value="other">Other</option>
                 </select>
               </div>
 

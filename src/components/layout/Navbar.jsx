@@ -34,7 +34,10 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/products?search=${encodeURIComponent(searchQuery)}`;
+      // Log the search query for debugging
+      console.log('Searching for:', searchQuery.trim());
+      // Use router for navigation instead of direct location change
+      window.location.href = `/products?search=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 
@@ -83,19 +86,19 @@ export default function Navbar() {
               </button>
               <div className="absolute left-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <Link 
-                  href="/products?category=Cannabinoids" 
+                  href="/products?category=cannabinoids" 
                   className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                 >
                   Cannabinoids
                 </Link>
                 <Link 
-                  href="/products?category=Research%20Chemicals" 
+                  href="/products?category=research%20chemicals" 
                   className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                 >
                   Research Chemicals
                 </Link>
                 <Link 
-                  href="/products?category=Benzos" 
+                  href="/products?category=benzos" 
                   className="block px-4 py-2 text-sm text-white hover:bg-gray-800"
                 >
                   Benzos
@@ -213,25 +216,25 @@ export default function Navbar() {
                 </div>
                 <div className="pl-4 mt-1 space-y-1">
                   <Link 
-                    href="/products?category=Cannabinoids" 
+                    href="/products?category=cannabinoids" 
                     className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('Cannabinoids') ? 'text-purple-400' : ''
+                      pathname.includes('category=cannabinoids') ? 'text-purple-400' : ''
                     }`}
                   >
                     Cannabinoids
                   </Link>
                   <Link 
-                    href="/products?category=Research%20Chemicals" 
+                    href="/products?category=research%20chemicals" 
                     className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('Research') ? 'text-purple-400' : ''
+                      pathname.includes('category=research%20chemicals') ? 'text-purple-400' : ''
                     }`}
                   >
                     Research Chemicals
                   </Link>
                   <Link 
-                    href="/products?category=Benzos" 
+                    href="/products?category=benzos" 
                     className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('Benzos') ? 'text-purple-400' : ''
+                      pathname.includes('category=benzos') ? 'text-purple-400' : ''
                     }`}
                   >
                     Benzos

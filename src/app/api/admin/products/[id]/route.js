@@ -103,7 +103,7 @@ export async function PUT(request, { params: paramsPromise }) {
       name, 
       description, 
       price, 
-      category, 
+      category: submittedCategory, 
       countInStock, 
       featured, 
       rating,
@@ -112,11 +112,21 @@ export async function PUT(request, { params: paramsPromise }) {
     } = productData;
     
     // Validate required fields
-    if (!name || !description || isNaN(price) || !category || isNaN(countInStock)) {
+    if (!name || !description || isNaN(price) || !submittedCategory || isNaN(countInStock)) {
       return NextResponse.json(
         { message: 'Missing required fields' },
         { status: 400 }
       );
+    }
+    
+    // Process the category - preserve the original category if the submitted one is invalid
+    let category = submittedCategory.toLowerCase();
+    
+    // Validate against allowed categories
+    const validCategories = ['cannabinoids', 'benzos', 'research chemicals'];
+    if (!validCategories.includes(category)) {
+      console.warn(`Invalid category submitted during edit: ${category}. Preserving original category: ${product.category}`);
+      category = product.category; // Keep the original category if the new one is invalid
     }
     
     // Handle images
@@ -160,7 +170,7 @@ export async function PUT(request, { params: paramsPromise }) {
 }
 
 // DELETE - Remove a product by ID
-export async function DELETE(request, { params }) {
+export async function DELETE(request, { params: paramsPromise }) {
   try {
     // Check admin authorization
     if (!await checkAdminAuth()) {
@@ -169,6 +179,8 @@ export async function DELETE(request, { params }) {
 
     await dbConnect();
     
+    // Await params before using them (required in Next.js 15.3.2+)
+    const params = await paramsPromise;
     const { id } = params;
     
     // Find the product
@@ -183,11 +195,18 @@ export async function DELETE(request, { params }) {
     
     // Delete images from Cloudinary
     if (product.images && product.images.length > 0) {
-      for (const imageUrl of product.images) {
-        const publicId = getCloudinaryId(imageUrl);
-        if (publicId) {
-          await deleteFromCloudinary(publicId);
+      try {
+        for (const imageUrl of product.images) {
+          const publicId = getCloudinaryId(imageUrl);
+          if (publicId) {
+            // Don't await each deletion - we'll continue even if some fail
+            deleteFromCloudinary(publicId)
+              .catch(err => console.warn(`Failed to delete image ${publicId}:`, err));
+          }
         }
+      } catch (error) {
+        // Log but continue with product deletion even if image deletion fails
+        console.error('Error processing product images for deletion:', error);
       }
     }
     

@@ -21,6 +21,22 @@ export async function POST(request) {
         { expiresIn: '30d' }
       );
       
+      // Send real-time notification to admin
+      try {
+        const io = global.io;
+        if (io) {
+          io.to('admin-room').emit('user-login', {
+            type: 'user-login',
+            email: user.email,
+            name: user.name,
+            timestamp: new Date().toISOString(),
+            message: `🔔 User ${user.email} logged in`,
+          });
+        }
+      } catch (err) {
+        console.error('Error sending login notification:', err);
+      }
+      
       // Return user data (without password) and token
       return NextResponse.json({
         user: {

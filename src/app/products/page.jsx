@@ -5,8 +5,9 @@ import Product from '@/models/Product';
 
 // Metadata for SEO
 export const metadata = {
-  title: 'Products | DarkChemSite',
-  description: 'Browse our premium collection of research chemicals, cannabinoids, stimulants, and benzos.',
+  title: 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
+  description: 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA. High-quality synthetic cannabinoids and benzos for laboratory research.',
+  keywords: '5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, buy research chemicals, synthetic cannabinoids, benzos',
 };
 
 // Helper function to convert MongoDB documents to plain objects

@@ -18,8 +18,7 @@ const nextConfig = {
       bodySizeLimit: '2mb'
     }
   },
-  // Output standalone for better Vercel compatibility
-  output: 'standalone',
+  // Removed standalone output to ensure proper static generation for SEO
   // Add transpilePackages for Three.js and related packages
   transpilePackages: ['three', '@react-three/fiber', '@react-three/drei']
 }

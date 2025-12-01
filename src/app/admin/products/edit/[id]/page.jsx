@@ -2,16 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaArrowLeft, FaSave, FaUpload, FaTimes } from 'react-icons/fa';
 
 export default function EditProduct({ params }) {
   const router = useRouter();
-  // Unwrap params using React.use() to follow Next.js best practices
-  const unwrappedParams = use(params);
-  const { id } = unwrappedParams;
+  const { id } = params;
   
   const [formData, setFormData] = useState({
     name: '',

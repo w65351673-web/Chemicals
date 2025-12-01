@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sphere, Line, Trail, useGLTF, PerspectiveCamera, Environment, MeshDistortMaterial, GradientTexture } from '@react-three/drei';
+import { OrbitControls, Sphere, Line, Trail, useGLTF, PerspectiveCamera, MeshDistortMaterial, GradientTexture } from '@react-three/drei';
 
 // Enhanced Atom component with glow and distortion
 const Atom = ({ position, color, size = 1, pulseSpeed = 1 }) => {
@@ -224,44 +224,16 @@ const Scene = () => {
       
       {/* Main molecule */}
       <Molecule rotationSpeed={0.005} />
-      
-      {/* Background environment */}
-      <Environment preset="night" background blur={0.7} />
     </>
   );
 };
 
-// Dynamic import with no SSR to avoid hydration issues on Vercel
-import dynamic from 'next/dynamic';
-
-// Create a no-SSR wrapper for the Canvas component
-const CanvasWithNoSSR = dynamic(
-  () => import('@react-three/fiber').then(mod => mod.Canvas),
-  { ssr: false }
-);
-
 export default function MoleculeModel3D({ className = '' }) {
-  const [mounted, setMounted] = useState(false);
-
-  // Handle mounting to prevent hydration issues
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Show a placeholder while loading to prevent layout shift
-  if (!mounted) {
-    return (
-      <div className={`w-full h-full ${className} bg-gray-900/30 flex items-center justify-center`}>
-        <div className="animate-pulse w-20 h-20 rounded-full bg-purple-600/30"></div>
-      </div>
-    );
-  }
-
   return (
     <div className={`w-full h-full ${className}`}>
-      <CanvasWithNoSSR dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
+      <Canvas dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
         <Scene />
-      </CanvasWithNoSSR>
+      </Canvas>
     </div>
   );
 }

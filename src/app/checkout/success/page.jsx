@@ -25,14 +25,11 @@ export default function CheckoutSuccessPage() {
       setCartCleared(true);
     }
     
-    // If no order ID is provided, redirect to home
     if (!orderId) {
       router.push('/');
       return;
     }
     
-    // For demo purposes, we'll just create a mock order
-    // In a real app, you would fetch the order details from your API
     const mockOrder = {
       _id: orderId,
       orderNumber: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,

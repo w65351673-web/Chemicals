@@ -13,17 +13,26 @@ import gsap from 'gsap';
 
 // Import our custom animation components
 import EnhancedParticles from '@/components/animations/EnhancedParticles';
-import MoleculeModel3D from '@/components/animations/MoleculeModel3D';
+import dynamic from 'next/dynamic';
+
+const MoleculeModel3D = dynamic(() => import('@/components/animations/MoleculeModel3D'), {
+  ssr: false,
+  loading: () => <div style={{ height: '300px' }} /> // Optional: a placeholder while the component loads
+});
 import FloatingElement from '@/components/animations/FloatingElement';
 import TypedText from '@/components/animations/TypedText';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import MoleculeAnimation from '@/components/animations/MoleculeAnimation';
 import ChemicalReaction from '@/components/animations/ChemicalReaction';
 import GlowingButton from '@/components/animations/GlowingButton';
+import SEOKeywords from '@/components/seo/SEOKeywords';
 
 export default function HomeClient({ featuredProducts = [] }) {
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-black relative">
+      {/* SEO Keywords and Schema Markup */}
+      <SEOKeywords />
+      
       {/* Enhanced Background Animations */}
       <EnhancedParticles />
       <ChemicalReaction />

@@ -1,28 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaCog } from 'react-icons/fa';
+import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaBell } from 'react-icons/fa';
+import RealTimeAlerts from '@/components/admin/RealTimeAlerts';
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const hasCheckedAdmin = useRef(false);
   
   // Check if the current path is the login page
-  const [isLoginPage, setIsLoginPage] = useState(false);
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLoginPage(window.location.pathname === '/admin/login');
-    }
-  }, []);
+  const isLoginPage = pathname === '/admin/login';
   
   useEffect(() => {
     // Skip admin check if we're on the login page
     if (isLoginPage) {
       setLoading(false);
+      return;
+    }
+    
+    // Only check admin status once
+    if (hasCheckedAdmin.current) {
       return;
     }
     
@@ -49,6 +51,7 @@ export default function AdminLayout({ children }) {
         } else {
           console.log('Admin status confirmed');
           setIsAdmin(true);
+          hasCheckedAdmin.current = true;
         }
       } catch (error) {
         console.error('Failed to check admin status:', error);
@@ -84,6 +87,9 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex">
+      {/* Real-Time Alerts */}
+      <RealTimeAlerts />
+      
       {/* Admin Sidebar */}
       <div className="w-64 bg-gray-800 min-h-screen p-4">
         <div className="mb-8">
@@ -115,6 +121,12 @@ export default function AdminLayout({ children }) {
               <Link href="/admin/users" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
                 <FaUsers className="mr-3 text-purple-400" />
                 Users
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin/activity" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <FaBell className="mr-3 text-purple-400" />
+                Activity Log
               </Link>
             </li>
           </ul>

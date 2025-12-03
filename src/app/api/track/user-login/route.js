@@ -8,6 +8,9 @@ import dbConnect from '@/lib/utils/db';
 import Activity from '@/models/Activity';
 import { getClientIP, getLocationFromIP, parseUserAgent } from '@/lib/utils/geolocation';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     await dbConnect();

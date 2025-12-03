@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { use } from 'react';
 import { FaArrowLeft, FaEdit, FaSave, FaTimes, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 
-export default function OrderDetail({ params: paramsPromise }) {
+function OrderDetailContent({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const orderId = params.id;
   const router = useRouter();
@@ -535,5 +535,17 @@ export default function OrderDetail({ params: paramsPromise }) {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrderDetail({ params }) {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <OrderDetailContent params={params} />
+    </Suspense>
   );
 }

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     // Get the admin token from cookies

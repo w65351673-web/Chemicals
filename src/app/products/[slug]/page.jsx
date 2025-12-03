@@ -14,7 +14,6 @@ import toast from 'react-hot-toast';
 export default function ProductDetailPage() {
   const gramOptions = [15, 20, 25, 50, 100, 500, 1000];
   const [selectedGrams, setSelectedGrams] = useState(15);
-  const calculateEuroPrice = (grams) => ((grams / 15) * 250).toFixed(2);
 
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
@@ -57,6 +56,15 @@ export default function ProductDetailPage() {
       fetchProduct();
     }
   }, [slug]);
+
+  // Calculate price based on product's actual price and selected grams
+  const calculateEuroPrice = (grams) => {
+    if (!product || !product.price) return '0.00';
+    // Calculate price proportionally: (selected grams / base grams) * base price
+    const baseGrams = 15; // Base unit is 15g
+    const calculatedPrice = (grams / baseGrams) * product.price;
+    return calculatedPrice.toFixed(2);
+  };
 
   const handleAddToCart = () => {
     if (product) {

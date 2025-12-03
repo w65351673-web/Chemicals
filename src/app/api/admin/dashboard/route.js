@@ -5,6 +5,9 @@ import Product from '@/models/Product';
 import Order from '@/models/Order';
 import User from '@/models/User';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     // Get the admin token from cookies

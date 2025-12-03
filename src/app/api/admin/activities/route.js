@@ -8,6 +8,9 @@ import dbConnect from '@/lib/utils/db';
 import Activity from '@/models/Activity';
 import { verifyAdmin } from '@/lib/utils/auth';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function GET(request) {
   try {
     // Verify admin

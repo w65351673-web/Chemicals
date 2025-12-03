@@ -5,6 +5,9 @@ import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
 import { uploadToCloudinary } from '@/lib/utils/cloudinary';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Helper function to check admin authorization
 async function checkAdminAuth() {
   try {

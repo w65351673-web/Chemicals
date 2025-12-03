@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/utils/db';
 import User from '@/models/User';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // This is a utility route to remove admin privileges from a user
 export async function GET(request) {
   try {

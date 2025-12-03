@@ -3,6 +3,9 @@ import dbConnect from '@/lib/utils/db';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const { email, password } = await request.json();

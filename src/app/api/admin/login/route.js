@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     // Parse request body

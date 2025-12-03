@@ -4,6 +4,9 @@ import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Middleware to verify JWT token
 const verifyToken = async (request) => {
   try {

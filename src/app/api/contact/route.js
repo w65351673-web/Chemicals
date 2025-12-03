@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import postmarkClient from '@/lib/postmark';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const { name, email, subject, message } = await request.json();

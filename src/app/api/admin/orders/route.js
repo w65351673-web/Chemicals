@@ -7,6 +7,9 @@ import Order from '@/models/Order';
 import User from '@/models/User';
 import { ObjectId } from 'mongodb';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Helper function to check admin authorization
 async function checkAdminAuth() {
   try {

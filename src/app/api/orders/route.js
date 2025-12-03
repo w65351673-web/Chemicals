@@ -8,6 +8,9 @@ import Order from '@/models/Order';
 import User from '@/models/User';
 import Product from '@/models/Product';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // GET - Fetch user's orders
 export async function GET(request) {
   try {

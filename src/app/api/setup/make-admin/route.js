@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/utils/db';
 import User from '@/models/User';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // This is a one-time setup route to make an existing user an admin
 // In production, you would want to secure this route or remove it after use
 export async function GET(request) {

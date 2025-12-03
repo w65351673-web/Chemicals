@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   try {
     // Get the cookie store

@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/utils/db';
 import User from '@/models/User';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Helper function to check admin authorization
 async function checkAdminAuth() {
   try {

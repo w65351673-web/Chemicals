@@ -18,6 +18,20 @@ body {
   min-height: 100vh;
 }
 
+/* Image Protection - Prevent easy downloads */
+img, picture {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded transition-colors duration-200;

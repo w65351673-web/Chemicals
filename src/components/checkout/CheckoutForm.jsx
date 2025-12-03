@@ -111,28 +111,6 @@ export default function CheckoutForm({ orderDetails }) {
           {errorMessage}
         </div>
       )}
-      
-      {/* Test Card Information */}
-      <div className="mb-6 bg-gray-800 p-4 rounded-lg border border-gray-700">
-        <h3 className="text-white text-lg font-medium mb-2">Test Card Information</h3>
-        <p className="text-gray-400 text-sm mb-2">Use these test cards to complete your payment:</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-white font-medium">Successful Payment</p>
-            <p className="text-gray-300">Card: <span className="font-mono">4242 4242 4242 4242</span></p>
-            <p className="text-gray-300">Exp: <span className="font-mono">Any future date</span></p>
-            <p className="text-gray-300">CVC: <span className="font-mono">Any 3 digits</span></p>
-            <p className="text-gray-300">ZIP: <span className="font-mono">Any 5 digits</span></p>
-          </div>
-          <div className="bg-gray-700 p-3 rounded-lg">
-            <p className="text-white font-medium">Requires Authentication</p>
-            <p className="text-gray-300">Card: <span className="font-mono">4000 0025 0000 3155</span></p>
-            <p className="text-gray-300">Exp: <span className="font-mono">Any future date</span></p>
-            <p className="text-gray-300">CVC: <span className="font-mono">Any 3 digits</span></p>
-            <p className="text-gray-300">ZIP: <span className="font-mono">Any 5 digits</span></p>
-          </div>
-        </div>
-      </div>
 
       <div className="mb-6">
         <h3 className="text-white text-lg font-medium mb-4">Billing Information</h3>

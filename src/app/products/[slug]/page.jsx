@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FaStar, FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '@/components/cart/CartProvider';
+import ProtectedImage from '@/components/common/ProtectedImage';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -124,7 +125,7 @@ export default function ProductDetailPage() {
           <div>
             <div className="relative h-80 md:h-96 w-full rounded-lg overflow-hidden mb-4">
               {product.images && product.images.length > 0 ? (
-                <Image
+                <ProtectedImage
                   src={product.images[selectedImage]}
                   alt={product.name}
                   fill
@@ -149,7 +150,7 @@ export default function ProductDetailPage() {
                       selectedImage === index ? 'border-purple-500' : 'border-transparent'
                     }`}
                   >
-                    <Image
+                    <ProtectedImage
                       src={image}
                       alt={`${product.name} - Image ${index + 1}`}
                       fill

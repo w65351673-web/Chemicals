@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
-import { FaArrowRight, FaFlask, FaCannabis, FaPills, FaWhatsapp } from 'react-icons/fa';
-import { FaTelegram } from 'react-icons/fa6';
+import { FaArrowRight, FaFlask, FaCannabis, FaPills } from 'react-icons/fa';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -36,36 +35,6 @@ export default function HomeClient({ featuredProducts = [] }) {
       {/* Enhanced Background Animations */}
       <EnhancedParticles />
       <ChemicalReaction />
-      
-      {/* WhatsApp Icon (Left) */}
-      <div className="fixed left-4 bottom-24 z-50">
-        <FloatingElement delay={0.2} yOffset={10} glowColor="rgba(37, 211, 102, 0.6)">
-          <a 
-            href="https://wa.me/1234567890" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-[#25D366] hover:bg-[#128C7E] text-white p-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
-            aria-label="Contact us on WhatsApp"
-          >
-            <FaWhatsapp size={28} />
-          </a>
-        </FloatingElement>
-      </div>
-      
-      {/* Telegram Icon (Right) */}
-      <div className="fixed right-4 bottom-24 z-50">
-        <FloatingElement delay={0.3} yOffset={10} glowColor="rgba(0, 136, 204, 0.6)">
-          <a 
-            href="https://t.me/yourusername" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-[#0088cc] hover:bg-[#0099dd] text-white p-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
-            aria-label="Contact us on Telegram"
-          >
-            <FaTelegram size={28} />
-          </a>
-        </FloatingElement>
-      </div>
       
       <HeroCarousel />
       <CategoriesSection />

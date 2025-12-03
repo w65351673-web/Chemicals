@@ -1,7 +1,10 @@
 /**
  * Sitemap for SEO optimization
  * Includes all research chemical keywords: 5cl-adba, 5cladba, 5fadb, jwh-018, 
- * adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA
+ * adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA,
+ * Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam, Pyrazolam, Phenazepam,
+ * AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA, Isotonitazene, Protonitazene, Metonitazene, Alprazolam,
+ * 5fmdmb-2201, 4fadb
  */
 
 export default function sitemap() {

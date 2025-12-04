@@ -229,9 +229,63 @@ const Scene = () => {
 };
 
 export default function MoleculeModel3D({ className = '' }) {
+  const [webglSupported, setWebglSupported] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Check WebGL support
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setWebglSupported(false);
+      }
+    } catch (e) {
+      setWebglSupported(false);
+      console.warn('WebGL not supported, using fallback animation');
+    }
+  }, []);
+
+  // Handle Canvas errors
+  const handleCreated = ({ gl }) => {
+    try {
+      gl.getExtension('WEBGL_lose_context');
+    } catch (e) {
+      setError(e);
+      setWebglSupported(false);
+    }
+  };
+
+  // Fallback for old GPUs - simple CSS animation
+  if (!webglSupported || error) {
+    return (
+      <div className={`w-full h-full ${className} flex items-center justify-center`}>
+        <div className="relative w-64 h-64">
+          {/* Simple CSS molecule animation */}
+          <div className="absolute inset-0 animate-spin-slow">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-purple-600 rounded-full opacity-50 blur-xl"></div>
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-purple-500 rounded-full opacity-40 blur-lg"></div>
+            <div className="absolute top-3/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-purple-500 rounded-full opacity-40 blur-lg"></div>
+            <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-purple-500 rounded-full opacity-40 blur-lg"></div>
+            <div className="absolute top-1/2 left-3/4 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-purple-500 rounded-full opacity-40 blur-lg"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`w-full h-full ${className}`}>
-      <Canvas dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
+      <Canvas 
+        dpr={[1, 2]} 
+        gl={{ 
+          antialias: true, 
+          alpha: true,
+          powerPreference: 'high-performance',
+          failIfMajorPerformanceCaveat: false // Don't fail on old GPUs
+        }}
+        onCreated={handleCreated}
+      >
         <Scene />
       </Canvas>
     </div>

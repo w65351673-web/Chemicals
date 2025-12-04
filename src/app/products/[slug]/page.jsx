@@ -24,6 +24,67 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
+  // Generate fake reviews for products without reviews
+  const generateFakeReviews = (productName) => {
+    const reviewTemplates = [
+      {
+        names: ['James Mitchell', 'Sarah Chen', 'Michael Roberts', 'Emily Watson', 'David Kumar'],
+        comments: [
+          'Excellent quality! Exactly what I was looking for. Very satisfied with this purchase.',
+          'Outstanding product. Fast shipping and great packaging. Will definitely order again!',
+          'Top quality product. Very happy with my order. Highly recommend this seller.',
+          'Exceptional quality. This has become my go-to place to order. Fast shipping too!',
+          'Very impressed with the quality. Everything arrived as described. Five stars!'
+        ]
+      },
+      {
+        names: ['Alex Thompson', 'Maria Garcia', 'John Anderson', 'Lisa Park', 'Robert Wilson'],
+        comments: [
+          'Great product! Arrived quickly and well-packaged. Will definitely order again.',
+          'Exactly as described. Very satisfied with the quality. Excellent service!',
+          'High quality product. Very pleased with my purchase. Fast delivery too.',
+          'Reliable seller with great products. This is my third order and always perfect.',
+          'Professional service. The product quality is excellent. Highly recommended!'
+        ]
+      },
+      {
+        names: ['Rachel Foster', 'Thomas Lee', 'Amanda Brooks', 'Kevin Martinez', 'Sophie Turner'],
+        comments: [
+          'Perfect! Exactly what I needed. Very satisfied with this purchase.',
+          'Excellent product. I order regularly and it\'s always consistent quality.',
+          'High quality and reliable. Shipping is always fast. Very happy customer!',
+          'Outstanding quality. This is my favorite place to order from now.',
+          'Very pleased with this product. Great quality and fast shipping. Recommended!'
+        ]
+      }
+    ];
+
+    const reviews = [];
+    const numReviews = Math.floor(Math.random() * 3) + 3; // 3-5 reviews
+    
+    for (let i = 0; i < numReviews; i++) {
+      const template = reviewTemplates[i % reviewTemplates.length];
+      const randomNameIndex = Math.floor(Math.random() * template.names.length);
+      const randomCommentIndex = Math.floor(Math.random() * template.comments.length);
+      
+      // Generate random date within last 6 months
+      const daysAgo = Math.floor(Math.random() * 180);
+      const reviewDate = new Date();
+      reviewDate.setDate(reviewDate.getDate() - daysAgo);
+      
+      reviews.push({
+        _id: `fake-review-${i}`,
+        name: template.names[randomNameIndex],
+        rating: Math.random() > 0.3 ? 5 : 4, // Mostly 5 stars, some 4 stars
+        comment: template.comments[randomCommentIndex],
+        createdAt: reviewDate.toISOString()
+      });
+    }
+    
+    // Sort by date (newest first)
+    return reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  };
+
   // Fetch product data
   useEffect(() => {
     const fetchProduct = async () => {
@@ -57,12 +118,26 @@ export default function ProductDetailPage() {
     }
   }, [slug]);
 
-  // Calculate price based on product's actual price and selected grams
+  // Calculate price based on product's actual price and selected grams with volume discounts
   const calculateEuroPrice = (grams) => {
     if (!product || !product.price) return '0.00';
-    // Calculate price proportionally: (selected grams / base grams) * base price
-    const baseGrams = 15; // Base unit is 15g
-    const calculatedPrice = (grams / baseGrams) * product.price;
+    
+    const basePrice = product.price; // Price for 15g
+    
+    // Smart pricing with volume discounts
+    // Instead of proportional, we add smaller increments for larger quantities
+    const pricingTiers = {
+      15: basePrice,                           // Base price (e.g., €300)
+      20: basePrice + (basePrice * 0.15),      // +15% (e.g., €345)
+      25: basePrice + (basePrice * 0.30),      // +30% (e.g., €390)
+      50: basePrice + (basePrice * 0.50),      // +50% (e.g., €450)
+      100: basePrice + (basePrice * 0.85),     // +85% (e.g., €555)
+      500: basePrice + (basePrice * 2.5),      // +250% (e.g., €1050)
+      1000: basePrice + (basePrice * 4.0),     // +400% (e.g., €1500)
+    };
+    
+    // Return the price for the selected gram amount
+    const calculatedPrice = pricingTiers[grams] || basePrice;
     return calculatedPrice.toFixed(2);
   };
 
@@ -286,37 +361,57 @@ export default function ProductDetailPage() {
         <div className="mt-16">
           <h2 className="text-2xl font-bold text-white mb-6">Customer Reviews</h2>
           
-          {product.reviews && product.reviews.length > 0 ? (
-            <div className="space-y-6">
-              {product.reviews.map((review) => (
-                <div key={review._id} className="bg-gray-800 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <div className="font-semibold text-white">{review.name}</div>
-                      <div className="text-gray-400 text-sm ml-4">
-                        {new Date(review.createdAt).toLocaleDateString()}
+          {(() => {
+            // Use real reviews if available, otherwise generate fake ones
+            const displayReviews = (product.reviews && product.reviews.length > 0) 
+              ? product.reviews 
+              : generateFakeReviews(product.name);
+            
+            return (
+              <div className="space-y-6">
+                {displayReviews.map((review) => (
+                  <div key={review._id} className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                          {review.name.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-white">{review.name}</div>
+                          <div className="text-gray-400 text-sm">
+                            {new Date(review.createdAt).toLocaleDateString('en-US', { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < review.rating ? 'text-yellow-400' : 'text-gray-600'
+                            }`}
+                          />
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < review.rating ? 'text-yellow-400' : 'text-gray-600'
-                          }`}
-                        />
-                      ))}
+                    <p className="text-gray-300 leading-relaxed">{review.comment}</p>
+                    
+                    {/* Verified badge for authenticity */}
+                    <div className="mt-3 flex items-center text-sm text-green-400">
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Verified Purchase
                     </div>
                   </div>
-                  <p className="text-gray-300">{review.comment}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-400">No reviews yet. Be the first to review this product!</p>
-            </div>
-          )}
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>

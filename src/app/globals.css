@@ -16,6 +16,9 @@ body {
     rgb(var(--background-end-rgb))
   );
   min-height: 100vh;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Image Protection - Prevent easy downloads */
@@ -30,6 +33,20 @@ img, picture {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
+}
+
+/* Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }
 
 @layer components {

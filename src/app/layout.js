@@ -14,7 +14,9 @@ import CartProvider from "@/components/cart/CartProvider";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: "--font-inter",
+  display: 'swap',
 });
 
 export const metadata = {
@@ -100,8 +102,8 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans min-h-screen flex flex-col`}>
+    <html lang="en" className={inter.variable}>
+      <body className="font-sans min-h-screen flex flex-col">
         <AuthProvider>
           <CartProvider>
             <VisitorTracker />

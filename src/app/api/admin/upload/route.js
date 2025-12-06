@@ -66,25 +66,34 @@ async function uploadToCloudinary(file) {
 
 export async function POST(request) {
   try {
+    console.log('Upload API called');
+    
     // Check admin authorization
     if (!await checkAdminAuth()) {
+      console.log('Authorization failed');
       return NextResponse.json({ message: 'Not authorized' }, { status: 403 });
     }
+
+    console.log('Admin authorized');
 
     // Parse the multipart form data
     const formData = await request.formData();
     const file = formData.get('file');
     
     if (!file) {
+      console.log('No file in request');
       return NextResponse.json(
         { message: 'No file provided' },
         { status: 400 }
       );
     }
     
+    console.log('File received:', file.name, file.type, file.size);
+    
     // Check file type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) {
+      console.log('Invalid file type:', file.type);
       return NextResponse.json(
         { message: 'Invalid file type. Only JPEG, PNG, WEBP, and GIF files are allowed.' },
         { status: 400 }
@@ -93,14 +102,28 @@ export async function POST(request) {
     
     // Check file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
+      console.log('File too large:', file.size);
       return NextResponse.json(
         { message: 'File size exceeds the 10MB limit.' },
         { status: 400 }
       );
     }
 
+    console.log('Starting Cloudinary upload...');
+    
+    // Check Cloudinary config
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      console.error('Cloudinary credentials missing!');
+      return NextResponse.json(
+        { message: 'Server configuration error: Cloudinary credentials not set' },
+        { status: 500 }
+      );
+    }
+
     // Upload to Cloudinary
     const result = await uploadToCloudinary(file);
+    
+    console.log('Upload successful:', result.secure_url);
 
     return NextResponse.json({
       message: 'File uploaded successfully',
@@ -111,6 +134,7 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('Error uploading file:', error);
+    console.error('Error stack:', error.stack);
     return NextResponse.json(
       { message: 'Error uploading file: ' + error.message },
       { status: 500 }

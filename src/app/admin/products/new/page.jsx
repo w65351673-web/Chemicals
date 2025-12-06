@@ -110,19 +110,26 @@ export default function NewProductPage() {
       }
       
       // Upload images first
+      console.log('Uploading images...');
       const imageUrls = await uploadImages();
+      console.log('Images uploaded:', imageUrls);
+      
+      if (imageFiles.length > 0 && imageUrls.length === 0) {
+        throw new Error('Image upload failed. Please check your Cloudinary credentials.');
+      }
       
       // Create product
       const productData = {
         ...formData,
-        // Map 'research chemicals' to 'other' for API compatibility
-        category: formData.category === 'research chemicals' ? 'other' : formData.category,
+        category: formData.category, // Keep category as is
         price: parseFloat(formData.price),
         countInStock: parseInt(formData.countInStock, 10),
         rating: parseFloat(formData.rating),
         numReviews: parseInt(formData.numReviews, 10),
         images: imageUrls
       };
+      
+      console.log('Sending product data:', productData);
       
       const response = await fetch('/api/admin/products', {
         method: 'POST',
@@ -134,8 +141,12 @@ export default function NewProductPage() {
       
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || 'Failed to create product');
+        console.error('API Error:', data);
+        throw new Error(data.message || `Failed to create product (Status: ${response.status})`);
       }
+      
+      const result = await response.json();
+      console.log('Product created successfully:', result);
       
       setSuccess(true);
       

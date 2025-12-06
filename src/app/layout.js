@@ -7,7 +7,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ConditionalNavbar from "@/components/layout/ConditionalNavbar";
 import VisitorTracker from "@/components/tracking/VisitorTracker";
-import WhatsAppButton from "@/components/common/WhatsAppButton";
 
 // Providers
 import AuthProvider from "@/components/auth/AuthProvider";
@@ -109,7 +108,6 @@ export default function RootLayout({ children }) {
           <CartProvider>
             <VisitorTracker />
             <Toaster position="top-center" />
-            <WhatsAppButton />
             <ConditionalNavbar>
               <Navbar />
             </ConditionalNavbar>

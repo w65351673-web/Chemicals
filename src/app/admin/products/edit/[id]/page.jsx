@@ -224,17 +224,20 @@ export default function EditProduct({ params }) {
     
     try {
       // Upload images first
+      console.log('Uploading images for edit...');
       const imageUrls = await uploadImages();
+      console.log('Images uploaded:', imageUrls);
       
       // Prepare data for API
       const productData = {
         ...formData,
-        // Map 'research chemicals' to 'other' for API compatibility
-        category: formData.category === 'research chemicals' ? 'other' : formData.category,
+        category: formData.category, // Keep category as is
         images: imageUrls,
         price: parseFloat(formData.price),
         countInStock: parseInt(formData.countInStock)
       };
+      
+      console.log('Updating product with data:', productData);
       
       // Update product
       const res = await fetch(`/api/admin/products/${id}`, {
@@ -247,8 +250,12 @@ export default function EditProduct({ params }) {
       
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to update product');
+        console.error('Update failed:', errorData);
+        throw new Error(errorData.message || `Failed to update product (Status: ${res.status})`);
       }
+      
+      const result = await res.json();
+      console.log('Product updated successfully:', result);
       
       // Redirect to products list
       router.push('/admin/products');

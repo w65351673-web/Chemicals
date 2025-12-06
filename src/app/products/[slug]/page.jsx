@@ -190,43 +190,8 @@ export default function ProductDetailPage() {
     );
   }
 
-  // Generate JSON-LD structured data for SEO
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.description || `High quality ${product.name} for research purposes`,
-    image: product.images && product.images.length > 0 ? product.images[0] : '',
-    brand: {
-      '@type': 'Brand',
-      name: 'DarkChemSite'
-    },
-    offers: {
-      '@type': 'Offer',
-      url: `https://darkchemsite.com/products/${product.slug}`,
-      priceCurrency: 'EUR',
-      price: product.price || 0,
-      availability: product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'DarkChemSite'
-      }
-    },
-    aggregateRating: product.rating ? {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating,
-      reviewCount: product.numReviews || 0
-    } : undefined
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
-      {/* JSON-LD Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="mb-6 flex items-center text-sm text-gray-400">

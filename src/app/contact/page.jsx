@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaWhatsapp } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
@@ -100,23 +100,6 @@ export default function ContactPage() {
                 <div>
                   <p className="text-sm text-purple-300">Email</p>
                   <p className="text-white font-medium">info@darkchemsite.com</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center mb-8">
-                <div className="bg-green-600/30 rounded-full w-12 h-12 flex items-center justify-center mr-4">
-                  <FaWhatsapp className="text-green-300 text-xl" />
-                </div>
-                <div>
-                  <p className="text-sm text-green-300">WhatsApp</p>
-                  <a 
-                    href="https://wa.me/19802432914" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-white font-medium hover:text-green-300 transition-colors"
-                  >
-                    +1 980 243 2914
-                  </a>
                 </div>
               </div>
               

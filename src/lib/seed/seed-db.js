@@ -72,7 +72,7 @@ async function seedDatabase() {
         slug: 'cbg-crystals',
         category: 'Cannabinoids',
         images: ['/images/products/cbg-crystals.jpg'],
-        description: 'Cannabigerol (CBG) crystalline powder, 98%+ purity.\n\nCBG is often called the "mother cannabinoid" as it is the precursor to many other cannabinoids.',
+        description: 'Cannabigerol (CBG) crystalline powder, 98%+ purity. For research purposes only.\n\nCBG is often called the "mother cannabinoid" as it is the precursor to many other cannabinoids.',
         priceVariants: [
           { quantity: 1, price: 49.99 },
           { quantity: 5, price: 219.99 },

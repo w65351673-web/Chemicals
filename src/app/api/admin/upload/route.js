@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server';
-import { handleFileUpload } from '@/lib/utils/multerUpload';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Helper function to check admin authorization
 async function checkAdminAuth() {
@@ -27,6 +34,36 @@ async function checkAdminAuth() {
   }
 }
 
+// Helper function to upload to Cloudinary
+async function uploadToCloudinary(file) {
+  try {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'darkchem/products',
+          resource_type: 'auto',
+        },
+        (error, result) => {
+          if (error) {
+            console.error('Cloudinary upload error:', error);
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+      
+      uploadStream.end(buffer);
+    });
+  } catch (error) {
+    console.error('Error preparing file for upload:', error);
+    throw error;
+  }
+}
+
 export async function POST(request) {
   try {
     // Check admin authorization
@@ -34,31 +71,43 @@ export async function POST(request) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 403 });
     }
 
-    // Check if request is multipart form data
-    const contentType = request.headers.get('content-type');
-    if (!contentType || !contentType.includes('multipart/form-data')) {
+    // Parse the multipart form data
+    const formData = await request.formData();
+    const file = formData.get('file');
+    
+    if (!file) {
       return NextResponse.json(
-        { message: 'Content type must be multipart/form-data' },
+        { message: 'No file provided' },
+        { status: 400 }
+      );
+    }
+    
+    // Check file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { message: 'Invalid file type. Only JPEG, PNG, WEBP, and GIF files are allowed.' },
+        { status: 400 }
+      );
+    }
+    
+    // Check file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json(
+        { message: 'File size exceeds the 10MB limit.' },
         { status: 400 }
       );
     }
 
-    // Handle file upload with Multer
-    const result = await handleFileUpload(request);
-    
-    if (!result.success) {
-      return NextResponse.json(
-        { message: result.error },
-        { status: result.status || 500 }
-      );
-    }
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(file);
 
     return NextResponse.json({
       message: 'File uploaded successfully',
-      url: result.url,
-      filename: result.filename,
-      originalName: result.originalName,
-      size: result.size
+      url: result.secure_url,
+      publicId: result.public_id,
+      filename: result.original_filename,
+      size: result.bytes
     });
   } catch (error) {
     console.error('Error uploading file:', error);

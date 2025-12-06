@@ -19,7 +19,13 @@ export default function AdminDashboard() {
       try {
         const res = await fetch('/api/admin/dashboard');
         const data = await res.json();
-        setStats(data);
+        setStats({
+          totalProducts: data.totalProducts || 0,
+          totalOrders: data.totalOrders || 0,
+          totalUsers: data.totalUsers || 0,
+          totalRevenue: data.totalRevenue || 0,
+          recentOrders: data.recentOrders || []
+        });
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       } finally {
@@ -90,7 +96,7 @@ export default function AdminDashboard() {
             </div>
             <h2 className="text-lg font-semibold">Revenue</h2>
           </div>
-          <p className="text-3xl font-bold">${stats.totalRevenue.toFixed(2)}</p>
+          <p className="text-3xl font-bold">${typeof stats.totalRevenue === 'number' ? stats.totalRevenue.toFixed(2) : '0.00'}</p>
           <span className="text-gray-400 text-sm mt-2 inline-block">
             Total Sales
           </span>

@@ -120,9 +120,12 @@ export default function ProductDetailPage() {
 
   // Calculate price based on product's actual price and selected grams with volume discounts
   const calculateEuroPrice = (grams) => {
-    if (!product || !product.price) return '0.00';
+    if (!product || !product.price || typeof product.price !== 'number') return '0.00';
     
-    const basePrice = product.price; // Price for 15g
+    const basePrice = parseFloat(product.price); // Price for 15g
+    
+    // Ensure basePrice is valid
+    if (isNaN(basePrice) || basePrice <= 0) return '0.00';
     
     // Smart pricing with volume discounts
     // Instead of proportional, we add smaller increments for larger quantities
@@ -138,7 +141,7 @@ export default function ProductDetailPage() {
     
     // Return the price for the selected gram amount
     const calculatedPrice = pricingTiers[grams] || basePrice;
-    return calculatedPrice.toFixed(2);
+    return Number(calculatedPrice).toFixed(2);
   };
 
   const handleAddToCart = () => {
@@ -187,8 +190,43 @@ export default function ProductDetailPage() {
     );
   }
 
+  // Generate JSON-LD structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description || `High quality ${product.name} for research purposes`,
+    image: product.images && product.images.length > 0 ? product.images[0] : '',
+    brand: {
+      '@type': 'Brand',
+      name: 'DarkChemSite'
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `https://darkchemsite.com/products/${product.slug}`,
+      priceCurrency: 'EUR',
+      price: product.price || 0,
+      availability: product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      seller: {
+        '@type': 'Organization',
+        name: 'DarkChemSite'
+      }
+    },
+    aggregateRating: product.rating ? {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating,
+      reviewCount: product.numReviews || 0
+    } : undefined
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
+      {/* JSON-LD Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="mb-6 flex items-center text-sm text-gray-400">

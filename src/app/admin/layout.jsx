@@ -3,8 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaBell } from 'react-icons/fa';
-import RealTimeAlerts from '@/components/admin/RealTimeAlerts';
+import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaCog } from 'react-icons/fa';
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -87,9 +86,6 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex">
-      {/* Real-Time Alerts */}
-      <RealTimeAlerts />
-      
       {/* Admin Sidebar */}
       <div className="w-64 bg-gray-800 min-h-screen p-4">
         <div className="mb-8">
@@ -121,12 +117,6 @@ export default function AdminLayout({ children }) {
               <Link href="/admin/users" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
                 <FaUsers className="mr-3 text-purple-400" />
                 Users
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/activity" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                <FaBell className="mr-3 text-purple-400" />
-                Activity Log
               </Link>
             </li>
           </ul>

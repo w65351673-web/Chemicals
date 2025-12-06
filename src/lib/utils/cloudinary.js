@@ -1,5 +1,5 @@
-// Use CommonJS require for better compatibility with Next.js
-const cloudinary = require('cloudinary').v2;
+// Use ES module import
+import { v2 as cloudinary } from 'cloudinary';
 
 // Check if Cloudinary credentials are available
 const hasCloudinaryCredentials = (

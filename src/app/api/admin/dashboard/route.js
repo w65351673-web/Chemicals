@@ -43,21 +43,52 @@ export async function GET(request) {
     
     await dbConnect();
     
-    // Get counts and stats
-    const totalProducts = await Product.countDocuments();
-    const totalOrders = await Order.countDocuments();
-    const totalUsers = await User.countDocuments();
+    // Get counts and stats with error handling
+    let totalProducts = 0;
+    let totalOrders = 0;
+    let totalUsers = 0;
+    let totalRevenue = 0;
+    let recentOrders = [];
     
-    // Calculate total revenue
-    const orders = await Order.find({ status: 'completed' });
-    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+    try {
+      totalProducts = await Product.countDocuments();
+    } catch (err) {
+      console.error('Error counting products:', err);
+    }
     
-    // Get recent orders with user info
-    const recentOrders = await Order.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .populate('user', 'name email')
-      .lean();
+    try {
+      totalOrders = await Order.countDocuments();
+    } catch (err) {
+      console.error('Error counting orders:', err);
+    }
+    
+    try {
+      totalUsers = await User.countDocuments();
+    } catch (err) {
+      console.error('Error counting users:', err);
+    }
+    
+    try {
+      // Calculate total revenue
+      const orders = await Order.find({ status: 'completed' });
+      totalRevenue = orders.reduce((sum, order) => {
+        const orderTotal = order.total || order.totalPrice || 0;
+        return sum + (typeof orderTotal === 'number' ? orderTotal : 0);
+      }, 0);
+    } catch (err) {
+      console.error('Error calculating revenue:', err);
+    }
+    
+    try {
+      // Get recent orders with user info
+      recentOrders = await Order.find()
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .populate('user', 'name email')
+        .lean();
+    } catch (err) {
+      console.error('Error fetching recent orders:', err);
+    }
     
     return NextResponse.json({
       totalProducts,

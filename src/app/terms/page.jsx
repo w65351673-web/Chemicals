@@ -341,7 +341,7 @@ export default function TermsPage() {
               BY USING OUR SERVICES, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS AND CONDITIONS.
             </p>
             <p>
-              You further acknowledge that our products are for research purposes only and accept full responsibility for their proper use and handling.
+              You further acknowledge and accept full responsibility for the proper use and handling of our products.
             </p>
           </section>
         </div>

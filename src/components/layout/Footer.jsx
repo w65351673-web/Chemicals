@@ -146,9 +146,6 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
           <p>&copy; {new Date().getFullYear()} DarkChemSite. All rights reserved.</p>
-          <p className="mt-2 text-sm">
-            For research purposes only. Not for human consumption.
-          </p>
         </div>
       </div>
     </footer>

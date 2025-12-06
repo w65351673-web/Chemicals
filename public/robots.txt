@@ -16,4 +16,4 @@ Disallow: /api/*
 Disallow: /cart
 Disallow: /checkout
 
-Sitemap: /sitemap.xml
+Sitemap: https://darkchemsite.com/sitemap.xml

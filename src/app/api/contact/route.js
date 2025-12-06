@@ -247,18 +247,17 @@ Reply directly to this email to respond to ${name}.
     
     let confirmationResult = { MessageID: 'not-sent', status: 'skipped' };
     
-    // Check if the email domain is the same as our From domain (for Postmark restrictions)
-    const userEmailDomain = email.split('@')[1];
-    const fromEmailDomain = 'darkchemsite.com';
+    // Check if user email is same domain (Postmark sandbox restriction)
+    const userDomain = email.split('@')[1];
+    const canSendConfirmation = userDomain === 'darkchemsite.com';
     
-    // Only try to send confirmation email if domains match or we're in development mode
-    if (userEmailDomain === fromEmailDomain) {
+    // Try to send confirmation email to the user (only if same domain or Postmark is approved)
+    if (canSendConfirmation) {
       try {
-        // Send confirmation email to the user
         confirmationResult = await postmarkClient.sendEmail({
-          From: 'info@darkchemsite.com',
-          To: email,
-          Subject: '✅ We received your message - DarkChemSite',
+            From: 'info@darkchemsite.com',
+            To: email,
+            Subject: '✅ We received your message - DarkChemSite',
           TextBody: `
 Dear ${name},
 
@@ -503,7 +502,12 @@ Website: https://darkchemsite.com
         };
       }
     } else {
-      console.log(`Skipping confirmation email to ${email} due to domain restrictions`);
+      console.log(`Skipping confirmation email to ${email} - Postmark account pending approval (sandbox mode)`);
+      confirmationResult = { 
+        MessageID: 'skipped', 
+        status: 'skipped',
+        reason: 'Postmark sandbox mode - only same domain emails allowed'
+      };
     }
 
     return NextResponse.json({ 
@@ -516,8 +520,9 @@ Website: https://darkchemsite.com
         },
         confirmationEmail: {
           messageId: confirmationResult.MessageID,
-          status: userEmailDomain === fromEmailDomain ? 'sent' : 'skipped',
-          recipient: email
+          status: confirmationResult.status || 'sent',
+          recipient: email,
+          reason: confirmationResult.reason || null
         }
       }
     });

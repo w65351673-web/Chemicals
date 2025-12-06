@@ -12,8 +12,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
-  const gramOptions = [15, 20, 25, 50, 100, 500, 1000];
-  const [selectedGrams, setSelectedGrams] = useState(15);
+  const gramOptions = [25, 50, 100, 500, 1000];
+  const [selectedGrams, setSelectedGrams] = useState(25);
 
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
@@ -118,30 +118,20 @@ export default function ProductDetailPage() {
     }
   }, [slug]);
 
-  // Calculate price based on product's actual price and selected grams with volume discounts
+  // Fixed pricing tiers
   const calculateEuroPrice = (grams) => {
-    if (!product || !product.price || typeof product.price !== 'number') return '0.00';
-    
-    const basePrice = parseFloat(product.price); // Price for 15g
-    
-    // Ensure basePrice is valid
-    if (isNaN(basePrice) || basePrice <= 0) return '0.00';
-    
-    // Smart pricing with volume discounts
-    // Instead of proportional, we add smaller increments for larger quantities
+    // Fixed prices for each gram option
     const pricingTiers = {
-      15: basePrice,                           // Base price (e.g., €300)
-      20: basePrice + (basePrice * 0.15),      // +15% (e.g., €345)
-      25: basePrice + (basePrice * 0.30),      // +30% (e.g., €390)
-      50: basePrice + (basePrice * 0.50),      // +50% (e.g., €450)
-      100: basePrice + (basePrice * 0.85),     // +85% (e.g., €555)
-      500: basePrice + (basePrice * 2.5),      // +250% (e.g., €1050)
-      1000: basePrice + (basePrice * 4.0),     // +400% (e.g., €1500)
+      25: 400,
+      50: 550,
+      100: 700,
+      500: 1200,
+      1000: 2100,
     };
     
     // Return the price for the selected gram amount
-    const calculatedPrice = pricingTiers[grams] || basePrice;
-    return Number(calculatedPrice).toFixed(2);
+    const price = pricingTiers[grams] || 400;
+    return Number(price).toFixed(2);
   };
 
   const handleAddToCart = () => {

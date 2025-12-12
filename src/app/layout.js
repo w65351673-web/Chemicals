@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -104,6 +105,14 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        {/* Ahrefs Analytics */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="+CffPsHUUwlzmNtibduF4Q"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="font-sans min-h-screen flex flex-col">
         <AuthProvider>
           <CartProvider>

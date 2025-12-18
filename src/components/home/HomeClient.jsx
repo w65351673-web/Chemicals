@@ -16,7 +16,11 @@ import dynamic from 'next/dynamic';
 
 const MoleculeModel3D = dynamic(() => import('@/components/animations/MoleculeModel3D'), {
   ssr: false,
-  loading: () => <div style={{ height: '300px' }} /> // Optional: a placeholder while the component loads
+  loading: () => (
+    <div className="flex items-center justify-center" style={{ height: '300px' }}>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+    </div>
+  )
 });
 import FloatingElement from '@/components/animations/FloatingElement';
 import TypedText from '@/components/animations/TypedText';

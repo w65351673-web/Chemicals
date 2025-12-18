@@ -122,19 +122,23 @@ export default function Footer() {
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
               <div className="relative">
+                <label htmlFor="newsletter-email" className="sr-only">Email address for newsletter</label>
                 <input
+                  id="newsletter-email"
                   type="email"
                   placeholder="Your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="bg-gray-800 text-white rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
+                  aria-label="Email address for newsletter"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 top-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg p-1"
+                  className="absolute right-1 top-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  aria-label="Subscribe to newsletter"
                 >
-                  <FaEnvelope size={20} />
+                  <FaEnvelope size={20} aria-hidden="true" />
                 </button>
               </div>
               {subscribed && (

@@ -18,8 +18,9 @@ export default function WhatsAppButton() {
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 1 }}
+      aria-label="Chat with us on WhatsApp"
     >
-      <FaWhatsapp className="text-3xl" />
+      <FaWhatsapp className="text-3xl" aria-hidden="true" />
       
       {/* Tooltip */}
       <span className="absolute left-full ml-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">

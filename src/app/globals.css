@@ -88,6 +88,25 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+/* Improved color contrast for accessibility */
+.text-gray-400 {
+  color: #9ca3af !important; /* Ensures minimum 4.5:1 contrast ratio */
+}
+
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Ensure links have sufficient contrast */
+a {
+  text-decoration-skip-ink: auto;
+}
+
+a:not([class]) {
+  text-decoration-thickness: max(0.08em, 1px);
+  text-underline-offset: 0.15em;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded transition-colors duration-200 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;

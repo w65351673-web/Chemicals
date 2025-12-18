@@ -132,15 +132,18 @@ export default function Navbar() {
 
           {/* Search, Cart, and User */}
           <div className="hidden md:flex items-center space-x-6">
-            <form onSubmit={handleSearch} className="relative">
+            <form onSubmit={handleSearch} className="relative" role="search">
+              <label htmlFor="desktop-search" className="sr-only">Search products</label>
               <input
-                type="text"
+                id="desktop-search"
+                type="search"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-500 w-48"
+                aria-label="Search products"
               />
-              <FaSearch className="absolute left-3 top-3 text-gray-400" />
+              <FaSearch className="absolute left-3 top-3 text-gray-400" aria-hidden="true" />
             </form>
 
             <Link href="/cart" className="relative text-white hover:text-purple-400 cart-icon" aria-label={`Shopping cart with ${cartItemsCount} items`}>
@@ -272,15 +275,18 @@ export default function Navbar() {
                 Contact Us
               </Link>
               
-              <form onSubmit={handleSearch} className="relative mt-4">
+              <form onSubmit={handleSearch} className="relative mt-4" role="search">
+                <label htmlFor="mobile-search" className="sr-only">Search products</label>
                 <input
-                  type="text"
+                  id="mobile-search"
+                  type="search"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                  aria-label="Search products"
                 />
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                <FaSearch className="absolute left-3 top-3 text-gray-400" aria-hidden="true" />
               </form>
               
               <div className="border-t border-gray-800 my-4"></div>

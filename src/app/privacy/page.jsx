@@ -1,8 +1,12 @@
 import Link from 'next/link';
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
   title: 'Privacy Policy | DarkChemSite',
   description: 'Privacy Policy for DarkChemSite - Learn how we collect, use, and protect your personal information.',
+  alternates: {
+    canonical: '/privacy',
+  },
 };
 
 export default function PrivacyPolicyPage() {

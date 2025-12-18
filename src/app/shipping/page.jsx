@@ -2,8 +2,12 @@ import Link from 'next/link';
 import { FaShippingFast, FaBox, FaGlobeAmericas, FaClock, FaShieldAlt, FaCheckCircle } from 'react-icons/fa';
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
   title: 'Shipping & Delivery Policy | DarkChemSite',
   description: 'Learn about our shipping methods, delivery times, international shipping, and tracking information.',
+  alternates: {
+    canonical: '/shipping',
+  },
 };
 
 export default function ShippingPolicyPage() {

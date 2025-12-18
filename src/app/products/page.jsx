@@ -3,12 +3,38 @@ import ProductList from '@/components/product/ProductList';
 import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
 
-// Metadata for SEO
-export const metadata = {
-  title: 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
-  description: 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA. High-quality synthetic cannabinoids and benzos for laboratory research.',
-  keywords: '5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, buy research chemicals, synthetic cannabinoids, benzos',
-};
+// Dynamic Metadata for SEO - handles query parameters
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const category = params?.category || '';
+  
+  // Always use /products as canonical to avoid duplicate content from query params
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com';
+  
+  return {
+    metadataBase: new URL(baseUrl),
+    title: category 
+      ? `${category} | Research Chemicals | DarkChemSite`
+      : 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
+    description: category
+      ? `Browse premium ${category.toLowerCase()}: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.`
+      : 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA. High-quality synthetic cannabinoids and benzos for laboratory research.',
+    keywords: '5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, buy research chemicals, synthetic cannabinoids, benzos',
+    alternates: {
+      canonical: '/products', // Always point to /products to avoid duplicate content from query params
+    },
+    openGraph: {
+      title: category 
+        ? `${category} | Research Chemicals | DarkChemSite`
+        : 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
+      description: category
+        ? `Browse premium ${category.toLowerCase()}: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.`
+        : 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.',
+      url: '/products',
+      type: 'website',
+    },
+  };
+}
 
 // Helper function to convert MongoDB documents to plain objects
 function convertToPlainObject(doc) {

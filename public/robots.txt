@@ -8,12 +8,26 @@ Allow: /products
 Allow: /products/*
 Allow: /about
 Allow: /contact
+Allow: /faq
+Allow: /shipping
+Allow: /terms
+Allow: /privacy
+Allow: /refund
 
+# Block admin and API routes
 Disallow: /admin
 Disallow: /admin/*
-Disallow: /api
+Disallow: /api/
 Disallow: /api/*
+
+# Block user-specific pages (not useful for SEO)
 Disallow: /cart
 Disallow: /checkout
+Disallow: /checkout/*
+Disallow: /profile
+Disallow: /account
+Disallow: /account/*
+Disallow: /auth/
+Disallow: /auth/*
 
 Sitemap: https://darkchemsite.com/sitemap.xml

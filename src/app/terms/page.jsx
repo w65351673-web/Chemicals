@@ -1,8 +1,12 @@
 import Link from 'next/link';
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
   title: 'Terms & Conditions | DarkChemSite',
   description: 'Terms and Conditions for DarkChemSite - Read our terms of service, user agreements, and legal policies.',
+  alternates: {
+    canonical: '/terms',
+  },
 };
 
 export default function TermsPage() {

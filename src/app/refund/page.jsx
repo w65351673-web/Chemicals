@@ -2,8 +2,12 @@ import Link from 'next/link';
 import { FaUndo, FaExclamationTriangle, FaCheckCircle, FaClock, FaEnvelope, FaTimesCircle } from 'react-icons/fa';
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
   title: 'Return & Refund Policy | DarkChemSite',
   description: 'Learn about our return policy, refund process, and how to request returns for defective or incorrect products.',
+  alternates: {
+    canonical: '/refund',
+  },
 };
 
 export default function RefundPolicyPage() {

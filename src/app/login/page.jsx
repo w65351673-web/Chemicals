@@ -3,6 +3,14 @@
 import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+// Add metadata to tell search engines this is a redirect
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 function LoginRedirectContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

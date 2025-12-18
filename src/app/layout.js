@@ -16,9 +16,11 @@ import CartProvider from "@/components/cart/CartProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['400', '600', '700'], // Reduced font weights for better performance
   variable: "--font-inter",
   display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata = {
@@ -105,15 +107,15 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.variable}>
-      <head>
-        {/* Ahrefs Analytics */}
-        <Script
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="+CffPsHUUwlzmNtibduF4Q"
-          strategy="afterInteractive"
-        />
-      </head>
       <body className="font-sans min-h-screen flex flex-col">
+        {/* Skip to main content link for accessibility */}
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-purple-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+        >
+          Skip to main content
+        </a>
+        
         <AuthProvider>
           <CartProvider>
             <VisitorTracker />
@@ -122,15 +124,24 @@ export default function RootLayout({ children }) {
             <ConditionalNavbar>
               <Navbar />
             </ConditionalNavbar>
-            <main className="flex-grow">{children}</main>
+            <main id="main-content" className="flex-grow">{children}</main>
             <ConditionalNavbar>
               <Footer />
             </ConditionalNavbar>
           </CartProvider>
         </AuthProvider>
 
-        {/* Tawk.to Chat Widget */}
-        <script
+        {/* Ahrefs Analytics - Lazy load for better performance */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="+CffPsHUUwlzmNtibduF4Q"
+          strategy="lazyOnload"
+        />
+
+        {/* Tawk.to Chat Widget - Lazy load for better performance */}
+        <Script
+          id="tawk-to"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

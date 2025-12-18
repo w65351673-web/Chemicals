@@ -52,7 +52,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center" aria-label="Go to homepage">
             <Image 
               src="/images/logo.png" 
               alt="DarkChemSite Logo" 
@@ -76,11 +76,16 @@ export default function Navbar() {
             
             {/* Shop Dropdown */}
             <div className="relative group">
-              <button className={`text-white hover:text-purple-400 transition-colors flex items-center ${
-                pathname === '/products' || pathname.includes('category') ? 'text-purple-400' : ''
-              }`}>
+              <button 
+                className={`text-white hover:text-purple-400 transition-colors flex items-center ${
+                  pathname === '/products' || pathname.includes('category') ? 'text-purple-400' : ''
+                }`}
+                aria-label="Shop menu"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
                 Shop
-                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
@@ -138,10 +143,10 @@ export default function Navbar() {
               <FaSearch className="absolute left-3 top-3 text-gray-400" />
             </form>
 
-            <Link href="/cart" className="relative text-white hover:text-purple-400">
-              <FaShoppingCart size={24} />
+            <Link href="/cart" className="relative text-white hover:text-purple-400 cart-icon" aria-label={`Shopping cart with ${cartItemsCount} items`}>
+              <FaShoppingCart size={24} aria-hidden="true" />
               {cartItemsCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" aria-label={`${cartItemsCount} items in cart`}>
                   {cartItemsCount}
                 </span>
               )}
@@ -149,8 +154,13 @@ export default function Navbar() {
 
             {user ? (
               <div className="relative group">
-                <button className="text-white hover:text-purple-400 flex items-center space-x-1">
-                  <FaUser size={20} />
+                <button 
+                  className="text-white hover:text-purple-400 flex items-center space-x-1"
+                  aria-label="User menu"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <FaUser size={20} aria-hidden="true" />
                   <span className="ml-1">{user.name.split(' ')[0]}</span>
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
@@ -179,10 +189,12 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden text-white focus:outline-none"
+            className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            {isMenuOpen ? <FaTimes size={24} aria-hidden="true" /> : <FaBars size={24} aria-hidden="true" />}
           </button>
         </div>
       </div>

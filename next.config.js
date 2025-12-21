@@ -23,6 +23,12 @@ const nextConfig = {
   swcMinify: true,
   compress: true,
   poweredByHeader: false,
+  // Reduce bundle size
+  modularizeImports: {
+    'react-icons': {
+      transform: 'react-icons/{{member}}',
+    },
+  },
   // Fix experimental flags for Next.js 15.3.2
   experimental: {
     // Use the correct format for serverActions in Next.js 15.3.2

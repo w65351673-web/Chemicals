@@ -31,14 +31,28 @@ import GlowingButton from '@/components/animations/GlowingButton';
 import SEOKeywords from '@/components/seo/SEOKeywords';
 
 export default function HomeClient({ featuredProducts = [] }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if mobile on mount
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-black relative">
       {/* SEO Keywords and Schema Markup */}
       <SEOKeywords />
       
-      {/* Enhanced Background Animations */}
-      <EnhancedParticles />
-      <ChemicalReaction />
+      {/* Enhanced Background Animations - Reduced on mobile for performance */}
+      {!isMobile && <EnhancedParticles />}
+      {!isMobile && <ChemicalReaction />}
       
       <HeroCarousel />
       <CategoriesSection />

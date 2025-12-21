@@ -36,7 +36,11 @@ export default function ProductCard({ product }) {
       onHoverEnd={() => setIsHovered(false)}
       className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
     >
-      <div className="relative h-48 w-full overflow-hidden cursor-pointer" onClick={() => window.location.href = `/products/${product.slug || product._id}`}>
+      <Link 
+        href={`/products/${product.slug || product._id}`}
+        className="relative h-48 w-full overflow-hidden cursor-pointer block"
+        aria-label={`View ${product.name}`}
+      >
           {product.images && product.images.length > 0 ? (
             <motion.div
               animate={{
@@ -51,6 +55,8 @@ export default function ProductCard({ product }) {
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
+                loading="lazy"
+                quality={85}
                 onError={(e) => {
                   e.target.onerror = null; 
                   e.target.src = '/images/placeholder.jpg';
@@ -119,21 +125,23 @@ export default function ProductCard({ product }) {
               <Link 
                 href={`/products/${product.slug || product._id}`}
                 className="bg-white text-purple-600 p-2 rounded-full hover:bg-purple-600 hover:text-white transition-colors duration-300"
+                aria-label={`View details for ${product.name}`}
               >
-                <FaEye size={18} />
+                <FaEye size={18} aria-hidden="true" />
               </Link>
               
               {(product.countInStock > 0 || product.countInStock === undefined) && (
                 <Link 
                   href={`/products/${product.slug || product._id}`}
                   className="bg-purple-600 text-white p-2 rounded-full hover:bg-purple-700 transition-colors duration-300"
+                  aria-label={`Add ${product.name} to cart`}
                 >
-                  <FaShoppingCart size={18} />
+                  <FaShoppingCart size={18} aria-hidden="true" />
                 </Link>
               )}
             </motion.div>
           </motion.div>
-        </div>
+        </Link>
 
       <div className="p-4">
         <Link href={`/products/${product.slug || product._id}`}>

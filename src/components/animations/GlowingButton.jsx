@@ -82,7 +82,7 @@ export default function GlowingButton({
     }
   }, []);
   
-  // Ripple effect JSX
+  // Ripple effect JSX - always render same structure
   const rippleEffect = (
     <span className="absolute inset-0 overflow-hidden rounded-lg">
       {rippleStyles.map((style, i) => (
@@ -95,32 +95,21 @@ export default function GlowingButton({
     </span>
   );
   
-  // Animation styles - only include on client side
-  const AnimationStyles = () => {
-    // Only include styles when running on client
-    const [isMounted, setIsMounted] = useState(false);
-    
-    useEffect(() => {
-      setIsMounted(true);
-    }, []);
-    
-    if (!isMounted) return null;
-    
-    return (
-      <style jsx global>{`
-        @keyframes ripple {
-          0% {
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0.8;
-          }
-          100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0;
-          }
+  // Animation styles - render unconditionally
+  const AnimationStyles = () => (
+    <style jsx global>{`
+      @keyframes ripple {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0.8;
         }
-      `}</style>
-    );
-  };
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 0;
+        }
+      }
+    `}</style>
+  );
   
   // Use the appropriate component based on whether we have an href
   if (href) {

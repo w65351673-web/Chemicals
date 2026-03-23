@@ -13,9 +13,15 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { cart } = useCart();
+
+  // Handle mount for hydration safety
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Handle scroll effect
   useEffect(() => {
@@ -203,9 +209,10 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
+      {mounted && (
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -321,8 +328,9 @@ export default function Navbar() {
               )}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      )}
     </header>
   );
 }

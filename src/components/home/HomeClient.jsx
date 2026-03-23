@@ -29,6 +29,7 @@ import MoleculeAnimation from '@/components/animations/MoleculeAnimation';
 import ChemicalReaction from '@/components/animations/ChemicalReaction';
 import GlowingButton from '@/components/animations/GlowingButton';
 import SEOKeywords from '@/components/seo/SEOKeywords';
+import EmailMailbox from '@/components/common/EmailMailbox';
 
 export default function HomeClient({ featuredProducts = [] }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -1109,7 +1110,7 @@ function CallToAction() {
         
         <ScrollReveal delay={0.4}>
           <motion.div 
-            className="flex flex-col sm:flex-row justify-center gap-4"
+            className="flex flex-col sm:flex-row justify-center gap-4 flex-wrap"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
@@ -1125,6 +1126,13 @@ function CallToAction() {
               >
                 Browse Products
               </GlowingButton>
+            </motion.div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <EmailMailbox email="info@darkchemsite.com" />
             </motion.div>
             
             <motion.div

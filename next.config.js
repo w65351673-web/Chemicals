@@ -29,13 +29,10 @@ const nextConfig = {
       transform: 'react-icons/{{member}}',
     },
   },
-  // Fix experimental flags for Next.js 15.3.2
   experimental: {
-    // Use the correct format for serverActions in Next.js 15.3.2
     serverActions: {
       bodySizeLimit: '2mb'
     },
-    optimizeCss: true,
   },
   // Add transpilePackages for Three.js and related packages
   transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],

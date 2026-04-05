@@ -4,6 +4,18 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaQuestionCircle, FaChevronDown, FaChevronUp, FaSearch } from 'react-icons/fa';
 
+function renderAnswerWithLinks(text) {
+  const emailRegex = /([\w.-]+@[\w.-]+\.\w+)/g;
+  const parts = text.split(emailRegex);
+  return parts.map((part, i) =>
+    emailRegex.test(part) ? (
+      <a key={i} href={`mailto:${part}`} className="text-purple-400 hover:text-purple-300">{part}</a>
+    ) : (
+      part
+    )
+  );
+}
+
 export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -283,7 +295,7 @@ export default function FAQPage() {
                 </button>
                 {openIndex === index && (
                   <div className="px-6 py-4 bg-gray-900 border-t border-gray-700">
-                    <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                    <p className="text-gray-300 leading-relaxed">{renderAnswerWithLinks(faq.answer)}</p>
                   </div>
                 )}
               </div>

@@ -163,7 +163,7 @@ export default function RefundPolicyPage() {
                   <span className="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4 font-bold">1</span>
                   <div>
                     <p className="font-semibold text-white mb-1">Contact Us Immediately</p>
-                    <p className="text-sm">Email info@darkchemsite.com within the specified timeframe</p>
+                    <p className="text-sm">Email <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a> within the specified timeframe</p>
                     <p className="text-xs text-gray-400 mt-1">Include: Order number, product name, and reason for return</p>
                   </div>
                 </li>
@@ -367,7 +367,7 @@ export default function RefundPolicyPage() {
               <p className="font-semibold text-white mb-2">✅ Cancellation Possible</p>
               <p className="text-sm">
                 You may cancel your order for a full refund if it hasn't been processed or shipped yet. 
-                Contact us immediately at info@darkchemsite.com with your order number.
+                Contact us immediately at <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a> with your order number.
               </p>
             </div>
 
@@ -396,7 +396,7 @@ export default function RefundPolicyPage() {
                 <li>Reporting to fraud prevention agencies</li>
               </ul>
               <p className="text-yellow-400 font-semibold">
-                Please contact us first at info@darkchemsite.com. We're committed to resolving all issues fairly and promptly.
+                Please contact us first at <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a>. We're committed to resolving all issues fairly and promptly.
               </p>
             </div>
           </section>
@@ -411,7 +411,7 @@ export default function RefundPolicyPage() {
               Have questions about returns or need to start a return request?
             </p>
             <div className="bg-gray-900 p-6 rounded-lg">
-              <p className="mb-3"><strong className="text-white">Email:</strong> info@darkchemsite.com</p>
+              <p className="mb-3"><strong className="text-white">Email:</strong> <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></p>
               <p className="mb-3"><strong className="text-white">Subject Line:</strong> Return Request - Order #[Your Order Number]</p>
               <p className="mb-3"><strong className="text-white">Response Time:</strong> Within 24 hours</p>
               <p className="mb-3"><strong className="text-white">Contact Form:</strong> <Link href="/contact" className="text-purple-400 hover:text-purple-300">Click here</Link></p>

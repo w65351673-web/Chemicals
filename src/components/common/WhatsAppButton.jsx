@@ -10,7 +10,9 @@ export default function WhatsAppButton() {
       {/* Email Button */}
       <div className="group relative">
         <a
-          href={`mailto:${emailAddress}`}
+          href={`https://mail.google.com/mail/?view=cm&to=${emailAddress}&su=Inquiry%20from%20DarkChemSite`}
+          target="_blank"
+          rel="noopener noreferrer"
           className="block bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-white rounded-full p-4 shadow-2xl transition-all duration-300 hover:shadow-cyan-500/50"
           aria-label="Email us"
         >

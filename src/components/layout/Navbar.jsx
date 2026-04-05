@@ -213,121 +213,121 @@ export default function Navbar() {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-gray-900"
-          >
-            <div className="px-4 py-3 space-y-1">
-              <Link 
-                href="/" 
-                className={`block py-2 text-white hover:text-purple-400 ${
-                  pathname === '/' ? 'text-purple-400' : ''
-                }`}
-              >
-                Home
-              </Link>
-              
-              {/* Shop section with subcategories */}
-              <div className="py-2">
-                <div className="flex items-center justify-between text-white hover:text-purple-400 cursor-pointer">
-                  <span>Shop</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div className="pl-4 mt-1 space-y-1">
-                  <Link 
-                    href="/products?category=cannabinoids" 
-                    className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('category=cannabinoids') ? 'text-purple-400' : ''
-                    }`}
-                  >
-                    Cannabinoids
-                  </Link>
-                  <Link 
-                    href="/products?category=research%20chemicals" 
-                    className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('category=research%20chemicals') ? 'text-purple-400' : ''
-                    }`}
-                  >
-                    Research Chemicals
-                  </Link>
-                  <Link 
-                    href="/products?category=benzos" 
-                    className={`block py-2 text-sm text-white hover:text-purple-400 ${
-                      pathname.includes('category=benzos') ? 'text-purple-400' : ''
-                    }`}
-                  >
-                    Benzos
-                  </Link>
-                </div>
-              </div>
-              
-              <Link 
-                href="/about" 
-                className={`block py-2 text-white hover:text-purple-400 ${
-                  pathname === '/about' ? 'text-purple-400' : ''
-                }`}
-              >
-                About
-              </Link>
-              
-              <Link 
-                href="/contact" 
-                className={`block py-2 text-white hover:text-purple-400 ${
-                  pathname === '/contact' ? 'text-purple-400' : ''
-                }`}
-              >
-                Contact Us
-              </Link>
-              
-              <form onSubmit={handleSearch} className="relative mt-4" role="search">
-                <label htmlFor="mobile-search" className="sr-only">Search products</label>
-                <input
-                  id="mobile-search"
-                  type="search"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
-                  aria-label="Search products"
-                />
-                <FaSearch className="absolute left-3 top-3 text-gray-400" aria-hidden="true" />
-              </form>
-              
-              <div className="border-t border-gray-800 my-4"></div>
-              
-              <Link href="/cart" className="flex items-center py-2 text-white hover:text-purple-400">
-                <FaShoppingCart size={20} className="mr-2" />
-                <span>Cart ({cartItemsCount})</span>
-              </Link>
-              
-              {user ? (
-                <>
-                  <Link href="/profile" className="flex items-center py-2 text-white hover:text-purple-400">
-                    <FaUser size={20} className="mr-2" />
-                    <span>Profile</span>
-                  </Link>
-                  {user.isAdmin && (
-                    <Link href="/admin" className="block py-2 text-white hover:text-purple-400">
-                      Admin Dashboard
-                    </Link>
-                  )}
-                  <button
-                    onClick={logout}
-                    className="flex items-center py-2 text-white hover:text-purple-400 w-full text-left"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <Link href="/auth/login" className="block py-2 text-white hover:text-purple-400">
-                  Login
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-gray-900"
+            >
+              <div className="px-4 py-3 space-y-1">
+                <Link 
+                  href="/" 
+                  className={`block py-2 text-white hover:text-purple-400 ${
+                    pathname === '/' ? 'text-purple-400' : ''
+                  }`}
+                >
+                  Home
                 </Link>
-              )}
-            </div>
-          </motion.div>
+                
+                {/* Shop section with subcategories */}
+                <div className="py-2">
+                  <div className="flex items-center justify-between text-white hover:text-purple-400 cursor-pointer">
+                    <span>Shop</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                  <div className="pl-4 mt-1 space-y-1">
+                    <Link 
+                      href="/products?category=cannabinoids" 
+                      className={`block py-2 text-sm text-white hover:text-purple-400 ${
+                        pathname.includes('category=cannabinoids') ? 'text-purple-400' : ''
+                      }`}
+                    >
+                      Cannabinoids
+                    </Link>
+                    <Link 
+                      href="/products?category=research%20chemicals" 
+                      className={`block py-2 text-sm text-white hover:text-purple-400 ${
+                        pathname.includes('category=research%20chemicals') ? 'text-purple-400' : ''
+                      }`}
+                    >
+                      Research Chemicals
+                    </Link>
+                    <Link 
+                      href="/products?category=benzos" 
+                      className={`block py-2 text-sm text-white hover:text-purple-400 ${
+                        pathname.includes('category=benzos') ? 'text-purple-400' : ''
+                      }`}
+                    >
+                      Benzos
+                    </Link>
+                  </div>
+                </div>
+                
+                <Link 
+                  href="/about" 
+                  className={`block py-2 text-white hover:text-purple-400 ${
+                    pathname === '/about' ? 'text-purple-400' : ''
+                  }`}
+                >
+                  About
+                </Link>
+                
+                <Link 
+                  href="/contact" 
+                  className={`block py-2 text-white hover:text-purple-400 ${
+                    pathname === '/contact' ? 'text-purple-400' : ''
+                  }`}
+                >
+                  Contact Us
+                </Link>
+                
+                <form onSubmit={handleSearch} className="relative mt-4" role="search">
+                  <label htmlFor="mobile-search" className="sr-only">Search products</label>
+                  <input
+                    id="mobile-search"
+                    type="search"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-gray-800 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                    aria-label="Search products"
+                  />
+                  <FaSearch className="absolute left-3 top-3 text-gray-400" aria-hidden="true" />
+                </form>
+                
+                <div className="border-t border-gray-800 my-4"></div>
+                
+                <Link href="/cart" className="flex items-center py-2 text-white hover:text-purple-400">
+                  <FaShoppingCart size={20} className="mr-2" />
+                  <span>Cart ({cartItemsCount})</span>
+                </Link>
+                
+                {user ? (
+                  <>
+                    <Link href="/profile" className="flex items-center py-2 text-white hover:text-purple-400">
+                      <FaUser size={20} className="mr-2" />
+                      <span>Profile</span>
+                    </Link>
+                    {user.isAdmin && (
+                      <Link href="/admin" className="block py-2 text-white hover:text-purple-400">
+                        Admin Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={logout}
+                      className="flex items-center py-2 text-white hover:text-purple-400 w-full text-left"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link href="/auth/login" className="block py-2 text-white hover:text-purple-400">
+                    Login
+                  </Link>
+                )}
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       )}

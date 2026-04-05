@@ -14,6 +14,11 @@ export default function GlowingButton({
   ...props 
 }) {
   const buttonRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   useEffect(() => {
     // Only run GSAP animations on the client side
@@ -116,20 +121,32 @@ export default function GlowingButton({
     return (
       <>
         <AnimationStyles />
-        <motion.div
-          whileTap={{ scale: 0.98 }}
-          className="inline-block"
-        >
+        {mounted ? (
+          <motion.div
+            whileTap={{ scale: 0.98 }}
+            className="inline-block"
+          >
+            <Link
+              href={href}
+              ref={buttonRef}
+              className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 ${className}`}
+              {...props}
+            >
+              {rippleEffect}
+              <span className="relative z-10">{children}</span>
+            </Link>
+          </motion.div>
+        ) : (
           <Link
             href={href}
             ref={buttonRef}
-            className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 ${className}`}
+            className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 inline-block ${className}`}
             {...props}
           >
             {rippleEffect}
             <span className="relative z-10">{children}</span>
           </Link>
-        </motion.div>
+        )}
       </>
     );
   }
@@ -138,16 +155,28 @@ export default function GlowingButton({
   return (
     <>
       <AnimationStyles />
-      <motion.button
-        ref={buttonRef}
-        onClick={onClick}
-        className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 ${className}`}
-        whileTap={{ scale: 0.98 }}
-        {...props}
-      >
-        {rippleEffect}
-        <span className="relative z-10">{children}</span>
-      </motion.button>
+      {mounted ? (
+        <motion.button
+          ref={buttonRef}
+          onClick={onClick}
+          className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 ${className}`}
+          whileTap={{ scale: 0.98 }}
+          {...props}
+        >
+          {rippleEffect}
+          <span className="relative z-10">{children}</span>
+        </motion.button>
+      ) : (
+        <button
+          ref={buttonRef}
+          onClick={onClick}
+          className={`relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 ${className}`}
+          {...props}
+        >
+          {rippleEffect}
+          <span className="relative z-10">{children}</span>
+        </button>
+      )}
     </>
   );
 }

@@ -279,7 +279,7 @@ export default function TermsPage() {
             
             <h3 className="text-xl font-semibold text-purple-400 mb-3">13.1 Informal Resolution</h3>
             <p className="mb-4">
-              Before filing a claim, you agree to contact us at info@darkchemsite.com to attempt to resolve the dispute informally.
+              Before filing a claim, you agree to contact us at <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a> to attempt to resolve the dispute informally.
             </p>
 
             <h3 className="text-xl font-semibold text-purple-400 mb-3">13.2 Arbitration</h3>
@@ -332,7 +332,7 @@ export default function TermsPage() {
               If you have questions about these Terms, please contact us:
             </p>
             <div className="bg-gray-900 p-6 rounded-lg">
-              <p className="mb-2"><strong className="text-white">Email:</strong> info@darkchemsite.com</p>
+              <p className="mb-2"><strong className="text-white">Email:</strong> <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></p>
               <p className="mb-2"><strong className="text-white">Website:</strong> <Link href="/contact" className="text-purple-400 hover:text-purple-300">Contact Form</Link></p>
               <p><strong className="text-white">Response Time:</strong> We aim to respond within 48 hours</p>
             </div>

@@ -227,7 +227,7 @@ export default function PrivacyPolicyPage() {
               If you have questions, concerns, or requests regarding this Privacy Policy or your personal information, please contact us:
             </p>
             <div className="bg-gray-900 p-6 rounded-lg">
-              <p className="mb-2"><strong className="text-white">Email:</strong> info@darkchemsite.com</p>
+              <p className="mb-2"><strong className="text-white">Email:</strong> <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></p>
               <p className="mb-2"><strong className="text-white">Website:</strong> <Link href="/contact" className="text-purple-400 hover:text-purple-300">Contact Form</Link></p>
               <p><strong className="text-white">Response Time:</strong> We aim to respond within 48 hours</p>
             </div>

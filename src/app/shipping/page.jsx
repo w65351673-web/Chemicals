@@ -183,7 +183,7 @@ export default function ShippingPolicyPage() {
               <ol className="list-decimal list-inside space-y-3">
                 <li className="mb-2">
                   <strong className="text-white">Check Your Email:</strong>
-                  <p className="ml-6 mt-1 text-sm">Look for the shipping confirmation email from info@darkchemsite.com</p>
+                  <p className="ml-6 mt-1 text-sm">Look for the shipping confirmation email from <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></p>
                 </li>
                 <li className="mb-2">
                   <strong className="text-white">Visit Carrier Website:</strong>
@@ -235,7 +235,7 @@ export default function ShippingPolicyPage() {
                 <strong>Shipping Restrictions:</strong>
               </p>
               <p className="text-sm">
-                Please contact us at info@darkchemsite.com to verify if we can ship to your country before placing an order.
+                Please contact us at <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a> to verify if we can ship to your country before placing an order.
               </p>
             </div>
 
@@ -264,7 +264,7 @@ export default function ShippingPolicyPage() {
               <li>Look for delivery notices or alternative drop-off locations</li>
               <li>Wait 24 hours as carriers sometimes mark packages delivered early</li>
               <li>Contact the shipping carrier directly with your tracking number</li>
-              <li>If still missing after 48 hours, contact us at info@darkchemsite.com</li>
+              <li>If still missing after 48 hours, contact us at <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></li>
             </ol>
             <p className="text-yellow-400 text-sm">
               <strong>Note:</strong> We are not responsible for packages stolen after delivery confirmation. Consider using a secure delivery location.
@@ -316,7 +316,7 @@ export default function ShippingPolicyPage() {
               Need help with your shipment? We're here to assist:
             </p>
             <div className="bg-gray-900 p-6 rounded-lg">
-              <p className="mb-3"><strong className="text-white">Email:</strong> info@darkchemsite.com</p>
+              <p className="mb-3"><strong className="text-white">Email:</strong> <a href="mailto:info@darkchemsite.com" className="text-purple-400 hover:text-purple-300">info@darkchemsite.com</a></p>
               <p className="mb-3"><strong className="text-white">Response Time:</strong> Within 24 hours</p>
               <p className="mb-3"><strong className="text-white">Contact Form:</strong> <Link href="/contact" className="text-purple-400 hover:text-purple-300">Click here</Link></p>
               <p className="text-sm text-gray-400 mt-4">

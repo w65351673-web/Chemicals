@@ -99,7 +99,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-sm text-purple-300">Email</p>
-                  <p className="text-white font-medium">info@darkchemsite.com</p>
+                  <a href="mailto:info@darkchemsite.com" className="text-white font-medium hover:text-purple-300 transition-colors">info@darkchemsite.com</a>
                 </div>
               </div>
               

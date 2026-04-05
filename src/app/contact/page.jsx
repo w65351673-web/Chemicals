@@ -110,12 +110,12 @@ export default function ContactPage() {
                 <div>
                   <p className="text-sm text-green-300">WhatsApp</p>
                   <a 
-                    href="https://wa.me/19802432914" 
+                    href="https://wa.me/19852913802" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-white font-medium hover:text-green-300 transition-colors"
                   >
-                    +1 980 243 2914
+                    +1 985 291 3802
                   </a>
                 </div>
               </div>

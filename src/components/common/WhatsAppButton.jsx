@@ -1,7 +1,7 @@
 import { FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 
 export default function WhatsAppButton() {
-  const whatsappNumber = '19802432914'; // Your WhatsApp number
+  const whatsappNumber = '19852913802'; // Your WhatsApp number
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
   const emailAddress = 'info@darkchemsite.com';
 

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import ProductList from '@/components/product/ProductList';
 import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
+import { categoryLabel } from '@/lib/constants/categories';
 
 // Dynamic Metadata for SEO - handles query parameters
 export async function generateMetadata({ searchParams }) {
@@ -9,27 +10,27 @@ export async function generateMetadata({ searchParams }) {
   const category = params?.category || '';
   
   // Always use /products as canonical to avoid duplicate content from query params
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chemicalssite.com';
   
   return {
     metadataBase: new URL(baseUrl),
     title: category 
-      ? `${category} | Research Chemicals | DarkChemSite`
-      : 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
+      ? `${categoryLabel(category)} | ChemicalsSite`
+      : 'Anabolic Steroids, Psychedelics & Research Chemicals | ChemicalsSite',
     description: category
-      ? `Browse premium ${category.toLowerCase()}: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.`
-      : 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA. High-quality synthetic cannabinoids and benzos for laboratory research.',
-    keywords: '5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, buy research chemicals, synthetic cannabinoids, benzos',
+      ? `Browse high-purity ${categoryLabel(category).toLowerCase()} for laboratory research \u2014 every batch assayed and documented.`
+      : 'Browse high-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research. Testosterone enanthate, trenbolone acetate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 2-FDCK and more.',
+    keywords: 'anabolic steroids, psychedelic drugs, research chemicals, testosterone enanthate, trenbolone acetate, nandrolone decanoate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 2-FDCK, buy research chemicals online',
     alternates: {
       canonical: '/products', // Always point to /products to avoid duplicate content from query params
     },
     openGraph: {
       title: category 
-        ? `${category} | Research Chemicals | DarkChemSite`
-        : 'Research Chemicals | 5cl-adba, jwh-018, adb-butinaca | DarkChemSite',
+        ? `${categoryLabel(category)} | ChemicalsSite`
+        : 'Anabolic Steroids, Psychedelics & Research Chemicals | ChemicalsSite',
       description: category
-        ? `Browse premium ${category.toLowerCase()}: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.`
-        : 'Browse premium research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.',
+        ? `Browse high-purity ${categoryLabel(category).toLowerCase()} for laboratory research.`
+        : 'Browse high-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research.',
       url: '/products',
       type: 'website',
     },
@@ -129,10 +130,14 @@ async function getProducts(searchParams) {
 // Loading component
 function ProductsLoading() {
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
+    <div className="grid grid-cols-1 gap-x-8 gap-y-14 py-14 sm:grid-cols-2 xl:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="animate-pulse">
+          <div className="aspect-[4/5] w-full bg-bone-dark" />
+          <div className="mt-5 h-4 w-2/3 bg-bone-dark" />
+          <div className="mt-3 h-3 w-1/3 bg-bone-dark" />
+        </div>
+      ))}
     </div>
   );
 }
@@ -145,19 +150,24 @@ export default async function ProductsPage({ searchParams }) {
   const selectedCategory = params?.category || '';
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            {selectedCategory ? `€{selectedCategory}` : 'All Products'}
-          </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            {selectedCategory 
-              ? `Browse our premium collection of €{selectedCategory.toLowerCase()}.`
-              : 'Browse our premium collection of research chemicals, cannabinoids, stimulants, and benzos.'}
-          </p>
-        </div>
-        
+    <div className="min-h-screen bg-bone pt-32">
+      <div className="container-editorial">
+        <header className="grid grid-cols-1 items-end gap-8 pb-14 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <p className="eyebrow">{selectedCategory ? 'Category' : 'The catalogue'}</p>
+            <h1 className="mt-5 font-serif text-[clamp(2.4rem,6vw,4.4rem)] leading-[0.98] text-ink">
+              {selectedCategory ? categoryLabel(selectedCategory) : 'All products'}
+            </h1>
+          </div>
+          <div className="lg:col-span-4">
+            <p className="max-w-sm text-[15px] leading-[1.75] text-ink-muted">
+              {selectedCategory
+                ? `A curated selection of ${categoryLabel(selectedCategory).toLowerCase()}, each batch assayed for identity and purity before it is listed.`
+                : 'Anabolic steroids, psychedelic drugs and research chemicals \u2014 each batch assayed, documented and dispatched discreetly.'}
+            </p>
+          </div>
+        </header>
+
         <Suspense fallback={<ProductsLoading />}>
           <ProductList initialProducts={products} selectedCategory={selectedCategory} />
         </Suspense>

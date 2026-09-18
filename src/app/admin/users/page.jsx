@@ -84,10 +84,13 @@ export default function AdminUsers() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl font-bold text-white">User Management</h1>
-        
-        <div className="flex flex-col sm:flex-row gap-4">
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <p className="eyebrow mb-1">Administration</p>
+          <h1 className="text-2xl font-serif font-medium text-ink">User Management</h1>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
           {/* Search Form */}
           <form onSubmit={handleSearch} className="flex">
             <input
@@ -95,82 +98,81 @@ export default function AdminUsers() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search users..."
-              className="bg-gray-700 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="bg-bone border border-ink/15 border-r-0 text-ink px-4 py-2.5 rounded-l-[2px] focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors text-sm"
             />
             <button
               type="submit"
-              className="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700"
+              className="bg-ink text-bone-light px-4 py-2.5 rounded-r-[2px] hover:bg-ink-soft transition-colors"
             >
               <FaSearch />
             </button>
           </form>
-          
-          {/* Add New User Button */}
+
           <Link
             href="/admin/users/new"
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center justify-center"
+            className="btn-primary"
           >
             <FaUserPlus className="mr-2" />
             Add User
           </Link>
         </div>
-      </div>
-      
+      </header>
+
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-lg">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark p-4 rounded-editorial text-sm">
           {error}
         </div>
       )}
-      
+
       {/* Users Table */}
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <>
           {displayUsers && displayUsers.length > 0 ? (
-            <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-bone-light border border-ink/10 rounded-editorial overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400 bg-gray-700">
-                      <th className="p-4">Name</th>
-                      <th className="p-4">Email</th>
-                      <th className="p-4">Role</th>
-                      <th className="p-4">Joined</th>
-                      <th className="p-4">Actions</th>
+                    <tr className="text-left text-ink-muted border-b border-ink/10 bg-bone/50">
+                      <th className="p-4 font-normal">Name</th>
+                      <th className="p-4 font-normal">Email</th>
+                      <th className="p-4 font-normal">Role</th>
+                      <th className="p-4 font-normal">Joined</th>
+                      <th className="p-4 font-normal">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {displayUsers.map((user) => (
-                      <tr key={user._id} className="border-b border-gray-700 hover:bg-gray-750">
-                        <td className="p-4 text-white">{user.name}</td>
-                        <td className="p-4 text-white">{user.email}</td>
+                      <tr key={user._id} className="border-b border-ink/5 last:border-0 hover:bg-bone/50 transition-colors">
+                        <td className="p-4 font-medium text-ink-soft">{user.name}</td>
+                        <td className="p-4 text-ink-muted">{user.email}</td>
                         <td className="p-4">
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            user.role === 'admin' 
-                              ? 'bg-purple-500/20 text-purple-400' 
-                              : 'bg-blue-500/20 text-blue-400'
+                          <span className={`px-2.5 py-1 rounded-full text-xs ${
+                            user.role === 'admin'
+                              ? 'bg-ink text-bone-light'
+                              : 'bg-ink/5 text-ink-muted'
                           }`}>
                             {user.role}
                           </span>
                         </td>
-                        <td className="p-4 text-gray-400">
+                        <td className="p-4 text-ink-muted">
                           {new Date(user.createdAt).toLocaleDateString()}
                         </td>
                         <td className="p-4">
-                          <div className="flex space-x-2">
+                          <div className="flex items-center space-x-2">
                             <Link
                               href={`/admin/users/edit/${user._id}`}
-                              className="text-blue-400 hover:text-blue-300"
+                              className="text-ink-muted hover:text-ink p-1.5 hover:bg-bone-deep rounded-editorial transition-colors"
                               title="Edit User"
                             >
                               <FaUserEdit size={18} />
                             </Link>
                             <button
                               onClick={() => handleDeleteClick(user)}
-                              className="text-red-400 hover:text-red-300"
+                              className="text-ink-muted hover:text-red-700 p-1.5 hover:bg-bone-deep rounded-editorial transition-colors disabled:opacity-40"
                               title="Delete User"
                               disabled={user.role === 'admin'}
                             >
@@ -183,37 +185,37 @@ export default function AdminUsers() {
                   </tbody>
                 </table>
               </div>
-              
+
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-center p-4">
-                  <div className="flex space-x-2">
+                <div className="flex justify-center p-4 border-t border-ink/10">
+                  <div className="flex space-x-1">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="px-3 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                      className="px-3 py-1.5 rounded-editorial bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep disabled:opacity-40 text-sm transition-colors"
                     >
                       Previous
                     </button>
-                    
+
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                       <button
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`px-3 py-1 rounded ${
+                        className={`px-3 py-1.5 rounded-editorial text-sm ${
                           currentPage === page
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-gray-700 text-white'
+                            ? 'bg-ink text-bone-light'
+                            : 'bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep'
                         }`}
                       >
                         {page}
                       </button>
                     ))}
-                    
+
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                      className="px-3 py-1.5 rounded-editorial bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep disabled:opacity-40 text-sm transition-colors"
                     >
                       Next
                     </button>
@@ -222,11 +224,11 @@ export default function AdminUsers() {
               )}
             </div>
           ) : (
-            <div className="bg-gray-800 p-8 rounded-lg text-center">
-              <p className="text-gray-400 mb-4">No users found.</p>
+            <div className="bg-bone-light border border-ink/10 p-8 rounded-editorial text-center">
+              <p className="text-ink-muted mb-4">No users found.</p>
               <Link
                 href="/admin/users/new"
-                className="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                className="btn-primary"
               >
                 Add Your First User
               </Link>
@@ -234,26 +236,26 @@ export default function AdminUsers() {
           )}
         </>
       )}
-      
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-xl font-bold text-white mb-4">Confirm Deletion</h3>
-            <p className="text-gray-300 mb-6">
-              Are you sure you want to delete the user <span className="font-semibold">{userToDelete?.name}</span>? 
+        <div className="fixed inset-0 bg-ink/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-bone-light border border-ink/10 rounded-editorial max-w-md w-full p-6 shadow-editorial-lg">
+            <h3 className="text-xl font-serif font-medium text-ink mb-4">Confirm Deletion</h3>
+            <p className="text-ink-muted mb-8">
+              Are you sure you want to delete the user <span className="font-medium text-ink-soft">{userToDelete?.name}</span>?
               This action cannot be undone.
             </p>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                className="px-4 py-2 bg-bone border border-ink/15 text-ink-soft rounded-editorial hover:border-ink/30 hover:text-ink transition-colors text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                className="px-4 py-2 bg-red-700 text-bone-light rounded-editorial hover:bg-red-800 transition-colors text-sm"
               >
                 Delete
               </button>

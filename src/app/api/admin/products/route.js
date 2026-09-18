@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
 import { uploadToCloudinary } from '@/lib/utils/cloudinary';
+import { PRODUCT_CATEGORY_VALUES, DEFAULT_CATEGORY } from '@/lib/constants/categories';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -112,15 +113,14 @@ export async function POST(request) {
         productData.category = productData.category.toLowerCase();
         
         // Ensure it's one of the valid categories
-        const validCategories = ['cannabinoids', 'benzos', 'research chemicals'];
-        if (!validCategories.includes(productData.category)) {
+        if (!PRODUCT_CATEGORY_VALUES.includes(productData.category)) {
           // Default to a valid category if invalid one is provided
-          console.warn(`Invalid category provided: ${productData.category}. Defaulting to 'research chemicals'.`);
-          productData.category = 'research chemicals';
+          console.warn(`Invalid category provided: ${productData.category}. Defaulting to '${DEFAULT_CATEGORY}'.`);
+          productData.category = DEFAULT_CATEGORY;
         }
       } else {
         // Default category if none provided
-        productData.category = 'research chemicals';
+        productData.category = DEFAULT_CATEGORY;
       }
       
       // Images are already URLs in this case
@@ -142,15 +142,14 @@ export async function POST(request) {
         category = category.toLowerCase();
         
         // Ensure it's one of the valid categories
-        const validCategories = ['cannabinoids', 'benzos', 'research chemicals', 'other'];
-        if (!validCategories.includes(category)) {
+        if (!PRODUCT_CATEGORY_VALUES.includes(category)) {
           // Default to a valid category if invalid one is provided
-          console.warn(`Invalid category provided: ${category}. Defaulting to 'research chemicals'.`);
-          category = 'research chemicals';
+          console.warn(`Invalid category provided: ${category}. Defaulting to '${DEFAULT_CATEGORY}'.`);
+          category = DEFAULT_CATEGORY;
         }
       } else {
         // Default category if none provided
-        category = 'research chemicals';
+        category = DEFAULT_CATEGORY;
       }
       
       const countInStock = parseInt(formData.get('countInStock'));

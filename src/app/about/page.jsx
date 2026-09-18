@@ -1,352 +1,205 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaFlask, FaLeaf, FaShieldAlt, FaTruck, FaHeadset, FaMoneyBillWave, FaClock } from 'react-icons/fa';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Reveal, { RevealText, RevealRule } from '@/components/animations/Reveal';
+import { PRODUCT_CATEGORIES, categoryHref } from '@/lib/constants/categories';
+
+const EASE = [0.22, 1, 0.36, 1];
+
+const PRINCIPLES = [
+  {
+    number: '01',
+    title: 'Verified before listing',
+    copy: 'No batch reaches the catalogue until an independent assay confirms identity, concentration and purity.',
+  },
+  {
+    number: '02',
+    title: 'Documented lineage',
+    copy: 'Every vial carries a reference number that ties back to its certificate, storage conditions and arrival date.',
+  },
+  {
+    number: '03',
+    title: 'Discreet by default',
+    copy: 'Unbranded, sealed packaging with tracked worldwide dispatch. Nothing on the outside describes the contents.',
+  },
+  {
+    number: '04',
+    title: 'Answered by people',
+    copy: 'Technical questions are answered by the same team that handles the material, usually within one business day.',
+  },
+];
+
+const FACTS = [
+  { value: '3', label: 'Research categories' },
+  { value: '99.4%', label: 'Average verified purity' },
+  { value: '48h', label: 'Typical dispatch window' },
+  { value: '24h', label: 'Median reply time' },
+];
 
 export default function AboutPage() {
-  const containerRef = useRef(null);
-  const missionRef = useRef(null);
-  const whoWeAreRef = useRef(null);
-  
-  // Register ScrollTrigger plugin
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Create background particles
-    if (!containerRef.current) return;
-    
-    const container = containerRef.current;
-    const particles = [];
-    const particleCount = 20;
-    
-    // Create particles
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'absolute rounded-full bg-purple-500/10 pointer-events-none';
-      
-      // Random size
-      const size = Math.random() * 150 + 50;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      
-      // Random position
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.top = `${Math.random() * 100}%`;
-      
-      container.appendChild(particle);
-      particles.push(particle);
-      
-      // Animate each particle
-      gsap.to(particle, {
-        x: (Math.random() - 0.5) * 200,
-        y: (Math.random() - 0.5) * 200,
-        opacity: Math.random() * 0.3 + 0.1,
-        duration: Math.random() * 20 + 10,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: Math.random() * 5
-      });
-    }
-    
-    // Animate mission and who we are sections
-    if (missionRef.current && whoWeAreRef.current) {
-      gsap.from(missionRef.current, {
-        scrollTrigger: {
-          trigger: missionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        },
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: 'power3.out'
-      });
-      
-      gsap.from(whoWeAreRef.current, {
-        scrollTrigger: {
-          trigger: whoWeAreRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none'
-        },
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: 'power3.out',
-        delay: 0.3
-      });
-    }
-    
-    return () => {
-      particles.forEach(particle => {
-        gsap.killTweensOf(particle);
-        particle.remove();
-      });
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
-  
   return (
-    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 relative overflow-hidden">
-      <div className="container mx-auto px-4 py-12 relative z-10">
-        <div className="max-w-4xl mx-auto">
-          <motion.h1 
-            className="text-4xl font-bold text-white mb-8 text-center relative inline-block w-full"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <span className="relative inline-block">
-              About DarkChemSite
-              <motion.div 
-                className="absolute -bottom-2 left-0 h-1 bg-purple-500 w-full"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1, delay: 0.5 }}
-              />
-            </span>
-          </motion.h1>
-          
-          <motion.div 
-            ref={missionRef}
-            className="bg-gray-800 rounded-lg p-8 mb-12 shadow-lg border border-gray-700 relative overflow-hidden"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            whileHover={{ boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3)' }}
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none" />
-            <motion.h2 
-              className="text-2xl font-semibold text-white mb-6 relative inline-block"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <span className="relative">
-                Our Mission
-                <motion.div 
-                  className="absolute -bottom-1 left-0 h-0.5 bg-purple-500"
-                  initial={{ width: 0 }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                />
+    <div className="min-h-screen bg-bone pt-32">
+      <section className="container-editorial">
+        <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <Reveal>
+              <p className="eyebrow">About the house</p>
+            </Reveal>
+            <h1 className="mt-6 font-serif text-[clamp(2.6rem,7vw,5.2rem)] leading-[0.95] text-ink">
+              <RevealText text="A quiet standard" />
+              <span className="block italic text-amber-dark">
+                <RevealText text="for research supply" delay={0.2} />
               </span>
-            </motion.h2>
-            <motion.p 
-              className="text-gray-300 mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              DarkChemSite strives to have everyone leave our website satisfied and happy. We are growing every day with new products and varying quantities. However, We offer convenient, clean, affordable, efficient, friendly, safe, discreet, dependable, and simply Ideal to all our cherished customers.
-            </motion.p>
-          </motion.div>
-          
-          <motion.div 
-            ref={whoWeAreRef}
-            className="bg-gray-800 rounded-lg p-8 mb-12 shadow-lg border border-gray-700 relative overflow-hidden"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            whileHover={{ boxShadow: '0 8px 32px rgba(139, 92, 246, 0.3)' }}
-          >
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full -ml-20 -mb-20 blur-2xl pointer-events-none" />
-            <motion.h2 
-              className="text-2xl font-semibold text-white mb-6 relative inline-block"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <span className="relative">
-                Who We Are?
-                <motion.div 
-                  className="absolute -bottom-1 left-0 h-0.5 bg-purple-500"
-                  initial={{ width: 0 }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                />
-              </span>
-            </motion.h2>
-            <motion.p 
-              className="text-gray-300"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              We are passionate believers in the healing powers of the earth's bounty. The idea that natural methods of relieving pain, stress, relaxation and enjoyment are the least invasive, and, ultimately, the most sustainable. So that others might experience the benefits of safe, effective non-pharmaceutical remedies.
-            </motion.p>
-          </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            {[
-              {
-                icon: <FaTruck className="text-purple-500 text-3xl mr-4" />,
-                title: "Timely Delivery",
-                description: "All packages are delivered just in time depending on the shipping option taken (Express or Standard)."
-              },
-              {
-                icon: <FaMoneyBillWave className="text-purple-500 text-3xl mr-4" />,
-                title: "100% Money Back Guarantee",
-                description: "If not satisfied with our services, your money will be return directly to you in 7 days by our financial sector."
-              },
-              {
-                icon: <FaHeadset className="text-purple-500 text-3xl mr-4" />,
-                title: "24x7 Online Support",
-                description: "You'll receive friendly and knowledgeable chat from our Online services to ensure the product you purchase meets your specific needs and other issues."
-              }
-            ].map((item, index) => (
-              <motion.div 
-                key={index}
-                className="bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-700 relative overflow-hidden"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.7 + (index * 0.2) }}
-                whileHover={{ y: -10, boxShadow: '0 10px 25px -5px rgba(139, 92, 246, 0.4)' }}
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full -mr-12 -mt-12 blur-xl pointer-events-none" />
-                <motion.div 
-                  className="flex items-center mb-4"
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.9 + (index * 0.2) }}
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 300, 
-                      damping: 15, 
-                      delay: 1 + (index * 0.2) 
-                    }}
-                  >
-                    {item.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                </motion.div>
-                <motion.p 
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1.1 + (index * 0.2) }}
-                >
-                  {item.description}
-                </motion.p>
-              </motion.div>
-            ))}
-          </motion.div>
-          
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
-          >
-            {[
-              {
-                icon: <FaFlask className="text-purple-500 text-3xl mr-4" />,
-                title: "Quality Products",
-                description: "Every product in our catalog undergoes rigorous testing for purity and potency. We work with certified laboratories to verify the quality of our compounds, ensuring you receive exactly what you expect."
-              },
-              {
-                icon: <FaLeaf className="text-purple-500 text-3xl mr-4" />,
-                title: "Natural Solutions",
-                description: "We believe in the power of natural remedies. Our products are carefully selected to provide effective alternatives for pain relief, stress reduction, and overall wellbeing."
-              },
-              {
-                icon: <FaShieldAlt className="text-purple-500 text-3xl mr-4" />,
-                title: "Safe & Discreet",
-                description: "Your privacy and security are our top priorities. We employ state-of-the-art encryption and security measures to protect your personal information and ensure a safe, discreet shopping experience."
-              },
-              {
-                icon: <FaClock className="text-purple-500 text-3xl mr-4" />,
-                title: "Growing Selection",
-                description: "We are constantly expanding our product catalog with new items and varying quantities to meet the diverse needs of our customers. Check back regularly to see what's new."
-              }
-            ].map((item, index) => (
-              <motion.div 
-                key={index}
-                className="bg-gray-800 rounded-lg p-6 shadow-lg border border-gray-700 relative overflow-hidden"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 1.2 + (index * 0.15) }}
-                whileHover={{ y: -10, boxShadow: '0 10px 25px -5px rgba(139, 92, 246, 0.4)' }}
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full -mr-12 -mt-12 blur-xl pointer-events-none" />
-                <motion.div 
-                  className="flex items-center mb-4"
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1.4 + (index * 0.15) }}
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 300, 
-                      damping: 15, 
-                      delay: 1.5 + (index * 0.15) 
-                    }}
-                  >
-                    {item.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                </motion.div>
-                <motion.p 
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1.6 + (index * 0.15) }}
-                >
-                  {item.description}
-                </motion.p>
-              </motion.div>
-            ))}
-          </motion.div>
-          
-          <motion.div 
-            className="text-center relative"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/10 to-purple-500/0 rounded-xl blur-3xl -z-10 opacity-50" />
-            <motion.h2 
-              className="text-2xl font-semibold text-white mb-6"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 2 }}
-            >
-              Ready to Experience the DarkChemSite Difference?
-            </motion.h2>
-            <motion.div
+            </h1>
+          </div>
+
+          <div className="lg:col-span-5">
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 2.2 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
+              className="max-w-md text-[15px] leading-[1.8] text-ink-muted"
             >
-              <a 
-                href="/products" 
-                className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors relative overflow-hidden group"
-              >
-                <span className="relative z-10">Shop Now</span>
-                <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-purple-600 to-purple-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out" />
-                <div className="absolute top-0 left-0 w-full h-full bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-              </a>
-            </motion.div>
-          </motion.div>
+              ChemicalsSite supplies anabolic steroids, psychedelic drugs and research
+              chemicals to laboratories, analysts and independent researchers. We keep the
+              catalogue deliberately narrow so that every compound in it can be documented
+              properly.
+            </motion.p>
+          </div>
         </div>
-      </div>
+
+        <Reveal delay={0.2} className="mt-16">
+          <div className="relative aspect-[16/7] w-full overflow-hidden bg-bone-dark">
+            <Image
+              src="/images/Laboratory-Science.jpg"
+              alt="Laboratory bench with analytical glassware"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="container-editorial pt-28">
+        <RevealRule />
+        <div className="grid grid-cols-2 gap-10 py-12 md:grid-cols-4">
+          {FACTS.map((fact, i) => (
+            <Reveal key={fact.label} delay={i * 0.08}>
+              <p className="font-serif text-[clamp(2rem,4vw,3rem)] leading-none text-ink">
+                {fact.value}
+              </p>
+              <p className="eyebrow mt-3">{fact.label}</p>
+            </Reveal>
+          ))}
+        </div>
+        <RevealRule />
+      </section>
+
+      <section className="container-editorial pt-28">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <Reveal>
+              <p className="eyebrow">Our position</p>
+              <h2 className="mt-6 font-serif text-[clamp(1.9rem,3.4vw,2.8rem)] leading-tight text-ink">
+                Fewer compounds, better paperwork
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-8">
+            <Reveal delay={0.12}>
+              <p className="text-[17px] leading-[1.85] text-ink">
+                Research supply has a documentation problem. Material moves quickly, and
+                the certificate that should follow it often does not. We built the house
+                around the opposite habit: nothing is listed before it is tested, and
+                nothing ships without its reference.
+              </p>
+              <p className="mt-7 text-[15px] leading-[1.85] text-ink-muted">
+                That means our catalogue grows slowly. It also means that when you order a
+                gram of testosterone enanthate, 1P-LSD or 3-MMC, you receive the same
+                material described on the listing, at the purity stated, with the analysis
+                to support it. Storage is controlled and logged, orders are packed by hand,
+                and every dispatch is tracked door to door.
+              </p>
+              <p className="mt-7 text-[15px] leading-[1.85] text-ink-muted">
+                We work with laboratories, universities and independent analysts across
+                Europe, North America and Asia. If a compound you need is not listed, ask
+                &mdash; sourcing requests are part of the service.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section className="container-editorial pt-28">
+        <Reveal>
+          <p className="eyebrow">How we work</p>
+        </Reveal>
+        <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2">
+          {PRINCIPLES.map((item, i) => (
+            <Reveal key={item.number} delay={i * 0.08}>
+              <div className="border-t border-ink/12 pt-7">
+                <span className="font-serif text-[15px] text-amber-dark">
+                  {item.number}
+                </span>
+                <h3 className="mt-4 font-serif text-[24px] leading-tight text-ink">
+                  {item.title}
+                </h3>
+                <p className="mt-3 max-w-md text-[15px] leading-[1.8] text-ink-muted">
+                  {item.copy}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-editorial pt-28">
+        <Reveal>
+          <p className="eyebrow">What we carry</p>
+        </Reveal>
+        <div className="mt-8 grid grid-cols-1 gap-px overflow-hidden border border-ink/12 bg-ink/12 md:grid-cols-3">
+          {PRODUCT_CATEGORIES.map((cat, i) => (
+            <Link
+              key={cat.value}
+              href={categoryHref(cat.value)}
+              className="group bg-bone-light px-8 py-12 transition-colors duration-500 hover:bg-bone-dark"
+            >
+              <span className="font-serif text-[15px] text-amber-dark">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 className="mt-4 font-serif text-[26px] leading-tight text-ink">
+                {cat.label}
+              </h3>
+              <span className="link-underline mt-6 inline-block text-[11px] font-medium uppercase tracking-editorial text-ink-muted group-hover:text-ink">
+                Browse
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-editorial py-28">
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-8 border-t border-ink/12 pt-14 md:flex-row md:items-end">
+            <h2 className="max-w-xl font-serif text-[clamp(1.9rem,3.6vw,3rem)] leading-tight text-ink">
+              Have a compound in mind, or a question about a batch?
+            </h2>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/products" className="btn-primary">
+                Browse catalogue
+              </Link>
+              <a href="mailto:info@chemicalssite.com" className="btn-secondary">
+                Email us
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </section>
     </div>
   );
 }

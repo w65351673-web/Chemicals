@@ -99,31 +99,39 @@ export default function NewUser() {
     }
   };
 
+  const inputClass = (error) =>
+    `w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors text-sm ${
+      error ? 'border-red-500 bg-red-50/20' : ''
+    }`;
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Add New User</h1>
+      <header className="flex items-center justify-between">
+        <div>
+          <p className="eyebrow mb-1">Administration</p>
+          <h1 className="text-2xl font-serif font-medium text-ink">Add New User</h1>
+        </div>
         <Link
           href="/admin/users"
-          className="flex items-center text-gray-400 hover:text-white"
+          className="flex items-center text-ink-muted hover:text-ink text-sm transition-colors"
         >
           <FaArrowLeft className="mr-2" />
           Back to Users
         </Link>
-      </div>
-      
+      </header>
+
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-lg">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark p-4 rounded-editorial text-sm">
           {error}
         </div>
       )}
-      
-      <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+
+      <div className="bg-bone-light border border-ink/10 rounded-editorial p-6 shadow-editorial">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-gray-400 mb-2">
+              <label htmlFor="name" className="block text-ink-soft text-sm font-medium mb-2">
                 Name
               </label>
               <input
@@ -132,19 +140,17 @@ export default function NewUser() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.name ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.name)}
                 placeholder="Enter user's full name"
               />
               {formErrors.name && (
-                <p className="mt-1 text-red-400 text-sm">{formErrors.name}</p>
+                <p className="mt-1 text-red-700 text-sm">{formErrors.name}</p>
               )}
             </div>
-            
+
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-gray-400 mb-2">
+              <label htmlFor="email" className="block text-ink-soft text-sm font-medium mb-2">
                 Email
               </label>
               <input
@@ -153,19 +159,17 @@ export default function NewUser() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.email ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.email)}
                 placeholder="user@example.com"
               />
               {formErrors.email && (
-                <p className="mt-1 text-red-400 text-sm">{formErrors.email}</p>
+                <p className="mt-1 text-red-700 text-sm">{formErrors.email}</p>
               )}
             </div>
-            
+
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-gray-400 mb-2">
+              <label htmlFor="password" className="block text-ink-soft text-sm font-medium mb-2">
                 Password
               </label>
               <input
@@ -174,19 +178,17 @@ export default function NewUser() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.password ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.password)}
                 placeholder="Enter password"
               />
               {formErrors.password && (
-                <p className="mt-1 text-red-400 text-sm">{formErrors.password}</p>
+                <p className="mt-1 text-red-700 text-sm">{formErrors.password}</p>
               )}
             </div>
-            
+
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-gray-400 mb-2">
+              <label htmlFor="confirmPassword" className="block text-ink-soft text-sm font-medium mb-2">
                 Confirm Password
               </label>
               <input
@@ -195,19 +197,17 @@ export default function NewUser() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.confirmPassword ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.confirmPassword)}
                 placeholder="Confirm password"
               />
               {formErrors.confirmPassword && (
-                <p className="mt-1 text-red-400 text-sm">{formErrors.confirmPassword}</p>
+                <p className="mt-1 text-red-700 text-sm">{formErrors.confirmPassword}</p>
               )}
             </div>
-            
+
             {/* Role */}
             <div>
-              <label htmlFor="role" className="block text-gray-400 mb-2">
+              <label htmlFor="role" className="block text-ink-soft text-sm font-medium mb-2">
                 Role
               </label>
               <select
@@ -215,24 +215,24 @@ export default function NewUser() {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors text-sm"
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
           </div>
-          
-          <div className="flex justify-end mt-6">
+
+          <div className="flex justify-end pt-4 border-t border-ink/10">
             <button
               type="submit"
               disabled={loading}
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Saving...
+                  <div className="w-4 h-4 border-2 border-bone-light border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Saving…
                 </>
               ) : (
                 <>

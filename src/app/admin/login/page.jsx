@@ -56,19 +56,22 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-gray-800 rounded-lg p-8">
-        <h1 className="text-2xl font-bold text-white mb-6 text-center">Admin Login</h1>
-        
+    <div className="min-h-screen bg-bone flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-bone-light border border-ink/10 rounded-editorial p-8 shadow-editorial">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-serif font-medium text-ink mb-2">Admin Login</h1>
+          <p className="text-ink-muted text-sm uppercase tracking-editorial">ChemicalsSite Dashboard</p>
+        </div>
+
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-lg mb-6">
+          <div className="bg-amber-wash border border-amber/30 text-amber-dark p-4 rounded-editorial mb-6 text-sm">
             {error}
           </div>
         )}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-300 mb-2">
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="username" className="block text-ink-soft text-sm mb-2 font-medium">
               Username
             </label>
             <input
@@ -76,13 +79,13 @@ export default function AdminLoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-gray-700 text-white p-3 rounded-lg"
+              className="w-full bg-bone border border-ink/15 text-ink px-4 py-3 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
               placeholder="Enter admin username"
             />
           </div>
-          
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-300 mb-2">
+
+          <div>
+            <label htmlFor="password" className="block text-ink-soft text-sm mb-2 font-medium">
               Password
             </label>
             <input
@@ -90,22 +93,22 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-700 text-white p-3 rounded-lg"
+              className="w-full bg-bone border border-ink/15 text-ink px-4 py-3 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
               placeholder="Enter admin password"
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg"
+            className="w-full bg-ink text-bone-light font-medium py-3 px-4 rounded-editorial hover:bg-ink-soft transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? 'Processing...' : 'Login to Dashboard'}
           </button>
         </form>
-        
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-purple-400 hover:text-purple-300">
+
+        <div className="mt-8 text-center">
+          <Link href="/" className="text-ink-muted hover:text-ink text-sm transition-colors link-underline">
             Return to Main Site
           </Link>
         </div>

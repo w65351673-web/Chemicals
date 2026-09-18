@@ -42,7 +42,7 @@ export async function getLocationFromIP(ip) {
     // Using ipapi.co free tier (1000 requests/day)
     const response = await fetch(`https://ipapi.co/${ip}/json/`, {
       headers: {
-        'User-Agent': 'DarkChemSite/1.0',
+        'User-Agent': 'ChemicalsSite/1.0',
       },
     });
 

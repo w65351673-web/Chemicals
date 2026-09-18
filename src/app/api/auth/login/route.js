@@ -20,7 +20,7 @@ export async function POST(request) {
       // Generate JWT token
       const token = jwt.sign(
         { id: user._id },
-        process.env.JWT_SECRET || 'darkchemsite-secret-key',
+        process.env.JWT_SECRET || 'chemicalssite-secret-key',
         { expiresIn: '30d' }
       );
       

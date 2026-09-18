@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
 import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/utils/cloudinary';
+import { PRODUCT_CATEGORY_VALUES } from '@/lib/constants/categories';
 
 // Helper function to check admin authorization
 async function checkAdminAuth() {
@@ -123,8 +124,7 @@ export async function PUT(request, { params: paramsPromise }) {
     let category = submittedCategory.toLowerCase();
     
     // Validate against allowed categories
-    const validCategories = ['cannabinoids', 'benzos', 'research chemicals', 'other'];
-    if (!validCategories.includes(category)) {
+    if (!PRODUCT_CATEGORY_VALUES.includes(category)) {
       console.warn(`Invalid category submitted during edit: ${category}. Preserving original category: ${product.category}`);
       category = product.category; // Keep the original category if the new one is invalid
     }

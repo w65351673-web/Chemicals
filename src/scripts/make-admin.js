@@ -49,7 +49,7 @@ const email = process.argv[2];
 
 if (!email) {
   console.log('Usage: node src/scripts/make-admin.js <email>');
-  console.log('Example: node src/scripts/make-admin.js darkchem12@gmial.com');
+  console.log('Example: node src/scripts/make-admin.js chemicals12@gmial.com');
   process.exit(1);
 }
 

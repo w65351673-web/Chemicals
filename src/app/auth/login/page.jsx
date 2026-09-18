@@ -44,26 +44,29 @@ function LoginForm() {
     }
   };
 
+  const inputClass = "bg-bone border border-ink/15 text-ink rounded-editorial py-3 px-4 pl-10 w-full focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors";
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-bone pt-24 pb-16">
+      <div className="container-editorial py-8">
         <div className="max-w-md mx-auto">
-          <div className="bg-gray-800 rounded-lg p-8 shadow-lg">
+          <div className="bg-bone-light border border-ink/10 rounded-editorial p-8 shadow-editorial">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white">Login</h1>
-              <p className="text-gray-400 mt-2">
-                Welcome back to DarkChemSite
+              <p className="eyebrow mb-2">Account</p>
+              <h1 className="text-3xl font-serif font-medium text-ink">Login</h1>
+              <p className="text-ink-muted mt-2 text-sm">
+                Welcome back
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-white mb-2">
+                <label htmlFor="email" className="block text-ink-soft text-sm font-medium mb-2">
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaEnvelope className="text-gray-500" />
+                    <FaEnvelope className="text-ink-muted" />
                   </div>
                   <input
                     id="email"
@@ -71,19 +74,19 @@ function LoginForm() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="bg-gray-700 text-white rounded-lg py-3 px-4 pl-10 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className={inputClass}
                     placeholder="your@email.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-white mb-2">
+                <label htmlFor="password" className="block text-ink-soft text-sm font-medium mb-2">
                   Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-gray-500" />
+                    <FaLock className="text-ink-muted" />
                   </div>
                   <input
                     id="password"
@@ -91,33 +94,33 @@ function LoginForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-gray-700 text-white rounded-lg py-3 px-4 pl-10 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className={inputClass}
                     placeholder="••••••••"
                   />
                 </div>
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 type="submit"
                 disabled={loading}
-                className={`w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center ${
+                className={`w-full btn-primary justify-center ${
                   loading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
                 {loading ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                  <div className="w-5 h-5 border-2 border-bone-light border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   'Login'
                 )}
               </motion.button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-gray-400">
+            <div className="mt-6 text-center text-sm">
+              <p className="text-ink-muted">
                 Don't have an account?{' '}
-                <Link href="/auth/register" className="text-purple-400 hover:text-purple-300">
+                <Link href="/auth/register" className="text-amber-dark hover:text-ink link-underline font-medium transition-colors">
                   Register
                 </Link>
               </p>
@@ -132,10 +135,10 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 flex items-center justify-center">
+      <div className="min-h-screen bg-bone pt-24 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-xl">Loading...</p>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="font-serif text-lg text-ink-muted">Loading...</p>
         </div>
       </div>
     }>

@@ -117,56 +117,55 @@ export default function AdminOrders() {
   const getStatusBadgeClass = (status) => {
     switch (status) {
       case 'pending':
-        return 'bg-yellow-500/20 text-yellow-400';
+        return 'bg-bone-deep text-ink-muted';
       case 'processing':
-        return 'bg-blue-500/20 text-blue-400';
       case 'shipped':
-        return 'bg-indigo-500/20 text-indigo-400';
+        return 'bg-amber-wash text-amber-dark';
       case 'delivered':
-        return 'bg-green-500/20 text-green-400';
       case 'completed':
-        return 'bg-purple-500/20 text-purple-400';
+        return 'bg-green-50 text-green-700';
       case 'cancelled':
-        return 'bg-red-500/20 text-red-400';
+        return 'bg-red-50 text-red-700';
       default:
-        return 'bg-gray-500/20 text-gray-400';
+        return 'bg-bone-deep text-ink-muted';
     }
   };
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Orders</h1>
-      </div>
-      
+      <header className="mb-8">
+        <p className="eyebrow mb-1">Fulfillment</p>
+        <h1 className="text-3xl font-serif font-medium text-ink">Orders</h1>
+      </header>
+
       {/* Search and Filters */}
-      <div className="bg-gray-800 p-4 rounded-lg mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+      <div className="bg-bone-light border border-ink/10 rounded-editorial p-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <form onSubmit={handleSearch} className="flex">
             <div className="relative flex-1">
               <input
                 type="text"
                 placeholder="Search orders..."
-                className="w-full bg-gray-700 text-white px-4 py-2 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 pl-10 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ink-muted" />
             </div>
-            <button 
+            <button
               type="submit"
-              className="ml-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
+              className="ml-2 bg-ink text-bone-light px-5 py-2.5 rounded-editorial hover:bg-ink-soft transition-colors text-sm font-medium"
             >
               Search
             </button>
           </form>
-          
+
           <div className="flex items-center space-x-2">
-            <span className="text-gray-300">Status:</span>
+            <span className="text-ink-soft text-sm">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-gray-700 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="bg-bone border border-ink/15 text-ink px-3 py-2 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors text-sm"
             >
               <option value="all">All</option>
               <option value="pending">Pending</option>
@@ -179,56 +178,56 @@ export default function AdminOrders() {
           </div>
         </div>
       </div>
-      
+
       {/* Orders Table */}
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <>
           {filteredOrders.length > 0 ? (
-            <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-bone-light border border-ink/10 rounded-editorial overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400 bg-gray-700">
-                      <th className="p-4">Order ID</th>
-                      <th className="p-4">Customer</th>
-                      <th className="p-4">Date</th>
-                      <th className="p-4">Total</th>
-                      <th className="p-4">Status</th>
-                      <th className="p-4">Payment</th>
-                      <th className="p-4">Actions</th>
+                    <tr className="text-left text-ink-muted border-b border-ink/10 bg-bone/50">
+                      <th className="p-4 font-normal">Order ID</th>
+                      <th className="p-4 font-normal">Customer</th>
+                      <th className="p-4 font-normal">Date</th>
+                      <th className="p-4 font-normal">Total</th>
+                      <th className="p-4 font-normal">Status</th>
+                      <th className="p-4 font-normal">Payment</th>
+                      <th className="p-4 font-normal">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredOrders.map((order) => (
-                      <tr key={order._id} className="border-b border-gray-700 hover:bg-gray-750">
-                        <td className="p-4 font-medium">#{order._id.slice(-6)}</td>
+                      <tr key={order._id} className="border-b border-ink/5 last:border-0 hover:bg-bone/50 transition-colors">
+                        <td className="p-4 font-medium text-ink-soft">#{order._id.slice(-6)}</td>
                         <td className="p-4">
                           {order.user ? (
                             <div>
-                              <div className="font-medium">{order.user.name}</div>
-                              <div className="text-gray-400 text-sm">{order.user.email}</div>
+                              <div className="font-medium text-ink-soft">{order.user.name}</div>
+                              <div className="text-ink-muted text-xs">{order.user.email}</div>
                             </div>
                           ) : (
-                            <span className="text-gray-400">Unknown</span>
+                            <span className="text-ink-muted">Unknown</span>
                           )}
                         </td>
-                        <td className="p-4 text-gray-300">
+                        <td className="p-4 text-ink-muted">
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
-                        <td className="p-4 font-medium">${order.totalPrice.toFixed(2)}</td>
+                        <td className="p-4 font-medium text-ink-soft">${order.totalPrice.toFixed(2)}</td>
                         <td className="p-4">
-                          <div className="flex items-center">
-                            <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadgeClass(order.status)}`}>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2.5 py-1 rounded-full text-xs ${getStatusBadgeClass(order.status)}`}>
                               {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </span>
                             <select
                               value={order.status}
                               onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                              className="ml-2 bg-gray-700 text-white text-xs px-2 py-1 rounded focus:outline-none focus:ring-1 focus:ring-purple-500"
+                              className="bg-bone border border-ink/15 text-ink text-xs px-2 py-1 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                             >
                               <option value="pending">Pending</option>
                               <option value="processing">Processing</option>
@@ -241,37 +240,34 @@ export default function AdminOrders() {
                         </td>
                         <td className="p-4">
                           {order.isPaid ? (
-                            <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
+                            <span className="bg-green-50 text-green-700 px-2.5 py-1 rounded-full text-xs">
                               Paid
                             </span>
                           ) : (
-                            <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs">
+                            <span className="bg-amber-wash text-amber-dark px-2.5 py-1 rounded-full text-xs">
                               Not Paid
                             </span>
                           )}
                         </td>
                         <td className="p-4">
-                          <div className="flex space-x-2">
-                            <Link 
+                          <div className="flex items-center space-x-2">
+                            <Link
                               href={`/admin/orders/${order._id}`}
-                              className="text-blue-400 hover:text-blue-300 p-1 hover:bg-gray-700 rounded"
+                              className="text-ink-muted hover:text-ink p-1.5 hover:bg-bone-deep rounded-editorial transition-colors"
                               title="View Order Details"
                             >
                               <FaEye />
                             </Link>
-                            <button 
-                              onClick={() => {
-                                // Navigate to the order details page with edit mode activated
-                                router.push(`/admin/orders/${order._id}?edit=true`);
-                              }}
-                              className="text-green-400 hover:text-green-300 p-1 hover:bg-gray-700 rounded"
+                            <button
+                              onClick={() => router.push(`/admin/orders/${order._id}?edit=true`)}
+                              className="text-ink-muted hover:text-ink p-1.5 hover:bg-bone-deep rounded-editorial transition-colors"
                               title="Edit Order"
                             >
                               <FaEdit />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(order)}
-                              className="text-red-400 hover:text-red-300 p-1 hover:bg-gray-700 rounded"
+                              className="text-ink-muted hover:text-red-700 p-1.5 hover:bg-bone-deep rounded-editorial transition-colors"
                               title="Delete Order"
                             >
                               <FaTrash />
@@ -283,35 +279,37 @@ export default function AdminOrders() {
                   </tbody>
                 </table>
               </div>
-              
+
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="p-4 flex justify-center">
+                <div className="p-4 flex justify-center border-t border-ink/10">
                   <div className="flex space-x-1">
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className="px-3 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                      className="px-3 py-1.5 rounded-editorial bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep disabled:opacity-40 text-sm transition-colors"
                     >
                       Prev
                     </button>
-                    
+
                     {[...Array(totalPages)].map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === i + 1 ? 'bg-purple-600 text-white' : 'bg-gray-700 text-white'
+                        className={`px-3 py-1.5 rounded-editorial text-sm ${
+                          currentPage === i + 1
+                            ? 'bg-ink text-bone-light'
+                            : 'bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep'
                         }`}
                       >
                         {i + 1}
                       </button>
                     ))}
-                    
+
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                      className="px-3 py-1.5 rounded-editorial bg-bone border border-ink/10 text-ink-soft hover:bg-bone-deep disabled:opacity-40 text-sm transition-colors"
                     >
                       Next
                     </button>
@@ -320,32 +318,32 @@ export default function AdminOrders() {
               )}
             </div>
           ) : (
-            <div className="bg-gray-800 p-8 rounded-lg text-center">
-              <p className="text-gray-400 mb-4">No orders found.</p>
+            <div className="bg-bone-light border border-ink/10 p-8 rounded-editorial text-center">
+              <p className="text-ink-muted">No orders found.</p>
             </div>
           )}
         </>
       )}
-      
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
-            <p className="mb-6">
-              Are you sure you want to delete order #{orderToDelete?._id.slice(-6)}? 
+        <div className="fixed inset-0 bg-ink/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-bone-light border border-ink/10 rounded-editorial max-w-md w-full p-6 shadow-editorial-lg">
+            <h3 className="text-xl font-serif font-medium text-ink mb-4">Confirm Delete</h3>
+            <p className="text-ink-muted mb-8">
+              Are you sure you want to delete order <span className="font-medium text-ink-soft">#{orderToDelete?._id.slice(-6)}</span>?
               This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+                className="px-4 py-2 bg-bone border border-ink/15 text-ink-soft rounded-editorial hover:border-ink/30 hover:text-ink transition-colors text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                className="px-4 py-2 bg-red-700 text-bone-light rounded-editorial hover:bg-red-800 transition-colors text-sm"
               >
                 Delete
               </button>

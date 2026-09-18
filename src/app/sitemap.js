@@ -1,17 +1,16 @@
 /**
  * Dynamic Sitemap for SEO optimization
- * Includes all research chemical keywords: 5cl-adba, 5cladba, 5fadb, jwh-018, 
- * adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA,
- * Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam, Pyrazolam, Phenazepam,
- * AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA, Isotonitazene, Protonitazene, Metonitazene, Alprazolam,
- * 5fmdmb-2201, 4fadb
+ * Covers the storefront, the three category listings
+ * (anabolic steroids, psychedelic drugs, research chemicals)
+ * and every product detail page.
  */
 
 import dbConnect from '@/lib/utils/db';
 import Product from '@/models/Product';
+import { PRODUCT_CATEGORIES, categoryHref } from '@/lib/constants/categories';
 
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://chemicalssite.com';
   
   // Static pages
   const staticPages = [
@@ -34,12 +33,6 @@ export default async function sitemap() {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
       url: `${baseUrl}/faq`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -52,18 +45,20 @@ export default async function sitemap() {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/terms`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
       url: `${baseUrl}/privacy`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
   ];
+
+  // Category listing pages
+  const categoryPages = PRODUCT_CATEGORIES.map((cat) => ({
+    url: `${baseUrl}${categoryHref(cat.value)}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 0.85,
+  }));
 
   // Fetch all products from database
   let productPages = [];
@@ -83,5 +78,5 @@ export default async function sitemap() {
   }
 
   // Always return at least static pages
-  return [...staticPages, ...productPages];
+  return [...staticPages, ...categoryPages, ...productPages];
 }

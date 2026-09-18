@@ -18,14 +18,14 @@ async function seedDatabase() {
     console.log('Cleared existing products');
     
     // Create admin user if it doesn't exist
-    const adminExists = await User.findOne({ email: 'admin@darkchemsite.com' });
+    const adminExists = await User.findOne({ email: 'admin@chemicalssite.com' });
     if (!adminExists) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash('admin123', salt);
       
       await User.create({
         name: 'Admin User',
-        email: 'admin@darkchemsite.com',
+        email: 'admin@chemicalssite.com',
         password: hashedPassword,
         isAdmin: true,
       });
@@ -34,13 +34,13 @@ async function seedDatabase() {
 
     // Sample products data
     const productsData = [
-      // Cannabinoids
+      // Anabolic Steroids
       {
-        name: 'CBD Isolate',
-        slug: 'cbd-isolate',
-        category: 'Cannabinoids',
-        images: ['/images/products/cbd-isolate.jpg'],
-        description: 'Pure CBD isolate powder, 99.9% purity. Perfect for research and development purposes.\n\nThis high-quality CBD isolate is extracted using CO2 methods and thoroughly tested for purity and potency.',
+        name: 'Testosterone Enanthate',
+        slug: 'testosterone-enanthate',
+        category: 'anabolic steroids',
+        images: ['/images/products/testosterone-enanthate.jpg'],
+        description: 'Testosterone enanthate reference material, 99.5% purity. For laboratory research only.\n\nSupplied with an analytical certificate covering identity and concentration.',
         priceVariants: [
           { quantity: 1, price: 29.99 },
           { quantity: 5, price: 129.99 },
@@ -52,11 +52,11 @@ async function seedDatabase() {
         featured: true,
       },
       {
-        name: 'Delta-8 THC',
-        slug: 'delta-8-thc',
-        category: 'Cannabinoids',
-        images: ['/images/products/delta-8.jpg'],
-        description: 'Delta-8 THC research compound, 95% purity. For laboratory research only.\n\nThis compound is ideal for comparative studies and analytical testing.',
+        name: 'Trenbolone Acetate',
+        slug: 'trenbolone-acetate',
+        category: 'anabolic steroids',
+        images: ['/images/products/trenbolone-acetate.jpg'],
+        description: 'Trenbolone acetate reference material, 99% purity. For laboratory research only.\n\nIdeal for comparative studies and analytical method development.',
         priceVariants: [
           { quantity: 1, price: 39.99 },
           { quantity: 5, price: 179.99 },
@@ -68,11 +68,11 @@ async function seedDatabase() {
         featured: false,
       },
       {
-        name: 'CBG Crystals',
-        slug: 'cbg-crystals',
-        category: 'Cannabinoids',
-        images: ['/images/products/cbg-crystals.jpg'],
-        description: 'Cannabigerol (CBG) crystalline powder, 98%+ purity.\n\nCBG is often called the "mother cannabinoid" as it is the precursor to many other cannabinoids.',
+        name: 'Oxandrolone',
+        slug: 'oxandrolone',
+        category: 'anabolic steroids',
+        images: ['/images/products/oxandrolone.jpg'],
+        description: 'Oxandrolone reference material, 98%+ purity. For laboratory research only.\n\nCrystalline powder supplied with batch identity and purity data.',
         priceVariants: [
           { quantity: 1, price: 49.99 },
           { quantity: 5, price: 219.99 },
@@ -88,7 +88,7 @@ async function seedDatabase() {
       {
         name: '3-MMC',
         slug: '3-mmc',
-        category: 'Research Chemicals',
+        category: 'research chemicals',
         images: ['/images/products/3-mmc.jpg'],
         description: '3-MMC (3-Methylmethcathinone) research compound, 99% purity. For analytical chemistry only.\n\nThis compound is provided for laboratory research and analytical purposes.',
         priceVariants: [
@@ -104,7 +104,7 @@ async function seedDatabase() {
       {
         name: '4-AcO-DMT',
         slug: '4-aco-dmt',
-        category: 'Research Chemicals',
+        category: 'psychedelic drugs',
         images: ['/images/products/4-aco-dmt.jpg'],
         description: '4-AcO-DMT (O-Acetylpsilocin) research compound, 99.5% purity. For laboratory use only.\n\nThis tryptamine compound is ideal for comparative analysis and scientific research.',
         priceVariants: [
@@ -120,7 +120,7 @@ async function seedDatabase() {
       {
         name: '2-FDCK',
         slug: '2-fdck',
-        category: 'Research Chemicals',
+        category: 'research chemicals',
         images: ['/images/products/2-fdck.jpg'],
         description: '2-FDCK (2-Fluorodeschloroketamine) research compound, 99% purity. For analytical purposes only.\n\nThis arylcyclohexylamine compound is provided for laboratory research.',
         priceVariants: [
@@ -134,15 +134,13 @@ async function seedDatabase() {
         featured: false,
       },
       
-      // Stimulants category has been removed as requested by the owners
-      
-      // Benzos
+      // Psychedelic Drugs
       {
-        name: 'Etizolam',
-        slug: 'etizolam',
-        category: 'Benzos',
-        images: ['/images/products/etizolam.jpg'],
-        description: 'Etizolam research compound, 99.8% purity. For laboratory research only.\n\nThis thienodiazepine compound is provided for analytical chemistry and scientific research.',
+        name: '1P-LSD',
+        slug: '1p-lsd',
+        category: 'psychedelic drugs',
+        images: ['/images/products/1p-lsd.jpg'],
+        description: '1P-LSD reference material, 99.8% purity. For laboratory research only.\n\nThis lysergamide compound is provided for analytical chemistry and scientific research.',
         priceVariants: [
           { quantity: 1, price: 49.99 },
           { quantity: 5, price: 219.99 },
@@ -154,11 +152,11 @@ async function seedDatabase() {
         featured: true,
       },
       {
-        name: 'Flualprazolam',
-        slug: 'flualprazolam',
-        category: 'Benzos',
-        images: ['/images/products/flualprazolam.jpg'],
-        description: 'Flualprazolam research compound, 99.5% purity. For analytical purposes only.\n\nThis triazole benzodiazepine compound is provided for laboratory research and analysis.',
+        name: 'Mescaline HCl',
+        slug: 'mescaline-hcl',
+        category: 'psychedelic drugs',
+        images: ['/images/products/mescaline-hcl.jpg'],
+        description: 'Mescaline HCl reference material, 99.5% purity. For analytical purposes only.\n\nThis phenethylamine compound is provided for laboratory research and analysis.',
         priceVariants: [
           { quantity: 1, price: 69.99 },
           { quantity: 5, price: 299.99 },
@@ -170,11 +168,11 @@ async function seedDatabase() {
         featured: false,
       },
       {
-        name: 'Clonazolam',
-        slug: 'clonazolam',
-        category: 'Benzos',
-        images: ['/images/products/clonazolam.jpg'],
-        description: 'Clonazolam research compound, 99.7% purity. For laboratory use only.\n\nThis triazole benzodiazepine compound is provided for analytical chemistry and scientific research.',
+        name: '2C-B',
+        slug: '2c-b',
+        category: 'psychedelic drugs',
+        images: ['/images/products/2c-b.jpg'],
+        description: '2C-B reference material, 99.7% purity. For laboratory use only.\n\nThis phenethylamine compound is provided for analytical chemistry and scientific research.',
         priceVariants: [
           { quantity: 1, price: 74.99 },
           { quantity: 5, price: 329.99 },

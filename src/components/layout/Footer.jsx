@@ -1,8 +1,52 @@
 'use client';
 
 import Link from 'next/link';
-import { FaFacebook, FaTwitter, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiInstagram, FiTwitter, FiFacebook } from 'react-icons/fi';
+import Reveal, { RevealRule } from '@/components/animations/Reveal';
+import { PRODUCT_CATEGORIES, categoryHref } from '@/lib/constants/categories';
+
+const SHOP = [
+  { label: 'All Products', href: '/products' },
+  ...PRODUCT_CATEGORIES.map((cat) => ({ label: cat.label, href: categoryHref(cat.value) })),
+];
+
+const HOUSE = [
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Shipping Policy', href: '/shipping' },
+];
+
+const LEGAL = [
+  { label: 'Privacy Policy', href: '/privacy' },
+];
+
+const SOCIAL = [
+  { label: 'Instagram', href: '#', Icon: FiInstagram },
+  { label: 'Twitter', href: '#', Icon: FiTwitter },
+  { label: 'Facebook', href: '#', Icon: FiFacebook },
+];
+
+function LinkColumn({ title, links, delay = 0 }) {
+  return (
+    <Reveal delay={delay}>
+      <h3 className="eyebrow">{title}</h3>
+      <ul className="mt-6 space-y-3.5">
+        {links.map((link) => (
+          <li key={link.href + link.label}>
+            <Link
+              href={link.href}
+              className="link-underline text-[14px] text-ink-soft transition-colors duration-300 hover:text-ink"
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Reveal>
+  );
+}
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -10,146 +54,93 @@ export default function Footer() {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (email) {
-      // In a real app, you would send this to your API
-      console.log('Subscribing email:', email);
-      setSubscribed(true);
-      setEmail('');
-      // Reset the subscribed message after 3 seconds
-      setTimeout(() => setSubscribed(false), 3000);
-    }
+    if (!email) return;
+    setSubscribed(true);
+    setEmail('');
+    setTimeout(() => setSubscribed(false), 4000);
   };
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and About */}
-          <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-bold">
-              DarkChem<span className="text-purple-500">Site</span>
-            </Link>
-            <p className="mt-4 text-gray-400">
-              Premium quality research chemicals and compounds for your scientific needs.
-            </p>
-            <div className="flex mt-6 space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <FaFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <FaTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <FaInstagram size={20} />
-              </a>
-            </div>
-          </div>
+    <footer className="relative overflow-hidden border-t border-ink/10 bg-bone-light">
+      <div className="container-editorial py-20 md:py-24">
+        {/* Newsletter band */}
+        <div className="grid gap-12 md:grid-cols-[1.1fr_1fr] md:gap-20">
+          <Reveal>
+            <span className="eyebrow">The Dispatch</span>
+            <h2 className="mt-5 max-w-lg text-[34px] leading-[1.08] text-ink md:text-[46px]">
+              New compounds, purity reports and quiet restocks.
+            </h2>
+          </Reveal>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/products" className="text-gray-400 hover:text-white transition-colors">
-                  All Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=Cannabinoids" className="text-gray-400 hover:text-white transition-colors">
-                  Cannabinoids
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=Research%20Chemicals" className="text-gray-400 hover:text-white transition-colors">
-                  Research Chemicals
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=Benzos" className="text-gray-400 hover:text-white transition-colors">
-                  Benzos
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Customer Service */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="text-gray-400 hover:text-white transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping" className="text-gray-400 hover:text-white transition-colors">
-                  Shipping Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/refund" className="text-gray-400 hover:text-white transition-colors">
-                  Return & Refund
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
-            <p className="text-gray-400 mb-4">
-              Subscribe to receive updates on new products and special promotions.
-            </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
-              <div className="relative">
-                <label htmlFor="newsletter-email" className="sr-only">Email address for newsletter</label>
+          <Reveal delay={0.12} className="flex flex-col justify-end">
+            <form onSubmit={handleSubscribe} className="w-full">
+              <label htmlFor="newsletter-email" className="eyebrow mb-4 block">
+                Subscribe
+              </label>
+              <div className="flex items-center gap-4 border-b border-ink/25 pb-3 focus-within:border-ink">
                 <input
                   id="newsletter-email"
                   type="email"
-                  placeholder="Your email address"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-800 text-white rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  required
+                  placeholder="your@email.com"
+                  className="w-full border-0 bg-transparent p-0 font-serif text-xl text-ink placeholder:text-ink-faint focus:ring-0 md:text-2xl"
                   aria-label="Email address for newsletter"
                 />
-                <button
+                <motion.button
                   type="submit"
-                  className="absolute right-1 top-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="shrink-0 text-ink-muted transition-colors hover:text-ink"
                   aria-label="Subscribe to newsletter"
                 >
-                  <FaEnvelope size={20} aria-hidden="true" />
-                </button>
+                  <FiArrowRight size={22} />
+                </motion.button>
               </div>
-              {subscribed && (
-                <p className="text-green-500 text-sm">Thanks for subscribing!</p>
-              )}
+              <p className="mt-4 h-5 text-[12px] tracking-wide text-amber-dark">
+                {subscribed ? 'Thank you — you are on the list.' : ''}
+              </p>
             </form>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} DarkChemSite. All rights reserved.</p>
+        <RevealRule className="my-16" />
+
+        {/* Columns */}
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          <Reveal>
+            <Link href="/" className="font-serif text-[24px] leading-none text-ink">
+              Chemicals<span className="italic text-amber-dark">Site</span>
+            </Link>
+            <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-ink-muted">
+              A considered catalogue of high-purity research compounds, documented and dispatched
+              with care. Supplied strictly for laboratory research.
+            </p>
+            <div className="mt-8 flex items-center gap-5">
+              {SOCIAL.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="text-ink-faint transition-colors duration-300 hover:text-ink"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
+          </Reveal>
+
+          <LinkColumn title="Shop" links={SHOP} delay={0.08} />
+          <LinkColumn title="House" links={HOUSE} delay={0.16} />
+          <LinkColumn title="Legal" links={LEGAL} delay={0.24} />
+        </div>
+
+        <RevealRule className="my-14" />
+
+        <div className="flex flex-col gap-4 text-[11px] uppercase tracking-editorial text-ink-faint md:flex-row md:items-center md:justify-between">
+          <p>&copy; {new Date().getFullYear()} ChemicalsSite</p>
+          <p>Discreet worldwide dispatch</p>
         </div>
       </div>
     </footer>

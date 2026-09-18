@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
@@ -16,56 +16,58 @@ import CartProvider from "@/components/cart/CartProvider";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ['400', '600', '700'], // Reduced font weights for better performance
+  weight: ['400', '500', '600'],
   variable: "--font-inter",
   display: 'swap',
   preload: true,
   fallback: ['system-ui', 'arial'],
 });
 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: 'swap',
+  preload: true,
+  fallback: ['Georgia', 'serif'],
+});
+
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
-  title: "DarkChemSite | Premium Research Chemicals",
-  description: "Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam, Pyrazolam, Phenazepam, AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA, Isotonitazene, Protonitazene, Metonitazene, Alprazolam, 5fmdmb-2201. Top-grade cannabinoids, stimulants and benzos for your research needs.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://chemicalssite.com'),
+  title: "ChemicalsSite | Anabolic Steroids, Psychedelics & Research Chemicals",
+  description: "High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory use. Testosterone enanthate, trenbolone acetate, nandrolone decanoate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 3-CMC, 2-FDCK and more \u2014 every batch assayed and documented.",
   other: {
-    'theme-color': '#7c3aed',
+    'theme-color': '#F7F3EC',
   },
   keywords: [
+    "anabolic steroids",
+    "psychedelic drugs",
     "research chemicals",
-    "5cl-adba",
-    "5cladba", 
-    "5fadb",
-    "jwh-018",
-    "adb-butinaca",
-    "ab-pinaca",
-    "5F-EDMB-PINACA",
-    "ADB-FUBINACA",
-    "4FADB",
-    "AMB-FUBINACA",
-    "MDMB-4en-PINACA",
-    "Etizolam",
-    "Flualprazolam",
-    "Clonazolam",
-    "Flubromazolam",
-    "Diclazepam",
-    "Bromazolam",
-    "Pyrazolam",
-    "Phenazepam",
-    "AB-FUBINACA",
-    "MDMB-CHMINACA",
-    "MDMB-FUBINACA",
-    "Isotonitazene",
-    "Protonitazene",
-    "Metonitazene",
-    "Alprazolam",
-    "5fmdmb-2201",
-    "4fadb",
-    "cannabinoids",
-    "synthetic cannabinoids",
-    "benzos",
-    "benzodiazepines",
-    "nitazenes",
-    "premium quality research chemicals",
+    "testosterone enanthate",
+    "testosterone cypionate",
+    "trenbolone acetate",
+    "nandrolone decanoate",
+    "boldenone undecylenate",
+    "oxandrolone",
+    "stanozolol",
+    "methandienone",
+    "drostanolone propionate",
+    "sustanon 250",
+    "1P-LSD",
+    "4-ACO-DMT",
+    "DMT",
+    "5-MeO-DMT",
+    "mescaline HCl",
+    "psilocybin analogues",
+    "2C-B",
+    "LSZ",
+    "3-MMC",
+    "3-CMC",
+    "4-MMC",
+    "2-FDCK",
+    "MDPHP",
+    "alpha-PiHP",
+    "buy anabolic steroids online",
+    "buy psychedelics online",
     "buy research chemicals online",
     "laboratory chemicals"
   ],
@@ -84,14 +86,14 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'DarkChemSite',
-    title: 'DarkChemSite | Premium Research Chemicals',
-    description: 'Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.',
+    siteName: 'ChemicalsSite',
+    title: 'ChemicalsSite | Anabolic Steroids, Psychedelics & Research Chemicals',
+    description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory use \u2014 assayed, documented and discreetly dispatched.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DarkChemSite | Premium Research Chemicals',
-    description: 'Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.',
+    title: 'ChemicalsSite | Anabolic Steroids, Psychedelics & Research Chemicals',
+    description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory use \u2014 assayed, documented and discreetly dispatched.',
   },
   verification: {
     // Add your verification codes when ready
@@ -109,19 +111,17 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <head>
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://analytics.ahrefs.com" />
-        <link rel="preconnect" href="https://embed.tawk.to" />
         <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
-        <link rel="dns-prefetch" href="https://embed.tawk.to" />
       </head>
-      <body className="font-sans min-h-screen flex flex-col">
+      <body className="font-sans min-h-screen flex flex-col bg-bone text-ink antialiased">
         {/* Skip to main content link for accessibility */}
         <a 
           href="#main-content" 
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-purple-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-ink focus:text-bone focus:px-4 focus:py-2"
         >
           Skip to main content
         </a>
@@ -129,7 +129,18 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <CartProvider>
             <VisitorTracker />
-            <Toaster position="top-center" />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: '#14110F',
+                  color: '#F7F3EC',
+                  borderRadius: '2px',
+                  fontSize: '14px',
+                  letterSpacing: '0.01em',
+                },
+              }}
+            />
             <WhatsAppButton />
             <ConditionalNavbar>
               <Navbar />
@@ -146,25 +157,6 @@ export default function RootLayout({ children }) {
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="+CffPsHUUwlzmNtibduF4Q"
           strategy="lazyOnload"
-        />
-
-        {/* Tawk.to Chat Widget - Lazy load for better performance */}
-        <Script
-          id="tawk-to"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-              var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-              (function(){
-                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-                s1.async=true;
-                s1.src='https://embed.tawk.to/6937ef887055cf197f3f3df7/1jc17vc06';
-                s1.charset='UTF-8';
-                s1.setAttribute('crossorigin','*');
-                s0.parentNode.insertBefore(s1,s0);
-              })();
-            `,
-          }}
         />
       </body>
     </html>

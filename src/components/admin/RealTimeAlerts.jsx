@@ -89,9 +89,9 @@ export default function RealTimeAlerts() {
     <div className="fixed top-20 right-4 z-50 w-96 max-w-full">
       {/* Connection Status */}
       <div className="mb-2 flex items-center justify-end">
-        <div className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded-full text-sm">
-          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
-          <span className="text-gray-300">
+        <div className="flex items-center gap-2 bg-bone-light border border-ink/10 px-3 py-1.5 rounded-full text-sm shadow-editorial">
+          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-600 animate-pulse' : 'bg-red-600'}`} />
+          <span className="text-ink-soft">
             {isConnected ? 'Live' : 'Disconnected'}
           </span>
         </div>
@@ -102,50 +102,50 @@ export default function RealTimeAlerts() {
         {alerts.map((alert) => (
           <motion.div
             key={alert.id}
-            initial={{ opacity: 0, x: 100, scale: 0.8 }}
+            initial={{ opacity: 0, x: 100, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 100, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: 100, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="mb-3"
           >
-            <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 backdrop-blur-sm">
+            <div className="bg-bone-light border border-ink/10 rounded-editorial shadow-editorial p-4 backdrop-blur-sm">
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3 flex-1">
-                  <div className="mt-1">
+                  <div className="mt-1 text-amber">
                     {alert.icon}
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-medium text-sm">
+                    <p className="text-ink font-medium text-sm">
                       {alert.message}
                     </p>
                     {alert.location && (
-                      <p className="text-gray-400 text-xs mt-1">
-                        📍 {alert.location.city}, {alert.location.country}
+                      <p className="text-ink-muted text-xs mt-1">
+                        {alert.location.city}, {alert.location.country}
                       </p>
                     )}
                     {alert.device && (
-                      <p className="text-gray-400 text-xs mt-1">
-                        💻 {alert.device.type} • {alert.device.browser} • {alert.device.os}
+                      <p className="text-ink-muted text-xs mt-1">
+                        {alert.device.type} • {alert.device.browser} • {alert.device.os}
                       </p>
                     )}
                     {alert.page && (
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-ink-muted text-xs mt-1">
                         Page: {alert.page}
                       </p>
                     )}
                     {alert.email && (
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-ink-muted text-xs mt-1">
                         Email: {alert.email}
                       </p>
                     )}
-                    <p className="text-gray-500 text-xs mt-1">
+                    <p className="text-ink-faint text-xs mt-1">
                       {new Date(alert.timestamp).toLocaleTimeString()}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => removeAlert(alert.id)}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-ink-muted hover:text-ink transition-colors"
                 >
                   <FaTimes size={14} />
                 </button>
@@ -160,10 +160,10 @@ export default function RealTimeAlerts() {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="fixed top-4 right-4 bg-purple-600 text-white rounded-full p-3 shadow-lg"
+          className="fixed top-4 right-4 bg-ink text-bone-light rounded-full p-3 shadow-editorial"
         >
           <FaBell size={20} />
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 bg-amber text-ink text-xs rounded-full w-5 h-5 flex items-center justify-center">
             {alerts.length}
           </span>
         </motion.div>

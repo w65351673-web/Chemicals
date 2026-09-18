@@ -3,7 +3,14 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaCog, FaBars, FaTimes } from 'react-icons/fa';
+import { FaBox, FaShoppingCart, FaUsers, FaChartLine, FaBars, FaTimes } from 'react-icons/fa';
+
+const NAV_LINKS = [
+  { href: '/admin', label: 'Dashboard', icon: FaChartLine },
+  { href: '/admin/products', label: 'Products', icon: FaBox },
+  { href: '/admin/orders', label: 'Orders', icon: FaShoppingCart },
+  { href: '/admin/users', label: 'Users', icon: FaUsers },
+];
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -12,44 +19,33 @@ export default function AdminLayout({ children }) {
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const hasCheckedAdmin = useRef(false);
-  
-  // Check if the current path is the login page
+
   const isLoginPage = pathname === '/admin/login';
-  
+
   useEffect(() => {
-    // Skip admin check if we're on the login page
     if (isLoginPage) {
       setLoading(false);
       return;
     }
-    
-    // Only check admin status once
+
     if (hasCheckedAdmin.current) {
       return;
     }
-    
+
     async function checkAdminStatus() {
       try {
-        console.log('Checking admin status...');
         const res = await fetch('/api/auth/check-admin');
-        console.log('Admin check response:', res.status);
-        
+
         if (res.status === 401) {
-          // Not authenticated
-          console.log('Not authenticated, redirecting to login');
           router.push('/admin/login');
           return;
         }
-        
+
         const data = await res.json();
-        console.log('Admin check data:', data);
-        
+
         if (!data.isAdmin) {
-          // Authenticated but not admin
-          console.log('Not admin, redirecting to home');
           router.push('/?message=You do not have admin privileges');
         } else {
-          console.log('Admin status confirmed');
           setIsAdmin(true);
           hasCheckedAdmin.current = true;
         }
@@ -60,42 +56,41 @@ export default function AdminLayout({ children }) {
         setLoading(false);
       }
     }
-    
+
     checkAdminStatus();
   }, [router, isLoginPage]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-bone text-ink flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl">Verifying admin access...</p>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="font-serif text-lg text-ink-muted">Verifying admin access…</p>
         </div>
       </div>
     );
   }
 
-  // If we're on the login page, render the children without the admin layout
   if (isLoginPage) {
     return children;
   }
-  
-  // For other admin pages, if not admin, don't render (will redirect in useEffect)
+
   if (!isAdmin) {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-bone text-ink">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-gray-800 p-4 flex items-center justify-between sticky top-0 z-50">
+      <div className="lg:hidden bg-bone-light border-b border-ink/10 p-4 flex items-center justify-between sticky top-0 z-50">
         <div>
-          <h1 className="text-xl font-bold text-purple-400">DarkChemSite</h1>
-          <p className="text-gray-400 text-xs">Admin Dashboard</p>
+          <h1 className="text-xl font-serif font-medium text-ink">ChemicalsSite</h1>
+          <p className="text-ink-muted text-xs uppercase tracking-editorial">Admin</p>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-white text-2xl p-2 hover:bg-gray-700 rounded-lg transition-colors"
+          className="text-ink p-2 hover:bg-bone-dark rounded-editorial transition-colors"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
@@ -103,43 +98,42 @@ export default function AdminLayout({ children }) {
 
       <div className="flex">
         {/* Admin Sidebar - Desktop */}
-        <div className="hidden lg:block w-64 bg-gray-800 min-h-screen p-4 sticky top-0 h-screen overflow-y-auto">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-purple-400">DarkChemSite</h1>
-            <p className="text-gray-400 text-sm">Admin Dashboard</p>
+        <div className="hidden lg:flex flex-col w-72 bg-bone-light border-r border-ink/10 min-h-screen p-6 sticky top-0 h-screen overflow-y-auto">
+          <div className="mb-10">
+            <Link href="/admin" className="inline-block">
+              <h1 className="text-2xl font-serif font-medium text-ink">ChemicalsSite</h1>
+            </Link>
+            <p className="text-ink-muted text-xs uppercase tracking-editorial mt-1">Admin Dashboard</p>
           </div>
-          
-          <nav>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/admin" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                  <FaChartLine className="mr-3 text-purple-400" />
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/products" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                  <FaBox className="mr-3 text-purple-400" />
-                  Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/orders" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                  <FaShoppingCart className="mr-3 text-purple-400" />
-                  Orders
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/users" className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors">
-                  <FaUsers className="mr-3 text-purple-400" />
-                  Users
-                </Link>
-              </li>
+
+          <nav className="flex-1">
+            <ul className="space-y-1">
+              {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+                const active = pathname === href || pathname.startsWith(`${href}/`);
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={`flex items-center p-3 rounded-editorial transition-all duration-300 ${
+                        active
+                          ? 'bg-ink text-bone-light'
+                          : 'text-ink-soft hover:bg-bone-dark hover:text-ink'
+                      }`}
+                    >
+                      <Icon className={`mr-3 ${active ? 'text-amber' : 'text-ink-muted'}`} />
+                      <span className="text-sm font-medium">{label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
-          
-          <div className="mt-auto pt-8">
-            <Link href="/" className="text-gray-400 hover:text-white text-sm flex items-center">
+
+          <div className="pt-6 border-t border-ink/10">
+            <Link
+              href="/"
+              className="text-ink-muted hover:text-ink text-sm flex items-center transition-colors"
+            >
               ← Return to Website
             </Link>
           </div>
@@ -147,61 +141,48 @@ export default function AdminLayout({ children }) {
 
         {/* Mobile Sidebar */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}>
-            <div 
-              className="bg-gray-800 w-64 h-full p-4 overflow-y-auto"
+          <div
+            className="lg:hidden fixed inset-0 z-40 bg-ink/20 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <div
+              className="bg-bone-light w-72 h-full p-6 overflow-y-auto border-r border-ink/10"
               onClick={(e) => e.stopPropagation()}
             >
-              <nav className="mt-4">
-                <ul className="space-y-2">
-                  <li>
-                    <Link 
-                      href="/admin" 
-                      className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <FaChartLine className="mr-3 text-purple-400" />
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      href="/admin/products" 
-                      className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <FaBox className="mr-3 text-purple-400" />
-                      Products
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      href="/admin/orders" 
-                      className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <FaShoppingCart className="mr-3 text-purple-400" />
-                      Orders
-                    </Link>
-                  </li>
-                  <li>
-                    <Link 
-                      href="/admin/users" 
-                      className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <FaUsers className="mr-3 text-purple-400" />
-                      Users
-                    </Link>
-                  </li>
+              <div className="mb-8">
+                <h1 className="text-xl font-serif font-medium text-ink">ChemicalsSite</h1>
+                <p className="text-ink-muted text-xs uppercase tracking-editorial mt-1">Admin</p>
+              </div>
+
+              <nav>
+                <ul className="space-y-1">
+                  {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+                    const active = pathname === href || pathname.startsWith(`${href}/`);
+                    return (
+                      <li key={href}>
+                        <Link
+                          href={href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center p-3 rounded-editorial transition-all duration-300 ${
+                            active
+                              ? 'bg-ink text-bone-light'
+                              : 'text-ink-soft hover:bg-bone-dark hover:text-ink'
+                          }`}
+                        >
+                          <Icon className={`mr-3 ${active ? 'text-amber' : 'text-ink-muted'}`} />
+                          <span className="text-sm font-medium">{label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
-              
-              <div className="mt-8 pt-8 border-t border-gray-700">
-                <Link 
-                  href="/" 
-                  className="text-gray-400 hover:text-white text-sm flex items-center"
+
+              <div className="mt-8 pt-6 border-t border-ink/10">
+                <Link
+                  href="/"
                   onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-ink-muted hover:text-ink text-sm flex items-center"
                 >
                   ← Return to Website
                 </Link>
@@ -209,11 +190,11 @@ export default function AdminLayout({ children }) {
             </div>
           </div>
         )}
-        
+
         {/* Main Content */}
-        <div className="flex-1 p-4 lg:p-8 overflow-x-hidden">
+        <main className="flex-1 p-6 lg:p-10 overflow-x-hidden bg-bone min-h-screen">
           {children}
-        </div>
+        </main>
       </div>
     </div>
   );

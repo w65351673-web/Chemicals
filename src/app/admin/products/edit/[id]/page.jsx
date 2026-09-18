@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaArrowLeft, FaSave, FaUpload, FaTimes } from 'react-icons/fa';
+import { PRODUCT_CATEGORIES } from '@/lib/constants/categories';
 
 export default function EditProduct({ params }) {
   const router = useRouter();
@@ -229,8 +230,6 @@ export default function EditProduct({ params }) {
       // Prepare data for API
       const productData = {
         ...formData,
-        // Map 'research chemicals' to 'other' for API compatibility
-        category: formData.category === 'research chemicals' ? 'other' : formData.category,
         images: imageUrls,
         price: parseFloat(formData.price),
         countInStock: parseInt(formData.countInStock)
@@ -260,83 +259,85 @@ export default function EditProduct({ params }) {
     }
   };
   
+  const inputClass = (error) =>
+    `w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors ${
+      error ? 'border-red-500 bg-red-50/20' : ''
+    }`;
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
-  
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Edit Product</h1>
-        <Link href="/admin/products" className="flex items-center text-gray-400 hover:text-white">
+    <div className="space-y-6">
+      <header className="flex items-center justify-between">
+        <div>
+          <p className="eyebrow mb-1">Catalog</p>
+          <h1 className="text-2xl font-serif font-medium text-ink">Edit Product</h1>
+        </div>
+        <Link href="/admin/products" className="flex items-center text-ink-muted hover:text-ink text-sm transition-colors">
           <FaArrowLeft className="mr-2" />
           Back to Products
         </Link>
-      </div>
-      
+      </header>
+
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-lg mb-6">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark p-4 rounded-editorial text-sm">
           {error}
         </div>
       )}
-      
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <form onSubmit={handleSubmit} className="bg-bone-light border border-ink/10 rounded-editorial p-6 shadow-editorial">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div>
-              <label className="block text-gray-400 mb-2">Product Name</label>
+              <label className="block text-ink-soft text-sm font-medium mb-2">Product Name</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.name ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.name)}
               />
-              {formErrors.name && <p className="text-red-400 text-sm mt-1">{formErrors.name}</p>}
+              {formErrors.name && <p className="text-red-700 text-sm mt-1">{formErrors.name}</p>}
             </div>
-            
+
             <div>
-              <label className="block text-gray-400 mb-2">Slug</label>
+              <label className="block text-ink-soft text-sm font-medium mb-2">Slug</label>
               <input
                 type="text"
                 name="slug"
                 value={formData.slug}
                 onChange={handleInputChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.slug ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.slug)}
               />
-              {formErrors.slug && <p className="text-red-400 text-sm mt-1">{formErrors.slug}</p>}
-              <p className="text-gray-500 text-sm mt-1">Used in URL: /products/your-slug</p>
+              {formErrors.slug && <p className="text-red-700 text-sm mt-1">{formErrors.slug}</p>}
+              <p className="text-ink-faint text-sm mt-1">Used in URL: /products/your-slug</p>
             </div>
-            
+
             <div>
-              <label className="block text-gray-400 mb-2">Description</label>
+              <label className="block text-ink-soft text-sm font-medium mb-2">Description</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
                 rows="5"
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.description ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.description)}
               ></textarea>
-              {formErrors.description && <p className="text-red-400 text-sm mt-1">{formErrors.description}</p>}
+              {formErrors.description && <p className="text-red-700 text-sm mt-1">{formErrors.description}</p>}
             </div>
           </div>
-          
+
           {/* Right Column */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-400 mb-2">Price ($)</label>
+                <label className="block text-ink-soft text-sm font-medium mb-2">Price ($)</label>
                 <input
                   type="number"
                   name="price"
@@ -344,61 +345,57 @@ export default function EditProduct({ params }) {
                   onChange={handleInputChange}
                   step="0.01"
                   min="0"
-                  className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    formErrors.price ? 'border border-red-500' : ''
-                  }`}
+                  className={inputClass(formErrors.price)}
                 />
-                {formErrors.price && <p className="text-red-400 text-sm mt-1">{formErrors.price}</p>}
+                {formErrors.price && <p className="text-red-700 text-sm mt-1">{formErrors.price}</p>}
               </div>
-              
+
               <div>
-                <label className="block text-gray-400 mb-2">Stock Count</label>
+                <label className="block text-ink-soft text-sm font-medium mb-2">Stock Count</label>
                 <input
                   type="number"
                   name="countInStock"
                   value={formData.countInStock}
                   onChange={handleInputChange}
                   min="0"
-                  className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                    formErrors.countInStock ? 'border border-red-500' : ''
-                  }`}
+                  className={inputClass(formErrors.countInStock)}
                 />
-                {formErrors.countInStock && <p className="text-red-400 text-sm mt-1">{formErrors.countInStock}</p>}
+                {formErrors.countInStock && <p className="text-red-700 text-sm mt-1">{formErrors.countInStock}</p>}
               </div>
             </div>
-            
+
             <div>
-              <label className="block text-gray-400 mb-2">Category</label>
+              <label className="block text-ink-soft text-sm font-medium mb-2">Category</label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
-                className={`w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                  formErrors.category ? 'border border-red-500' : ''
-                }`}
+                className={inputClass(formErrors.category)}
               >
-                <option value="cannabinoids">Cannabinoids</option>
-                <option value="benzos">Benzos</option>
-                <option value="research chemicals">Research Chemicals</option>
+                {PRODUCT_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
               </select>
-              {formErrors.category && <p className="text-red-400 text-sm mt-1">{formErrors.category}</p>}
+              {formErrors.category && <p className="text-red-700 text-sm mt-1">{formErrors.category}</p>}
             </div>
-            
-            <div className="flex items-center mb-4">
+
+            <div className="flex items-center">
               <input
                 type="checkbox"
                 id="featured"
                 name="featured"
                 checked={formData.featured}
                 onChange={handleInputChange}
-                className="w-4 h-4 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                className="h-5 w-5 accent-amber rounded-editorial border-ink/30"
               />
-              <label htmlFor="featured" className="ml-2 text-gray-300">Featured Product</label>
+              <label htmlFor="featured" className="ml-2 text-ink-soft text-sm">Featured Product</label>
             </div>
-            
+
             <div className="space-y-3">
               <div>
-                <label className="block text-gray-400 mb-2">Rating (1-5)</label>
+                <label className="block text-ink-soft text-sm font-medium mb-2">Rating (1-5)</label>
                 <div className="flex items-center">
                   <input
                     type="range"
@@ -408,15 +405,15 @@ export default function EditProduct({ params }) {
                     min="1"
                     max="5"
                     step="0.5"
-                    className="w-full bg-gray-700 text-white rounded-lg accent-purple-600"
+                    className="w-full accent-amber h-1.5 bg-ink/10 rounded-full appearance-none cursor-pointer"
                   />
-                  <span className="ml-3 text-white font-medium">{formData.rating}</span>
+                  <span className="ml-3 text-ink font-medium min-w-[2rem]">{formData.rating}</span>
                 </div>
                 <div className="flex mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <svg 
-                      key={star} 
-                      className={`w-5 h-5 ${star <= formData.rating ? 'text-yellow-400' : 'text-gray-500'}`}
+                    <svg
+                      key={star}
+                      className={`w-5 h-5 ${star <= formData.rating ? 'text-amber' : 'text-ink/15'}`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -424,28 +421,28 @@ export default function EditProduct({ params }) {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-500 text-sm mt-1">Set the product rating manually (1-5 stars)</p>
+                <p className="text-ink-faint text-sm mt-1">Set the product rating manually (1-5 stars)</p>
               </div>
-              
+
               <div>
-                <label className="block text-gray-400 mb-2">Number of Reviews</label>
+                <label className="block text-ink-soft text-sm font-medium mb-2">Number of Reviews</label>
                 <input
                   type="number"
                   name="numReviews"
                   value={formData.numReviews}
                   onChange={handleInputChange}
                   min="0"
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className={inputClass(false)}
                 />
-                <p className="text-gray-500 text-sm mt-1">Set the number of reviews manually</p>
+                <p className="text-ink-faint text-sm mt-1">Set the number of reviews manually</p>
               </div>
             </div>
-            
+
             <div>
-              <label className="block text-gray-400 mb-2">Product Images</label>
+              <label className="block text-ink-soft text-sm font-medium mb-2">Product Images</label>
               <div className="flex flex-wrap gap-3 mb-3">
                 {imagePreviewUrls.map((url, index) => (
-                  <div key={index} className="relative w-20 h-20 rounded overflow-hidden bg-gray-700">
+                  <div key={index} className="relative w-20 h-20 rounded-editorial overflow-hidden bg-bone-deep group">
                     <Image
                       src={url}
                       alt={`Product image ${index + 1}`}
@@ -455,17 +452,17 @@ export default function EditProduct({ params }) {
                     <button
                       type="button"
                       onClick={() => removeImage(index, index < formData.images.length)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 w-5 h-5 flex items-center justify-center"
+                      className="absolute top-1 right-1 bg-red-700 text-bone-light rounded-full p-1 w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       title="Remove image"
                     >
                       <FaTimes size={10} />
                     </button>
                   </div>
                 ))}
-                
-                <label className="w-20 h-20 border-2 border-dashed border-gray-600 rounded flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors">
-                  <FaUpload className="text-gray-400 mb-1" />
-                  <span className="text-xs text-gray-400">Add Image</span>
+
+                <label className="w-20 h-20 border-2 border-dashed border-ink/20 rounded-editorial flex flex-col items-center justify-center cursor-pointer hover:border-amber/50 transition-colors bg-bone">
+                  <FaUpload className="text-ink-muted mb-1" />
+                  <span className="text-[10px] text-ink-muted">Add Image</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -475,32 +472,32 @@ export default function EditProduct({ params }) {
                   />
                 </label>
               </div>
-              
+
               {isUploading && (
                 <div className="mt-2">
-                  <div className="w-full bg-gray-700 rounded-full h-2.5">
+                  <div className="w-full bg-bone-deep rounded-full h-2">
                     <div
-                      className="bg-purple-600 h-2.5 rounded-full"
+                      className="bg-amber h-2 rounded-full transition-all"
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                   </div>
-                  <p className="text-gray-400 text-sm mt-1">Uploading: {uploadProgress}%</p>
+                  <p className="text-ink-muted text-sm mt-1">Uploading: {uploadProgress}%</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-        
-        <div className="mt-8 flex justify-end">
+
+        <div className="mt-10 flex justify-end border-t border-ink/10 pt-6">
           <button
             type="submit"
             disabled={saving}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center disabled:opacity-70"
+            className="btn-primary disabled:opacity-60"
           >
             {saving ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Saving...
+                <div className="w-4 h-4 border-2 border-bone-light border-t-transparent rounded-full animate-spin mr-2"></div>
+                Saving…
               </>
             ) : (
               <>

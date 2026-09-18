@@ -13,15 +13,15 @@ function LoginRedirectContent() {
       params.append(key, value);
     });
     
-    // Redirect to the actual login page with all query parameters
-    router.replace(`/auth/login?${params.toString()}`);
+    // Redirect to the admin/dashboard login page with all query parameters
+    router.replace(`/admin/login?${params.toString()}`);
   }, [router, searchParams]);
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="text-white text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mx-auto mb-4"></div>
-        <p>Redirecting to login page...</p>
+    <div className="min-h-screen flex items-center justify-center bg-bone">
+      <div className="text-center">
+        <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-ink-muted">Redirecting to login page...</p>
       </div>
     </div>
   );
@@ -30,10 +30,10 @@ function LoginRedirectContent() {
 export default function LoginRedirect() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white mx-auto mb-4"></div>
-          <p>Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-bone">
+        <div className="text-center">
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-ink-muted">Loading...</p>
         </div>
       </div>
     }>

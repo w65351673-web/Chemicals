@@ -4,226 +4,114 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaStar, FaShoppingCart, FaEye } from 'react-icons/fa';
+import { FiArrowUpRight } from 'react-icons/fi';
+import { categoryLabel } from '@/lib/constants/categories';
 
-export default function ProductCard({ product }) {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  // Ensure product is defined to prevent errors
-  if (!product) {
-    console.error('ProductCard received undefined product');
-    return null;
-  }
-  
-  // Get the lowest price from price variants or use the product's main price
-  const lowestPrice = product.priceVariants && product.priceVariants.length > 0
-    ? product.priceVariants.reduce((min, variant) => 
-        variant.price < min ? variant.price : min, 
-        product.priceVariants[0]?.price || 0
-      )
-    : (product.price || 0);
+const EASE = [0.22, 1, 0.36, 1];
+
+export default function ProductCard({ product, index = 0 }) {
+  const [hovered, setHovered] = useState(false);
+
+  if (!product) return null;
+
+  const href = `/products/${product.slug || product._id}`;
+
+  const lowestPrice =
+    product.priceVariants && product.priceVariants.length > 0
+      ? product.priceVariants.reduce(
+          (min, variant) => (variant.price < min ? variant.price : min),
+          product.priceVariants[0]?.price || 0
+        )
+      : product.price || 0;
+
+  const inStock = product.countInStock === undefined || product.countInStock > 0;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ 
-        y: -8,
-        boxShadow: '0 10px 25px -5px rgba(139, 92, 246, 0.4)'
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
+    <motion.article
+      initial={{ opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.8, delay: (index % 3) * 0.08, ease: EASE }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group relative flex flex-col border-b border-ink/10 pb-6"
     >
-      <Link 
-        href={`/products/${product.slug || product._id}`}
-        className="relative h-48 w-full overflow-hidden cursor-pointer block"
+      <Link
+        href={href}
+        className="relative block aspect-[4/5] w-full overflow-hidden bg-bone-dark"
         aria-label={`View ${product.name}`}
       >
-          {product.images && product.images.length > 0 ? (
-            <motion.div
-              animate={{
-                scale: isHovered ? 1.1 : 1
-              }}
-              transition={{ duration: 0.4 }}
-              className="h-full w-full"
-            >
-              <Image
-                src={product.images[0]}
-                alt={product.name || 'Product image'}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-                loading="lazy"
-                quality={85}
-                onError={(e) => {
-                  e.target.onerror = null; 
-                  e.target.src = '/images/placeholder.jpg';
-                }}
-              />
-            </motion.div>
-          ) : (
-            <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-500">No image</span>
-            </div>
-          )}
-          
-          {/* Category badge with animation */}
-          <motion.div 
-            className="absolute top-2 left-2"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <motion.span 
-              className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full inline-block"
-              whileHover={{ scale: 1.05, backgroundColor: '#9333ea' }}
-            >
-              {product.category}
-            </motion.span>
-          </motion.div>
-          
-          {/* Out of stock overlay */}
-          {product.countInStock <= 0 && (
-            <motion.div 
-              className="absolute inset-0 bg-black/70 flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.span 
-                className="text-white font-bold text-lg"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 400, 
-                  damping: 10 
-                }}
-              >
-                Out of Stock
-              </motion.span>
-            </motion.div>
-          )}
-          
-          {/* Hover overlay with quick actions */}
-          <motion.div 
-            className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0"
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.div 
-              className="flex space-x-3"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ 
-                y: isHovered ? 0 : 20, 
-                opacity: isHovered ? 1 : 0 
-              }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              <Link 
-                href={`/products/${product.slug || product._id}`}
-                className="bg-white text-purple-600 p-2 rounded-full hover:bg-purple-600 hover:text-white transition-colors duration-300"
-                aria-label={`View details for ${product.name}`}
-              >
-                <FaEye size={18} aria-hidden="true" />
-              </Link>
-              
-              {(product.countInStock > 0 || product.countInStock === undefined) && (
-                <Link 
-                  href={`/products/${product.slug || product._id}`}
-                  className="bg-purple-600 text-white p-2 rounded-full hover:bg-purple-700 transition-colors duration-300"
-                  aria-label={`Add ${product.name} to cart`}
-                >
-                  <FaShoppingCart size={18} aria-hidden="true" />
-                </Link>
-              )}
-            </motion.div>
-          </motion.div>
-        </Link>
-
-      <div className="p-4">
-        <Link href={`/products/${product.slug || product._id}`}>
-          <motion.h3 
-            className="text-lg font-semibold text-white hover:text-purple-400 transition-colors line-clamp-1"
-            whileHover={{ x: 3 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            {product.name || 'Unnamed Product'}
-          </motion.h3>
-        </Link>
-
-        {/* Star rating with animation */}
-        <motion.div 
-          className="flex items-center mt-1 mb-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3 + (i * 0.1) }}
-              >
-                <FaStar
-                  className={`w-4 h-4 ${
-                    i < Math.round(product.rating)
-                      ? 'text-yellow-400'
-                      : 'text-gray-600'
-                  }`}
-                />
-              </motion.div>
-            ))}
+        {product.images && product.images.length > 0 ? (
+          <Image
+            src={product.images[0]}
+            alt={product.name || 'Product image'}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-[1.1s] ease-editorial group-hover:scale-[1.05]"
+            loading="lazy"
+            quality={85}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="eyebrow">No image</span>
           </div>
-          <span className="text-gray-400 text-sm ml-1">
-            ({product.numReviews})
-          </span>
-        </motion.div>
+        )}
 
-        {/* Price and action button */}
-        <motion.div 
-          className="flex items-center justify-between mt-3"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+        <span className="absolute left-4 top-4 bg-bone-light/90 px-2.5 py-1 text-[10px] uppercase tracking-editorial text-ink-muted backdrop-blur-sm">
+          {categoryLabel(product.category)}
+        </span>
+
+        {!inStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-bone/80">
+            <span className="border border-ink/25 bg-bone-light px-4 py-2 text-[11px] uppercase tracking-editorial text-ink">
+              Out of stock
+            </span>
+          </div>
+        )}
+
+        <motion.span
+          className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-bone-light"
+          initial={{ opacity: 0, y: 8 }}
+          animate={hovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          transition={{ duration: 0.45, ease: EASE }}
         >
-          <motion.div 
-            className="text-white"
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="font-bold text-lg">€{lowestPrice.toFixed(2)}</span>
+          <FiArrowUpRight className="text-base" aria-hidden="true" />
+        </motion.span>
+      </Link>
+
+      <div className="mt-5 flex flex-1 flex-col">
+        <Link href={href}>
+          <h3 className="font-serif text-[21px] leading-tight text-ink transition-colors duration-300 group-hover:text-amber-dark">
+            {product.name || 'Unnamed product'}
+          </h3>
+        </Link>
+
+        {product.description && (
+          <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-ink-muted">
+            {product.description}
+          </p>
+        )}
+
+        <div className="mt-5 flex items-end justify-between border-t border-ink/10 pt-4">
+          <div>
+            <span className="font-serif text-[20px] text-ink">
+              &euro;{Number(lowestPrice).toFixed(2)}
+            </span>
             {product.priceVariants && product.priceVariants.length > 1 && (
-              <span className="text-gray-400 text-sm ml-1">and up</span>
+              <span className="ml-1.5 text-[11px] uppercase tracking-editorial text-ink-faint">
+                and up
+              </span>
             )}
-          </motion.div>
-          
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+          </div>
+
+          <Link
+            href={href}
+            className="link-underline text-[11px] font-medium uppercase tracking-editorial text-ink-muted transition-colors hover:text-ink"
           >
-            <Link 
-              href={`/products/${product.slug || product._id}`}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-full text-sm transition-colors flex items-center"
-            >
-              <span>View</span>
-              <motion.span 
-                className="ml-1"
-                animate={{ x: isHovered ? 3 : 0 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                →
-              </motion.span>
-            </Link>
-          </motion.div>
-        </motion.div>
-        
-        {/* Subtle glow effect on hover */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600/0 via-purple-600/0 to-purple-600/0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-lg blur-xl"></div>
+            View
+          </Link>
+        </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }

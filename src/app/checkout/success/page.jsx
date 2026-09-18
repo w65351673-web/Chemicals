@@ -12,125 +12,125 @@ function CheckoutSuccessContent() {
   const { clearCart } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  const orderId = searchParams.get('order_id');
-  
-  // Use a ref to track if we've already cleared the cart
+
+  const orderId = searchParams.get('order');
+
   const [cartCleared, setCartCleared] = useState(false);
-  
+
   useEffect(() => {
-    // Only clear the cart once
     if (!cartCleared) {
       clearCart();
       setCartCleared(true);
     }
-    
+
     if (!orderId) {
       router.push('/');
       return;
     }
-    
+
     const mockOrder = {
       _id: orderId,
-      orderNumber: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
-      totalPrice: 79.99,
-      status: 'processing',
+      orderNumber: orderId,
+      totalPrice: 0,
+      status: 'pending',
       createdAt: new Date().toISOString()
     };
-    
+
     setOrder(mockOrder);
     setLoading(false);
-  }, [orderId, router, cartCleared]); // Remove clearCart from dependencies
-  
+  }, [orderId, router, cartCleared]);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 flex items-center justify-center">
+      <div className="min-h-screen bg-bone pt-24 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-xl">Processing your order...</p>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="font-serif text-lg text-ink-muted">Processing your order...</p>
         </div>
       </div>
     );
   }
-  
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 pb-16">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-          <div className="bg-purple-600 p-6 text-center">
-            <FaCheckCircle className="text-white text-5xl mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-white">Order Confirmed!</h1>
-            <p className="text-purple-100 mt-2">
-              Thank you for your purchase. Your order has been received.
+    <div className="min-h-screen bg-bone pt-24 pb-16">
+      <div className="container-editorial">
+        <div className="max-w-3xl mx-auto bg-bone-light border border-ink/10 rounded-editorial shadow-editorial overflow-hidden">
+          <div className="bg-ink p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-amber/20 flex items-center justify-center mx-auto mb-4">
+              <FaCheckCircle className="text-amber text-3xl" />
+            </div>
+            <h1 className="text-3xl font-serif font-medium text-bone-light">Order Request Sent</h1>
+            <p className="text-bone-deep mt-2">
+              Thank you. We have received your order request and will reply by email.
             </p>
           </div>
-          
-          <div className="p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Order Details</h2>
-              <div className="bg-gray-700 rounded-lg p-4">
-                <div className="grid grid-cols-2 gap-4">
+
+          <div className="p-8">
+            <div className="mb-8">
+              <h2 className="text-xl font-serif font-medium text-ink mb-4">Request Details</h2>
+              <div className="bg-bone border border-ink/10 rounded-editorial p-5">
+                <div className="grid grid-cols-2 gap-5 text-sm">
                   <div>
-                    <p className="text-gray-400 text-sm">Order Number</p>
-                    <p className="text-white font-medium">{order.orderNumber}</p>
+                    <p className="text-ink-muted text-xs uppercase tracking-editorial mb-1">Reference</p>
+                    <p className="text-ink-soft font-medium">{order.orderNumber}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Date</p>
-                    <p className="text-white font-medium">
+                    <p className="text-ink-muted text-xs uppercase tracking-editorial mb-1">Date</p>
+                    <p className="text-ink-soft font-medium">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Total</p>
-                    <p className="text-white font-medium">${order.totalPrice.toFixed(2)}</p>
+                    <p className="text-ink-muted text-xs uppercase tracking-editorial mb-1">Payment</p>
+                    <p className="text-ink-soft font-medium">Pending instructions</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Status</p>
-                    <p className="text-green-400 font-medium capitalize">{order.status}</p>
+                    <p className="text-ink-muted text-xs uppercase tracking-editorial mb-1">Status</p>
+                    <p className="text-amber-dark font-medium capitalize">{order.status}</p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-4">What's Next?</h2>
+
+            <div className="mb-8">
+              <h2 className="text-xl font-serif font-medium text-ink mb-4">What's Next?</h2>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <div className="bg-purple-600 p-2 rounded-full mr-3 flex-shrink-0">
-                    <FaBox className="text-white" />
+                  <div className="bg-amber/10 p-2 rounded-editorial mr-3 flex-shrink-0">
+                    <FaBox className="text-amber-dark" />
                   </div>
                   <div>
-                    <h3 className="text-white font-medium">Order Processing</h3>
-                    <p className="text-gray-400 text-sm">
-                      Your order is being processed and will be shipped soon.
+                    <h3 className="text-ink-soft font-medium">Check your email</h3>
+                    <p className="text-ink-muted text-sm">
+                      We've emailed the order details to our team. You should receive a copy shortly.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <div className="bg-purple-600 p-2 rounded-full mr-3 flex-shrink-0">
-                    <FaClipboardList className="text-white" />
+                  <div className="bg-amber/10 p-2 rounded-editorial mr-3 flex-shrink-0">
+                    <FaClipboardList className="text-amber-dark" />
                   </div>
                   <div>
-                    <h3 className="text-white font-medium">Order Updates</h3>
-                    <p className="text-gray-400 text-sm">
-                      You will receive email updates about your order status.
+                    <h3 className="text-ink-soft font-medium">Await our reply</h3>
+                    <p className="text-ink-muted text-sm">
+                      We'll respond within 24 hours with payment and shipping instructions.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-              <Link 
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
                 href="/"
-                className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-colors"
+                className="btn-secondary"
               >
                 <FaHome className="mr-2" />
                 Continue Shopping
               </Link>
-              <Link 
+              <Link
                 href="/account/orders"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center transition-colors"
+                className="btn-primary"
               >
                 <FaClipboardList className="mr-2" />
                 View My Orders
@@ -146,10 +146,10 @@ function CheckoutSuccessContent() {
 export default function CheckoutSuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 flex items-center justify-center">
+      <div className="min-h-screen bg-bone pt-24 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-xl">Loading...</p>
+          <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="font-serif text-lg text-ink-muted">Loading...</p>
         </div>
       </div>
     }>

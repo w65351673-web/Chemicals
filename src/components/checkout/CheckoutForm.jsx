@@ -107,14 +107,14 @@ export default function CheckoutForm({ orderDetails }) {
   return (
     <form onSubmit={handleSubmit}>
       {errorMessage && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark px-4 py-3 rounded-editorial mb-6 text-sm">
           {errorMessage}
         </div>
       )}
 
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">Billing Information</h3>
-        <AddressElement 
+        <h3 className="text-ink font-serif text-lg font-medium mb-4">Billing Information</h3>
+        <AddressElement
           options={{
             mode: 'billing',
             allowedCountries: ['US', 'CA', 'GB', 'AU'],
@@ -131,10 +131,10 @@ export default function CheckoutForm({ orderDetails }) {
           className="mb-4"
         />
       </div>
-      
+
       <div className="mb-6">
-        <h3 className="text-white text-lg font-medium mb-4">Payment Method</h3>
-        <PaymentElement 
+        <h3 className="text-ink font-serif text-lg font-medium mb-4">Payment Method</h3>
+        <PaymentElement
           options={{
             layout: 'tabs',
             defaultValues: {
@@ -145,17 +145,17 @@ export default function CheckoutForm({ orderDetails }) {
           }}
         />
       </div>
-      
+
       <div className="mt-8">
         <button
           type="submit"
           disabled={!stripe || processing}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full btn-primary disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {processing ? (
             <>
               <FaSpinner className="animate-spin mr-2" />
-              Processing...
+              Processing…
             </>
           ) : (
             <>
@@ -164,8 +164,8 @@ export default function CheckoutForm({ orderDetails }) {
             </>
           )}
         </button>
-        
-        <p className="text-gray-400 text-sm mt-4 text-center">
+
+        <p className="text-ink-muted text-xs mt-4 text-center">
           Your payment information is encrypted and secure. We never store your full credit card details.
         </p>
       </div>

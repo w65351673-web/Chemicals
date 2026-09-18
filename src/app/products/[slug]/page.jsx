@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FaStar, FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
+import { FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '@/components/cart/CartProvider';
 import ProtectedImage from '@/components/common/ProtectedImage';
 import axios from 'axios';
@@ -20,70 +20,8 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-
-  // Generate fake reviews for products without reviews
-  const generateFakeReviews = (productName) => {
-    const reviewTemplates = [
-      {
-        names: ['James Mitchell', 'Sarah Chen', 'Michael Roberts', 'Emily Watson', 'David Kumar'],
-        comments: [
-          'Excellent quality! Exactly what I was looking for. Very satisfied with this purchase.',
-          'Outstanding product. Fast shipping and great packaging. Will definitely order again!',
-          'Top quality product. Very happy with my order. Highly recommend this seller.',
-          'Exceptional quality. This has become my go-to place to order. Fast shipping too!',
-          'Very impressed with the quality. Everything arrived as described. Five stars!'
-        ]
-      },
-      {
-        names: ['Alex Thompson', 'Maria Garcia', 'John Anderson', 'Lisa Park', 'Robert Wilson'],
-        comments: [
-          'Great product! Arrived quickly and well-packaged. Will definitely order again.',
-          'Exactly as described. Very satisfied with the quality. Excellent service!',
-          'High quality product. Very pleased with my purchase. Fast delivery too.',
-          'Reliable seller with great products. This is my third order and always perfect.',
-          'Professional service. The product quality is excellent. Highly recommended!'
-        ]
-      },
-      {
-        names: ['Rachel Foster', 'Thomas Lee', 'Amanda Brooks', 'Kevin Martinez', 'Sophie Turner'],
-        comments: [
-          'Perfect! Exactly what I needed. Very satisfied with this purchase.',
-          'Excellent product. I order regularly and it\'s always consistent quality.',
-          'High quality and reliable. Shipping is always fast. Very happy customer!',
-          'Outstanding quality. This is my favorite place to order from now.',
-          'Very pleased with this product. Great quality and fast shipping. Recommended!'
-        ]
-      }
-    ];
-
-    const reviews = [];
-    const numReviews = Math.floor(Math.random() * 3) + 3; // 3-5 reviews
-    
-    for (let i = 0; i < numReviews; i++) {
-      const template = reviewTemplates[i % reviewTemplates.length];
-      const randomNameIndex = Math.floor(Math.random() * template.names.length);
-      const randomCommentIndex = Math.floor(Math.random() * template.comments.length);
-      
-      // Generate random date within last 6 months
-      const daysAgo = Math.floor(Math.random() * 180);
-      const reviewDate = new Date();
-      reviewDate.setDate(reviewDate.getDate() - daysAgo);
-      
-      reviews.push({
-        _id: `fake-review-${i}`,
-        name: template.names[randomNameIndex],
-        rating: Math.random() > 0.3 ? 5 : 4, // Mostly 5 stars, some 4 stars
-        comment: template.comments[randomCommentIndex],
-        createdAt: reviewDate.toISOString()
-      });
-    }
-    
-    // Sort by date (newest first)
-    return reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  };
 
   // Fetch product data
   useEffect(() => {
@@ -99,11 +37,6 @@ export default function ProductDetailPage() {
         
         const { data } = await axios.get(endpoint);
         setProduct(data);
-        
-        // Set default selected variant if available
-        if (data.priceVariants && data.priceVariants.length > 0) {
-          setSelectedVariant(data.priceVariants[0]);
-        }
       } catch (err) {
         console.error('Error fetching product:', err);
         setError(err.response?.data?.message || 'Failed to load product');
@@ -135,42 +68,36 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    if (product) {
-      // Calculate the euro price for the selected grams
+    if (!product) return;
+
+    const isResearchChemical = product.category?.toLowerCase() === 'research chemicals';
+
+    if (isResearchChemical) {
       const euroPrice = parseFloat(calculateEuroPrice(selectedGrams));
-      // Build a cart item variant object for grams
-      const gramsVariant = {
-        grams: selectedGrams,
-        price: euroPrice,
-      };
-      addToCart(
-        {
-          ...product,
-        },
-        quantity,
-        gramsVariant
-      );
+      addToCart(product, quantity, { grams: selectedGrams, price: euroPrice });
+    } else {
+      addToCart(product, quantity);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+      <div className="min-h-screen bg-bone pt-24 flex justify-center items-center">
+        <div className="w-12 h-12 border-2 border-amber border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
-        <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-bone pt-24">
+        <div className="container-editorial py-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-white mb-4">Product Not Found</h1>
-            <p className="text-gray-400 mb-6">{error || 'The product you are looking for does not exist.'}</p>
+            <h1 className="text-3xl font-serif font-medium text-ink mb-4">Product Not Found</h1>
+            <p className="text-ink-muted mb-6">{error || 'The product you are looking for does not exist.'}</p>
             <Link 
               href="/products" 
-              className="inline-flex items-center text-purple-500 hover:text-purple-400"
+              className="inline-flex items-center text-amber-dark hover:text-ink"
             >
               <FaArrowLeft className="mr-2" /> Back to Products
             </Link>
@@ -181,25 +108,25 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-bone pt-24 pb-16">
+      <div className="container-editorial">
         {/* Breadcrumb */}
-        <div className="mb-6 flex items-center text-sm text-gray-400">
-          <Link href="/" className="hover:text-white">Home</Link>
+        <div className="mb-8 flex flex-wrap items-center text-sm text-ink-faint">
+          <Link href="/" className="hover:text-ink transition-colors">Home</Link>
           <span className="mx-2">/</span>
-          <Link href="/products" className="hover:text-white">Products</Link>
+          <Link href="/products" className="hover:text-ink transition-colors">Products</Link>
           <span className="mx-2">/</span>
-          <Link href={`/products?category=${product.category}`} className="hover:text-white">
+          <Link href={`/products?category=${product.category}`} className="hover:text-ink transition-colors capitalize">
             {product.category}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-300">{product.name}</span>
+          <span className="text-ink-soft">{product.name}</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Product Images */}
           <div>
-            <div className="relative h-80 md:h-96 w-full rounded-lg overflow-hidden mb-4">
+            <div className="relative h-80 md:h-[460px] w-full rounded-editorial overflow-hidden border border-ink/10 bg-bone-light mb-4">
               {product.images && product.images.length > 0 ? (
                 <ProtectedImage
                   src={product.images[selectedImage]}
@@ -209,21 +136,20 @@ export default function ProductDetailPage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
-                  <span className="text-gray-500">No image</span>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-ink-faint">No image</span>
                 </div>
               )}
             </div>
 
-            {/* Image thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="flex space-x-2 overflow-x-auto pb-2">
+              <div className="flex space-x-3 overflow-x-auto pb-2">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative h-16 w-16 rounded-md overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-purple-500' : 'border-transparent'
+                    className={`relative h-16 w-16 rounded-editorial overflow-hidden border-2 transition-colors ${
+                      selectedImage === index ? 'border-amber' : 'border-transparent'
                     }`}
                   >
                     <ProtectedImage
@@ -241,37 +167,21 @@ export default function ProductDetailPage() {
 
           {/* Product Info */}
           <div>
-            <div className="mb-2">
-              <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+            <div className="mb-3">
+              <span className="bg-amber text-ink text-[11px] font-medium uppercase tracking-editorial px-2.5 py-1 rounded-editorial">
                 {product.category}
               </span>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">{product.name}</h1>
-            
-            {/* Rating */}
-            <div className="flex items-center mb-4">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar
-                    key={i}
-                    className={`w-5 h-5 ${
-                      i < Math.round(product.rating)
-                        ? 'text-yellow-400'
-                        : 'text-gray-600'
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-gray-400 ml-2">
-                ({product.numReviews} {product.numReviews === 1 ? 'review' : 'reviews'})
-              </span>
-            </div>
+            <h1 className="text-3xl md:text-4xl font-serif font-medium text-ink mb-2">{product.name}</h1>
+            {product.casNumber && (
+              <p className="text-sm text-ink-muted mb-4">CAS: {product.casNumber}</p>
+            )}
 
-            {/* Euro price dropdown for grams selection */}
+            {(product.category?.toLowerCase() === 'research chemicals') ? (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-white mb-2">Choose quantity</h3>
+              <h3 className="text-sm font-medium uppercase tracking-editorial text-ink-soft mb-2">Choose quantity</h3>
               <select
-                className="w-full bg-gray-700 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-2"
+                className="w-full bg-bone border border-ink/15 rounded-editorial px-3 py-2.5 text-ink focus:outline-none focus:border-amber transition-colors mb-2"
                 value={selectedGrams}
                 onChange={e => setSelectedGrams(Number(e.target.value))}
               >
@@ -279,20 +189,27 @@ export default function ProductDetailPage() {
                   <option key={g} value={g}>{g}g</option>
                 ))}
               </select>
-              <div className="text-2xl font-bold text-purple-400">
+              <div className="text-2xl font-serif font-medium text-amber-dark">
                 €{calculateEuroPrice(selectedGrams)}
-                <span className="ml-2 text-base text-gray-400">({selectedGrams}g)</span>
+                <span className="ml-2 text-base font-sans text-ink-muted">({selectedGrams}g)</span>
               </div>
             </div>
-
+            ) : (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium uppercase tracking-editorial text-ink-soft mb-2">Price</h3>
+              <div className="text-2xl font-serif font-medium text-amber-dark">
+                €{typeof product.price === 'number' ? product.price.toFixed(2) : product.price || '0.00'}
+              </div>
+            </div>
+            )}
 
             {/* Quantity selector */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-white mb-2">Quantity</h3>
-              <div className="flex items-center">
+              <h3 className="text-sm font-medium uppercase tracking-editorial text-ink-soft mb-2">Quantity</h3>
+              <div className="flex items-center rounded-editorial overflow-hidden border border-ink/15 w-fit">
                 <button
                   onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                  className="bg-gray-800 text-white w-10 h-10 flex items-center justify-center rounded-l-lg"
+                  className="bg-bone text-ink w-10 h-10 flex items-center justify-center hover:bg-bone-dark transition-colors disabled:opacity-50"
                   disabled={quantity <= 1}
                 >
                   -
@@ -302,11 +219,11 @@ export default function ProductDetailPage() {
                   min="1"
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="bg-gray-700 text-white text-center w-16 h-10 border-0"
+                  className="bg-bone text-ink text-center w-16 h-10 border-x border-ink/15 focus:outline-none"
                 />
                 <button
                   onClick={() => setQuantity(prev => prev + 1)}
-                  className="bg-gray-800 text-white w-10 h-10 flex items-center justify-center rounded-r-lg"
+                  className="bg-bone text-ink w-10 h-10 flex items-center justify-center hover:bg-bone-dark transition-colors"
                 >
                   +
                 </button>
@@ -315,14 +232,14 @@ export default function ProductDetailPage() {
 
             {/* Add to cart button */}
             <motion.button
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleAddToCart}
               disabled={product.countInStock <= 0}
-              className={`w-full py-3 px-4 rounded-lg flex items-center justify-center text-white font-semibold mb-4 ${
+              className={`w-full py-3 px-4 rounded-editorial flex items-center justify-center font-medium mb-4 transition-colors ${
                 product.countInStock > 0
-                  ? 'bg-purple-600 hover:bg-purple-700'
-                  : 'bg-gray-700 cursor-not-allowed'
+                  ? 'bg-ink text-bone-light hover:bg-ink/90'
+                  : 'bg-bone-dark text-ink-faint cursor-not-allowed'
               }`}
             >
               <FaShoppingCart className="mr-2" />
@@ -331,17 +248,17 @@ export default function ProductDetailPage() {
 
             {/* Stock status */}
             <div className="mb-6">
-              <span className={`text-sm ${product.countInStock > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {product.countInStock > 0 
-                  ? `In Stock (${product.countInStock} available)` 
+              <span className={`text-sm ${product.countInStock > 0 ? 'text-green-700' : 'text-red-600'}`}>
+                {product.countInStock > 0
+                  ? `In Stock (${product.countInStock} available)`
                   : 'Out of Stock'}
               </span>
             </div>
 
             {/* Description */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-white mb-2">Description</h3>
-              <div className="text-gray-300 space-y-2">
+              <h3 className="text-lg font-serif font-medium text-ink mb-3">Description</h3>
+              <div className="text-ink-soft space-y-3 leading-relaxed">
                 {product.description.split('\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
@@ -350,62 +267,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* Reviews section */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold text-white mb-6">Customer Reviews</h2>
-          
-          {(() => {
-            // Use real reviews if available, otherwise generate fake ones
-            const displayReviews = (product.reviews && product.reviews.length > 0) 
-              ? product.reviews 
-              : generateFakeReviews(product.name);
-            
-            return (
-              <div className="space-y-6">
-                {displayReviews.map((review) => (
-                  <div key={review._id} className="bg-gray-800 rounded-lg p-6 hover:bg-gray-750 transition-colors">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                          {review.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-white">{review.name}</div>
-                          <div className="text-gray-400 text-sm">
-                            {new Date(review.createdAt).toLocaleDateString('en-US', { 
-                              year: 'numeric', 
-                              month: 'long', 
-                              day: 'numeric' 
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <FaStar
-                            key={i}
-                            className={`w-5 h-5 ${
-                              i < review.rating ? 'text-yellow-400' : 'text-gray-600'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-gray-300 leading-relaxed">{review.comment}</p>
-                    
-                    {/* Verified badge for authenticity */}
-                    <div className="mt-3 flex items-center text-sm text-green-400">
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Verified Purchase
-                    </div>
-                  </div>
-                ))}
-              </div>
-            );
-          })()}
-        </div>
       </div>
     </div>
   );

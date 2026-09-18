@@ -27,7 +27,7 @@ const User = mongoose.models.User || mongoose.model('User', userSchema);
 async function createAdminUser() {
   try {
     // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: 'admin@darkchemsite.com' });
+    const existingAdmin = await User.findOne({ email: 'admin@chemicalssite.com' });
     
     if (existingAdmin) {
       console.log('Admin user already exists');
@@ -41,14 +41,14 @@ async function createAdminUser() {
     // Create admin user
     const adminUser = new User({
       name: 'Admin User',
-      email: 'admin@darkchemsite.com',
+      email: 'admin@chemicalssite.com',
       password: hashedPassword,
       role: 'admin',
     });
     
     await adminUser.save();
     console.log('Admin user created successfully');
-    console.log('Email: admin@darkchemsite.com');
+    console.log('Email: admin@chemicalssite.com');
     console.log('Password: admin123');
     
   } catch (error) {

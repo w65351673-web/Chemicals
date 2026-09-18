@@ -4,16 +4,16 @@ import HomeClient from '@/components/home/HomeClient';
 
 // Metadata for SEO
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com'),
-  title: 'DarkChemSite | Premium Research Chemicals - 5cl-adba, jwh-018, adb-butinaca',
-  description: 'Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA. Top-grade synthetic cannabinoids and benzos for laboratory research.',
-  keywords: '5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, research chemicals, synthetic cannabinoids, benzos',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://chemicalssite.com'),
+  title: 'ChemicalsSite | Anabolic Steroids, Psychedelic Drugs & Research Chemicals',
+  description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research. Testosterone enanthate, trenbolone acetate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 2-FDCK and more.',
+  keywords: 'anabolic steroids, psychedelic drugs, research chemicals, testosterone enanthate, trenbolone acetate, nandrolone decanoate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 3-CMC, 2-FDCK',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'DarkChemSite | Premium Research Chemicals',
-    description: 'Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca and more.',
+    title: 'ChemicalsSite | Anabolic Steroids, Psychedelics & Research Chemicals',
+    description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals \u2014 assayed, documented and discreetly dispatched.',
     url: '/',
     type: 'website',
   },

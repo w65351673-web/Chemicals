@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { PRODUCT_CATEGORY_VALUES } from '@/lib/constants/categories';
 
 const reviewSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -11,13 +12,14 @@ const reviewSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
+  casNumber: { type: String, default: '' },
   category: { 
     type: String, 
     required: true,
     // Allow only specific categories
     validate: {
       validator: function(v) {
-        return ['cannabinoids', 'benzos', 'research chemicals'].includes(v.toLowerCase());
+        return PRODUCT_CATEGORY_VALUES.includes(v.toLowerCase());
       },
       message: props => `${props.value} is not a valid category`
     }

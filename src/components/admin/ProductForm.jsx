@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FaUpload, FaTimes, FaSave, FaArrowLeft } from 'react-icons/fa';
+import { PRODUCT_CATEGORY_VALUES } from '@/lib/constants/categories';
 
 export default function ProductForm({ product = null }) {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function ProductForm({ product = null }) {
   const [success, setSuccess] = useState('');
   
   // Categories available in the store
-  const categories = ['cannabinoids', 'benzos', 'research chemicals'];
+  const categories = PRODUCT_CATEGORY_VALUES;
   
   useEffect(() => {
     if (product) {
@@ -156,36 +157,38 @@ export default function ProductForm({ product = null }) {
     }
   };
   
+  const inputClass = "w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors text-sm";
+
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+    <div className="bg-bone-light border border-ink/10 rounded-editorial shadow-editorial p-6">
       <div className="flex items-center mb-6">
         <button
           onClick={() => router.push('/admin/products')}
-          className="mr-4 text-gray-400 hover:text-white"
+          className="mr-4 text-ink-muted hover:text-ink transition-colors"
         >
           <FaArrowLeft />
         </button>
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-serif font-medium text-ink">
           {isEditing ? 'Edit Product' : 'Add New Product'}
         </h2>
       </div>
-      
+
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark px-4 py-3 rounded-editorial mb-6 text-sm">
           {error}
         </div>
       )}
-      
+
       {success && (
-        <div className="bg-green-500/20 border border-green-500 text-green-400 px-4 py-3 rounded-lg mb-6">
+        <div className="bg-ink text-bone-light px-4 py-3 rounded-editorial mb-6 text-sm">
           {success}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-gray-400 mb-2" htmlFor="name">
+            <label className="block text-ink-soft text-sm font-medium mb-2" htmlFor="name">
               Product Name*
             </label>
             <input
@@ -194,13 +197,13 @@ export default function ProductForm({ product = null }) {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
               required
             />
           </div>
-          
+
           <div>
-            <label className="block text-gray-400 mb-2" htmlFor="category">
+            <label className="block text-ink-soft text-sm font-medium mb-2" htmlFor="category">
               Category*
             </label>
             <select
@@ -208,7 +211,7 @@ export default function ProductForm({ product = null }) {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
               required
             >
               <option value="">Select Category</option>
@@ -219,10 +222,10 @@ export default function ProductForm({ product = null }) {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label className="block text-gray-400 mb-2" htmlFor="price">
-              Price (€)*
+            <label className="block text-ink-soft text-sm font-medium mb-2" htmlFor="price">
+              Price ($)*
             </label>
             <input
               type="number"
@@ -232,13 +235,13 @@ export default function ProductForm({ product = null }) {
               onChange={handleChange}
               min="0"
               step="0.01"
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
               required
             />
           </div>
-          
+
           <div>
-            <label className="block text-gray-400 mb-2" htmlFor="countInStock">
+            <label className="block text-ink-soft text-sm font-medium mb-2" htmlFor="countInStock">
               Stock Quantity*
             </label>
             <input
@@ -248,13 +251,13 @@ export default function ProductForm({ product = null }) {
               value={formData.countInStock}
               onChange={handleChange}
               min="0"
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
               required
             />
           </div>
-          
+
           <div className="md:col-span-2">
-            <label className="block text-gray-400 mb-2" htmlFor="description">
+            <label className="block text-ink-soft text-sm font-medium mb-2" htmlFor="description">
               Description*
             </label>
             <textarea
@@ -263,11 +266,11 @@ export default function ProductForm({ product = null }) {
               value={formData.description}
               onChange={handleChange}
               rows="4"
-              className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className={inputClass}
               required
             ></textarea>
           </div>
-          
+
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
               <input
@@ -276,21 +279,21 @@ export default function ProductForm({ product = null }) {
                 name="featured"
                 checked={formData.featured}
                 onChange={handleChange}
-                className="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-500 rounded"
+                className="mr-2 h-4 w-4 accent-amber rounded-editorial border-ink/30"
               />
-              <label htmlFor="featured" className="text-gray-300">
+              <label htmlFor="featured" className="text-ink-soft text-sm">
                 Feature this product on the homepage
               </label>
             </div>
           </div>
-          
+
           <div className="md:col-span-2">
-            <label className="block text-gray-400 mb-2">
+            <label className="block text-ink-soft text-sm font-medium mb-2">
               Product Images
             </label>
-            
+
             <div className="mb-4">
-              <label className="flex flex-col items-center px-4 py-6 bg-gray-700 text-white rounded-lg cursor-pointer hover:bg-gray-600 transition-colors">
+              <label className="flex flex-col items-center px-4 py-6 bg-bone border border-dashed border-ink/20 text-ink-muted rounded-editorial cursor-pointer hover:border-amber/50 hover:text-ink transition-colors">
                 <FaUpload className="mb-2 text-xl" />
                 <span className="text-sm">Upload Images</span>
                 <input
@@ -302,14 +305,14 @@ export default function ProductForm({ product = null }) {
                 />
               </label>
             </div>
-            
+
             {imagePreviewUrls.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
                 {imagePreviewUrls.map((url, index) => (
                   <div key={index} className="relative group">
-                    <div className="relative h-32 w-full rounded-lg overflow-hidden">
-                      <Image 
-                        src={url} 
+                    <div className="relative h-32 w-full rounded-editorial overflow-hidden bg-bone-deep border border-ink/10">
+                      <Image
+                        src={url}
                         alt={`Product image ${index + 1}`}
                         fill
                         className="object-cover"
@@ -318,9 +321,9 @@ export default function ProductForm({ product = null }) {
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                      className="absolute top-2 right-2 bg-red-700 text-bone-light p-1.5 rounded-full hover:bg-red-800 transition-colors"
                     >
-                      <FaTimes />
+                      <FaTimes size={12} />
                     </button>
                   </div>
                 ))}
@@ -328,25 +331,25 @@ export default function ProductForm({ product = null }) {
             )}
           </div>
         </div>
-        
-        <div className="flex justify-end">
+
+        <div className="flex justify-end border-t border-ink/10 pt-6">
           <button
             type="button"
             onClick={() => router.push('/admin/products')}
-            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 mr-2"
+            className="btn-secondary mr-3"
             disabled={loading}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center"
+            className="btn-primary"
             disabled={loading}
           >
             {loading ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Saving...
+                <div className="w-4 h-4 border-2 border-bone-light border-t-transparent rounded-full animate-spin mr-2"></div>
+                Saving…
               </>
             ) : (
               <>

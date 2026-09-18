@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaSave, FaUpload, FaTrash } from 'react-icons/fa';
+import { PRODUCT_CATEGORIES, DEFAULT_CATEGORY } from '@/lib/constants/categories';
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function NewProductPage() {
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
-    category: 'cannabinoids',
+    category: DEFAULT_CATEGORY,
     description: '',
     price: '',
     countInStock: '',
@@ -122,8 +123,6 @@ export default function NewProductPage() {
       // Create product
       const productData = {
         ...formData,
-        // Map 'research chemicals' to 'other' for API compatibility
-        category: formData.category === 'research chemicals' ? 'other' : formData.category,
         price: parseFloat(formData.price),
         countInStock: parseInt(formData.countInStock, 10),
         rating: parseFloat(formData.rating),
@@ -159,34 +158,37 @@ export default function NewProductPage() {
   
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-white">Add New Product</h1>
-        <Link 
-          href="/admin/products" 
-          className="flex items-center text-gray-400 hover:text-white"
+      <header className="flex items-center justify-between">
+        <div>
+          <p className="eyebrow mb-1">Catalog</p>
+          <h1 className="text-2xl font-serif font-medium text-ink">Add New Product</h1>
+        </div>
+        <Link
+          href="/admin/products"
+          className="flex items-center text-ink-muted hover:text-ink transition-colors text-sm"
         >
           <FaArrowLeft className="mr-2" /> Back to Products
         </Link>
-      </div>
-      
+      </header>
+
       {success && (
-        <div className="bg-green-500/20 border border-green-500 text-green-400 p-4 rounded-lg">
-          Product created successfully! Redirecting...
+        <div className="bg-ink text-bone-light p-4 rounded-editorial text-sm">
+          Product created successfully! Redirecting…
         </div>
       )}
-      
+
       {error && (
-        <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-lg">
+        <div className="bg-amber-wash border border-amber/30 text-amber-dark p-4 rounded-editorial text-sm">
           {error}
         </div>
       )}
-      
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <form onSubmit={handleSubmit} className="bg-bone-light border border-ink/10 rounded-editorial p-6 shadow-editorial">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div>
-              <label htmlFor="name" className="block text-gray-300 mb-2">
+              <label htmlFor="name" className="block text-ink-soft text-sm font-medium mb-2">
                 Product Name *
               </label>
               <input
@@ -195,15 +197,15 @@ export default function NewProductPage() {
                 type="text"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="Enter product name"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="slug" className="block text-gray-300 mb-2">
-                Slug * (auto-generated)
+              <label htmlFor="slug" className="block text-ink-soft text-sm font-medium mb-2">
+                Slug * <span className="text-ink-faint font-normal">(auto-generated)</span>
               </label>
               <input
                 id="slug"
@@ -211,14 +213,14 @@ export default function NewProductPage() {
                 type="text"
                 value={formData.slug}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="product-slug"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="category" className="block text-gray-300 mb-2">
+              <label htmlFor="category" className="block text-ink-soft text-sm font-medium mb-2">
                 Category *
               </label>
               <select
@@ -226,17 +228,19 @@ export default function NewProductPage() {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 required
               >
-                <option value="cannabinoids">Cannabinoids</option>
-                <option value="benzos">Benzos</option>
-                <option value="research chemicals">Research Chemicals</option>
+                {PRODUCT_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
               </select>
             </div>
-            
+
             <div>
-              <label htmlFor="price" className="block text-gray-300 mb-2">
+              <label htmlFor="price" className="block text-ink-soft text-sm font-medium mb-2">
                 Price ($) *
               </label>
               <input
@@ -247,14 +251,14 @@ export default function NewProductPage() {
                 min="0"
                 value={formData.price}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="0.00"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="countInStock" className="block text-gray-300 mb-2">
+              <label htmlFor="countInStock" className="block text-ink-soft text-sm font-medium mb-2">
                 Stock Quantity *
               </label>
               <input
@@ -264,14 +268,14 @@ export default function NewProductPage() {
                 min="0"
                 value={formData.countInStock}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="0"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="rating" className="block text-gray-300 mb-2">
+              <label htmlFor="rating" className="block text-ink-soft text-sm font-medium mb-2">
                 Product Rating (1-5) *
               </label>
               <div className="flex items-center">
@@ -284,16 +288,16 @@ export default function NewProductPage() {
                   step="0.5"
                   value={formData.rating}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 text-white rounded-lg accent-purple-600"
+                  className="w-full accent-amber h-1.5 bg-ink/10 rounded-full appearance-none cursor-pointer"
                   required
                 />
-                <span className="ml-3 text-white font-medium">{formData.rating}</span>
+                <span className="ml-3 text-ink font-medium min-w-[2rem]">{formData.rating}</span>
               </div>
               <div className="flex mt-2">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <svg 
-                    key={star} 
-                    className={`w-5 h-5 ${star <= formData.rating ? 'text-yellow-400' : 'text-gray-500'}`}
+                  <svg
+                    key={star}
+                    className={`w-5 h-5 ${star <= formData.rating ? 'text-amber' : 'text-ink/15'}`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -304,7 +308,7 @@ export default function NewProductPage() {
             </div>
 
             <div>
-              <label htmlFor="numReviews" className="block text-gray-300 mb-2">
+              <label htmlFor="numReviews" className="block text-ink-soft text-sm font-medium mb-2">
                 Number of Reviews
               </label>
               <input
@@ -314,10 +318,10 @@ export default function NewProductPage() {
                 min="0"
                 value={formData.numReviews}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="0"
               />
-              <p className="text-gray-500 text-sm mt-1">Set the number of reviews manually</p>
+              <p className="text-ink-faint text-sm mt-1">Set the number of reviews manually</p>
             </div>
 
             <div className="flex items-center">
@@ -327,18 +331,18 @@ export default function NewProductPage() {
                 type="checkbox"
                 checked={formData.featured}
                 onChange={handleChange}
-                className="h-5 w-5 text-purple-600 rounded"
+                className="h-5 w-5 accent-amber rounded-editorial border-ink/30"
               />
-              <label htmlFor="featured" className="ml-2 text-gray-300">
+              <label htmlFor="featured" className="ml-2 text-ink-soft text-sm">
                 Featured Product
               </label>
             </div>
           </div>
-          
+
           {/* Right Column */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div>
-              <label htmlFor="description" className="block text-gray-300 mb-2">
+              <label htmlFor="description" className="block text-ink-soft text-sm font-medium mb-2">
                 Description *
               </label>
               <textarea
@@ -346,17 +350,17 @@ export default function NewProductPage() {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full bg-gray-700 text-white p-3 rounded-lg h-32"
+                className="w-full bg-bone border border-ink/15 text-ink px-4 py-2.5 rounded-editorial h-40 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink transition-colors"
                 placeholder="Enter product description"
                 required
               />
             </div>
-            
+
             <div>
-              <label className="block text-gray-300 mb-2">
+              <label className="block text-ink-soft text-sm font-medium mb-2">
                 Product Images
               </label>
-              <div className="border-2 border-dashed border-gray-600 rounded-lg p-4">
+              <div className="border-2 border-dashed border-ink/20 rounded-editorial p-6 bg-bone hover:border-amber/50 transition-colors">
                 <input
                   type="file"
                   id="images"
@@ -367,30 +371,30 @@ export default function NewProductPage() {
                 />
                 <label
                   htmlFor="images"
-                  className="flex flex-col items-center justify-center cursor-pointer"
+                  className="flex flex-col items-center justify-center cursor-pointer text-ink-muted hover:text-ink transition-colors"
                 >
-                  <FaUpload className="text-gray-400 text-2xl mb-2" />
-                  <span className="text-gray-400">Click to upload images</span>
+                  <FaUpload className="text-2xl mb-2" />
+                  <span className="text-sm">Click to upload images</span>
                 </label>
               </div>
             </div>
-            
+
             {/* Image Previews */}
             {images.length > 0 && (
               <div>
-                <h3 className="text-gray-300 mb-2">Image Previews</h3>
-                <div className="grid grid-cols-3 gap-2">
+                <h3 className="text-ink-soft text-sm font-medium mb-2">Image Previews</h3>
+                <div className="grid grid-cols-3 gap-3">
                   {images.map((image, index) => (
-                    <div key={index} className="relative">
+                    <div key={index} className="relative group">
                       <img
                         src={image}
                         alt={`Preview ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
+                        className="w-full h-24 object-cover rounded-editorial"
                       />
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                        className="absolute top-2 right-2 bg-red-700 text-bone-light p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <FaTrash size={12} />
                       </button>
@@ -401,25 +405,25 @@ export default function NewProductPage() {
             )}
           </div>
         </div>
-        
-        <div className="mt-8 flex justify-end">
+
+        <div className="mt-10 flex justify-end border-t border-ink/10 pt-6">
           <button
             type="button"
             onClick={() => router.push('/admin/products')}
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg mr-4"
+            className="btn-secondary mr-3"
             disabled={loading}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center"
+            className="btn-primary"
             disabled={loading || imageUploading}
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Saving...
+                <div className="w-4 h-4 border-2 border-bone-light border-t-transparent rounded-full animate-spin mr-2"></div>
+                Saving…
               </>
             ) : (
               <>

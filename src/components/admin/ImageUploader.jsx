@@ -107,9 +107,9 @@ export default function ImageUploader({ images = [], onChange, maxImages = 5 }) 
     <div className="space-y-4">
       <div className="flex flex-wrap gap-4">
         {images.map((image, index) => (
-          <div 
-            key={index} 
-            className="relative w-32 h-32 bg-gray-700 rounded-lg overflow-hidden group"
+          <div
+            key={index}
+            className="relative w-32 h-32 bg-bone-deep rounded-editorial overflow-hidden group border border-ink/10"
           >
             <Image
               src={image}
@@ -120,21 +120,21 @@ export default function ImageUploader({ images = [], onChange, maxImages = 5 }) 
             <button
               type="button"
               onClick={() => handleDeleteImage(index)}
-              className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute inset-0 bg-ink/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <FaTrash className="text-red-500 text-xl" />
+              <FaTrash className="text-bone-light text-xl" />
             </button>
           </div>
         ))}
 
         {images.length < maxImages && (
-          <label className="w-32 h-32 border-2 border-dashed border-gray-500 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition-colors">
+          <label className="w-32 h-32 border-2 border-dashed border-ink/20 rounded-editorial flex flex-col items-center justify-center cursor-pointer hover:border-amber/50 transition-colors bg-bone">
             {uploading ? (
-              <FaSpinner className="text-purple-500 text-2xl animate-spin" />
+              <FaSpinner className="text-amber text-2xl animate-spin" />
             ) : (
               <>
-                <FaUpload className="text-gray-400 text-2xl mb-2" />
-                <span className="text-sm text-gray-400">Upload</span>
+                <FaUpload className="text-ink-muted text-2xl mb-2" />
+                <span className="text-sm text-ink-muted">Upload</span>
               </>
             )}
             <input
@@ -150,10 +150,10 @@ export default function ImageUploader({ images = [], onChange, maxImages = 5 }) 
       </div>
 
       {error && (
-        <p className="text-red-500 text-sm">{error}</p>
+        <p className="text-red-700 text-sm">{error}</p>
       )}
-      
-      <p className="text-gray-400 text-sm">
+
+      <p className="text-ink-muted text-sm">
         Upload up to {maxImages} images (JPEG, PNG, WEBP, GIF). Max size: 5MB per image.
       </p>
     </div>

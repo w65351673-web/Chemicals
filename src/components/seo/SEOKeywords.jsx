@@ -1,56 +1,72 @@
 /**
  * SEO Keywords Component
- * Contains all primary research chemical keywords for search engine optimization
- * Keywords: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 
- * 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA,
- * Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam,
- * Pyrazolam, Phenazepam, AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA,
- * Isotonitazene, Protonitazene, Metonitazene, Alprazolam, 5fmdmb-2201, 4fadb
+ * Keyword coverage for the three ChemicalsSite categories:
+ * anabolic steroids, psychedelic drugs and research chemicals.
  */
 
+export const anabolicSteroidKeywords = [
+  'Testosterone Enanthate',
+  'Testosterone Cypionate',
+  'Testosterone Propionate',
+  'Sustanon 250',
+  'Trenbolone Acetate',
+  'Trenbolone Enanthate',
+  'Nandrolone Decanoate',
+  'Boldenone Undecylenate',
+  'Drostanolone Propionate',
+  'Methenolone Enanthate',
+  'Oxandrolone',
+  'Stanozolol',
+  'Methandienone',
+  'Oxymetholone',
+];
+
+export const psychedelicKeywords = [
+  '1P-LSD',
+  '1cP-LSD',
+  'LSZ',
+  'AL-LAD',
+  '4-ACO-DMT',
+  '4-HO-MET',
+  'DMT',
+  '5-MeO-DMT',
+  'Mescaline HCl',
+  '2C-B',
+  '2C-E',
+  'DOC',
+];
+
+export const researchChemicalKeywords = [
+  '3-MMC',
+  '3-CMC',
+  '4-MMC',
+  '2-FDCK',
+  'MDPHP',
+  'alpha-PiHP',
+  'A-PVP',
+  '4F-MPH',
+  'Hexen',
+  'NEP',
+];
+
 export const primaryKeywords = [
-  '5cl-adba',
-  '5cladba',
-  '5fadb',
-  'jwh-018',
-  'adb-butinaca',
-  'ab-pinaca',
-  '5F-EDMB-PINACA',
-  'ADB-FUBINACA',
-  '4FADB',
-  'AMB-FUBINACA',
-  'MDMB-4en-PINACA',
-  'Etizolam',
-  'Flualprazolam',
-  'Clonazolam',
-  'Flubromazolam',
-  'Diclazepam',
-  'Bromazolam',
-  'Pyrazolam',
-  'Phenazepam',
-  'AB-FUBINACA',
-  'MDMB-CHMINACA',
-  'MDMB-FUBINACA',
-  'Isotonitazene',
-  'Protonitazene',
-  'Metonitazene',
-  'Alprazolam',
-  '5fmdmb-2201',
-  '4fadb'
+  ...anabolicSteroidKeywords,
+  ...psychedelicKeywords,
+  ...researchChemicalKeywords,
 ];
 
 export const secondaryKeywords = [
+  'anabolic steroids',
+  'psychedelic drugs',
   'research chemicals',
-  'synthetic cannabinoids',
-  'laboratory chemicals',
-  'premium research chemicals',
+  'buy anabolic steroids online',
+  'buy psychedelics online',
   'buy research chemicals online',
-  'benzos',
-  'benzodiazepines',
-  'nitazenes',
-  'cannabinoids for research',
-  'chemical compounds',
-  'laboratory grade chemicals'
+  'laboratory chemicals',
+  'laboratory grade compounds',
+  'reference materials',
+  'high purity compounds',
+  'analytical standards'
 ];
 
 export const allKeywords = [...primaryKeywords, ...secondaryKeywords];
@@ -77,15 +93,15 @@ export const getProductSchema = (product) => ({
 
 // Get base URL for schemas
 const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_BASE_URL || 'https://darkchemsite.com';
+  return process.env.NEXT_PUBLIC_BASE_URL || 'https://chemicalssite.com';
 };
 
 // Organization schema
 export const getOrganizationSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'DarkChemSite',
-  description: 'Premium research chemicals supplier specializing in 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam, Pyrazolam, Phenazepam, AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA, Isotonitazene, Protonitazene, Metonitazene, Alprazolam, 5fmdmb-2201, 4fadb and other synthetic cannabinoids, benzodiazepines, and nitazenes',
+  name: 'ChemicalsSite',
+  description: 'Supplier of high-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research, including testosterone enanthate, trenbolone acetate, nandrolone decanoate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 3-CMC and 2-FDCK',
   url: getBaseUrl(),
 });
 
@@ -93,8 +109,8 @@ export const getOrganizationSchema = () => ({
 export const getWebsiteSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'DarkChemSite',
-  description: 'Premium quality research chemicals including 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA, Etizolam, Flualprazolam, Clonazolam, Flubromazolam, Diclazepam, Bromazolam, Pyrazolam, Phenazepam, AB-FUBINACA, MDMB-CHMINACA, MDMB-FUBINACA, Isotonitazene, Protonitazene, Metonitazene, Alprazolam, 5fmdmb-2201, 4fadb',
+  name: 'ChemicalsSite',
+  description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research, assayed and documented batch by batch',
   url: getBaseUrl(),
 });
 
@@ -106,36 +122,25 @@ export default function SEOKeywords() {
     <>
       {/* Hidden keywords for SEO - not visible to users */}
       <div className="hidden" aria-hidden="true">
+        <h2>Anabolic Steroids Available</h2>
+        <ul>
+          {anabolicSteroidKeywords.map((k) => (
+            <li key={k}>{k} - Anabolic steroid reference compound</li>
+          ))}
+        </ul>
+
+        <h2>Psychedelic Drugs Available</h2>
+        <ul>
+          {psychedelicKeywords.map((k) => (
+            <li key={k}>{k} - Psychedelic research compound</li>
+          ))}
+        </ul>
+
         <h2>Research Chemicals Available</h2>
         <ul>
-          <li>5cl-adba - Premium synthetic cannabinoid</li>
-          <li>5cladba - High-quality research chemical</li>
-          <li>5fadb - Laboratory grade compound</li>
-          <li>jwh-018 - Synthetic cannabinoid for research</li>
-          <li>adb-butinaca - Premium research chemical</li>
-          <li>ab-pinaca - High-purity synthetic cannabinoid</li>
-          <li>5F-EDMB-PINACA - Laboratory research compound</li>
-          <li>ADB-FUBINACA - Premium synthetic cannabinoid</li>
-          <li>4FADB - High-quality research chemical</li>
-          <li>AMB-FUBINACA - Laboratory grade compound</li>
-          <li>MDMB-4en-PINACA - Premium research chemical</li>
-          <li>Etizolam - Research benzodiazepine</li>
-          <li>Flualprazolam - Laboratory benzodiazepine</li>
-          <li>Clonazolam - Premium benzodiazepine</li>
-          <li>Flubromazolam - Research chemical benzo</li>
-          <li>Diclazepam - Laboratory grade benzodiazepine</li>
-          <li>Bromazolam - Premium research benzo</li>
-          <li>Pyrazolam - Research benzodiazepine</li>
-          <li>Phenazepam - Laboratory benzodiazepine</li>
-          <li>AB-FUBINACA - Synthetic cannabinoid</li>
-          <li>MDMB-CHMINACA - Premium cannabinoid</li>
-          <li>MDMB-FUBINACA - Research cannabinoid</li>
-          <li>Isotonitazene - Research nitazene</li>
-          <li>Protonitazene - Laboratory nitazene</li>
-          <li>Metonitazene - Premium nitazene</li>
-          <li>Alprazolam - Research benzodiazepine</li>
-          <li>5fmdmb-2201 - Synthetic cannabinoid</li>
-          <li>4fadb - Premium research chemical</li>
+          {researchChemicalKeywords.map((k) => (
+            <li key={k}>{k} - Laboratory research chemical</li>
+          ))}
         </ul>
       </div>
 

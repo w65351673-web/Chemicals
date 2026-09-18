@@ -40,7 +40,7 @@ export async function uploadToCloudinary(file, options = {}) {
   try {
     // Set default options
     const defaultOptions = {
-      folder: 'darkchemsite',
+      folder: 'chemicalssite',
       resource_type: 'auto'
     };
     

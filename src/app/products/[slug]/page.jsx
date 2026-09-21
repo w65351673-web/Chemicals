@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 export default function ProductDetailPage() {
   const gramOptions = [25, 50, 100, 500, 1000];
   const [selectedGrams, setSelectedGrams] = useState(25);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
@@ -28,15 +29,19 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        
+        setSelectedVariant(null);
+
         // Try to determine if the slug is actually a MongoDB ID
         const isMongoId = /^[0-9a-fA-F]{24}$/.test(slug);
-        
+
         // Choose the appropriate API endpoint based on the slug format
         const endpoint = isMongoId ? `/api/products/id/${slug}` : `/api/products/${slug}`;
-        
+
         const { data } = await axios.get(endpoint);
         setProduct(data);
+        if (data.priceVariants && data.priceVariants.length > 0) {
+          setSelectedVariant(data.priceVariants[0]);
+        }
       } catch (err) {
         console.error('Error fetching product:', err);
         setError(err.response?.data?.message || 'Failed to load product');
@@ -70,9 +75,12 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (!product) return;
 
+    const hasVariants = product.priceVariants && product.priceVariants.length > 0;
     const isResearchChemical = product.category?.toLowerCase() === 'research chemicals';
 
-    if (isResearchChemical) {
+    if (hasVariants && selectedVariant) {
+      addToCart(product, quantity, { ...selectedVariant, price: Number(selectedVariant.price) });
+    } else if (isResearchChemical) {
       const euroPrice = parseFloat(calculateEuroPrice(selectedGrams));
       addToCart(product, quantity, { grams: selectedGrams, price: euroPrice });
     } else {
@@ -177,7 +185,26 @@ export default function ProductDetailPage() {
               <p className="text-sm text-ink-muted mb-4">CAS: {product.casNumber}</p>
             )}
 
-            {(product.category?.toLowerCase() === 'research chemicals') ? (
+            {(product.priceVariants && product.priceVariants.length > 0 && product.category?.toLowerCase() !== 'anabolic steroids') ? (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium uppercase tracking-editorial text-ink-soft mb-2">Choose an option</h3>
+              <select
+                className="w-full bg-bone border border-ink/15 rounded-editorial px-3 py-2.5 text-ink focus:outline-none focus:border-amber transition-colors mb-2"
+                value={selectedVariant?._id || ''}
+                onChange={e => {
+                  const variant = product.priceVariants.find(v => v._id === e.target.value);
+                  setSelectedVariant(variant || product.priceVariants[0]);
+                }}
+              >
+                {product.priceVariants.map(variant => (
+                  <option key={variant._id} value={variant._id}>{variant.label}</option>
+                ))}
+              </select>
+              <div className="text-2xl font-serif font-medium text-amber-dark">
+                €{Number(selectedVariant?.price || 0).toFixed(2)}
+              </div>
+            </div>
+            ) : (product.category?.toLowerCase() === 'research chemicals') ? (
             <div className="mb-6">
               <h3 className="text-sm font-medium uppercase tracking-editorial text-ink-soft mb-2">Choose quantity</h3>
               <select

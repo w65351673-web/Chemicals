@@ -27,6 +27,12 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   description: { type: String, required: true },
   price: { type: Number, required: true, default: 0 },
+  priceVariants: [{
+    _id: { type: String, required: true },
+    label: { type: String, required: true },
+    quantity: { type: Number, required: true, default: 1 },
+    price: { type: Number, required: true, default: 0 },
+  }],
   countInStock: { type: Number, required: true, default: 0 },
   rating: { type: Number, required: true, default: 0 },
   numReviews: { type: Number, required: true, default: 0 },

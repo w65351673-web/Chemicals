@@ -89,7 +89,11 @@ export default function CartPage() {
                           </Link>
                           {item.variant && (
                             <div className="text-ink-muted text-sm">
-                              {item.variant.grams ? `${item.variant.grams}g` : (item.variant.quantity ? `${item.variant.quantity}g` : '')}
+                              {item.variant.label
+                                ? item.variant.label
+                                : item.variant.grams
+                                  ? `${item.variant.grams}g`
+                                  : (item.variant.quantity ? `${item.variant.quantity}` : '')}
                             </div>
                           )}
                         </div>

@@ -30,6 +30,12 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   description: { type: String, required: true },
   price: { type: Number, required: true, default: 0 },
+  priceVariants: [{
+    _id: { type: String, required: true },
+    label: { type: String, required: true },
+    quantity: { type: Number, required: true, default: 1 },
+    price: { type: Number, required: true, default: 0 },
+  }],
   countInStock: { type: Number, required: true, default: 0 },
   rating: { type: Number, required: true, default: 0 },
   numReviews: { type: Number, required: true, default: 0 },
@@ -45,95 +51,183 @@ function slugify(name) {
     .replace(/(^-|-$)/g, '');
 }
 
-function buildDescription(name, casNumber) {
-  const casLine = casNumber && casNumber !== 'N/A'
-    ? `Catalogued under CAS registry number ${casNumber}, this reference standard is intended for analytical and comparative studies of anabolic-androgenic compounds.`
-    : `This reference standard is intended for analytical and comparative studies of anabolic-androgenic compounds (CAS registry number not available or not assigned).`;
+function buildDescription(item) {
+  const mfr = item.manufacturer && item.manufacturer !== 'N/A'
+    ? `Manufactured by ${item.manufacturer}. ` : '';
+  const sub = item.activeSubstance
+    ? `Active substance: ${item.activeSubstance}. ` : '';
+  const str = item.strength
+    ? `Strength: ${item.strength}. ` : '';
+  const unit = item.unit
+    ? `Unit: ${item.unit}. ` : '';
 
-  return `${name} is a reference-standard preparation supplied for laboratory research, analytical method development, and comparative studies. ${casLine}\n\n` +
-    `The product is produced and stored under controlled conditions to maintain batch consistency and is suitable for identity confirmation, purity profiling, and reference-spectrum generation in forensic, clinical-research, and analytical-chemistry workflows. ` +
+  return `${item.name} – ${mfr}${sub}${str}${unit}\n\n` +
+    `This product is produced and stored under controlled conditions to maintain batch consistency and is suitable for identity confirmation, purity profiling, and reference-spectrum generation in forensic, clinical-research, and analytical-chemistry workflows. ` +
     `It is not intended for human or veterinary administration, diagnostic use, cosmetic application, or consumption of any kind.\n\n` +
     `Handling should be restricted to qualified personnel in a properly equipped laboratory. Use appropriate personal protective equipment, containment, and disposal procedures, and ensure full compliance with all local, national, and institutional regulations governing controlled, scheduled, or pharmaceutical-reference substances.`;
 }
 
 const anabolicProducts = [
   {
-    name: '1-Test-Cyp 200',
-    casNumber: '65-06-5',
-    price: 220,
-    description: '1-Testosterone Cypionate (DHB) 200mg/ml injectable solution. CAS 65-06-5. For laboratory research only.',
+    name: '1-TEST CYP 200',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Vial (10 mL, 200 mg/mL)', price: 210 },
+      { label: '3 Vials', price: 580 },
+      { label: '5 Vials', price: 920 },
+      { label: '10 Vials', price: 1700 },
+    ],
+    unit: '10 mL vial (200 mg/mL)',
+    manufacturer: 'Dragon Pharma',
+    activeSubstance: 'Dihydroboldenone Cypionate',
+    strength: '200 mg',
   },
   {
-    name: 'AICAR 50mg',
-    casNumber: '2627-69-2',
-    price: 55,
-    description: 'AICAR (Acadesine) 50mg research peptide, AMPK activator. CAS 2627-69-2. For laboratory research only.',
+    name: 'AICAR',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Vial (50 mg)', price: 50 },
+      { label: '5 Vials', price: 220 },
+      { label: '10 Vials', price: 400 },
+    ],
+    unit: '50 mg vial',
+    manufacturer: 'N/A',
+    activeSubstance: '5-Aminoimidazole-4-carboxamide ribonucleotide',
+    strength: '50 mg',
   },
   {
-    name: 'Primobolan Depot',
-    casNumber: '303-42-4',
-    price: 140,
-    description: 'Methenolone Enanthate 100mg/ml 10ml injectable. CAS 303-42-4. For laboratory research only.',
+    name: 'Alphabolin',
+    casNumber: 'N/A',
+    variants: [
+      { label: '5 Ampoules (100 mg)', price: 100 },
+      { label: '10 Ampoules', price: 185 },
+      { label: '20 Ampoules', price: 340 },
+    ],
+    unit: '5 Ampoules',
+    manufacturer: 'Alpha Pharma',
+    activeSubstance: 'Methenolone Enanthate',
+    strength: '100 mg',
   },
   {
     name: 'Anadrol-50',
-    casNumber: '434-07-1',
-    price: 60,
-    description: 'Oxymetholone 50mg oral tablets, 100 tablets. CAS 434-07-1. For laboratory research only.',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Pack (100 tabs, 50 mg)', price: 44 },
+      { label: '3 Packs', price: 120 },
+      { label: '5 Packs', price: 190 },
+      { label: '10 Packs', price: 350 },
+    ],
+    unit: '100 tabs (50 mg/tab)',
+    manufacturer: 'Meditech Pharma',
+    activeSubstance: 'Oxymetholone',
+    strength: '50 mg',
   },
   {
     name: 'Anapolon',
-    casNumber: '434-07-1',
-    price: 50,
-    description: 'Oxymetholone 50mg oral tablets. CAS 434-07-1. For laboratory research only.',
-  },
-  {
-    name: 'ACKS 60 Tabs Pack',
     casNumber: 'N/A',
-    price: 120,
-    description: 'Multi-compound oral tablet blend, 60 tablets. CAS N/A. For laboratory research only.',
+    variants: [
+      { label: '3 Packs (60 tabs/pack, 50 mg)', price: 150 },
+      { label: '6 Packs', price: 280 },
+      { label: '9 Packs', price: 400 },
+    ],
+    unit: '3 packs × 60 tabs (50 mg/tab)',
+    manufacturer: 'Balkan Pharma',
+    activeSubstance: 'Oxymetholone',
+    strength: '50 mg',
   },
   {
     name: 'Anastrozole',
-    casNumber: '120511-73-1',
-    price: 50,
-    description: 'Anastrozole 1mg oral tablets, 30 tablets. Aromatase inhibitor. CAS 120511-73-1. For laboratory research only.',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Pack (1 mg/tab)', price: 165 },
+      { label: '3 Packs', price: 450 },
+      { label: '5 Packs', price: 700 },
+    ],
+    unit: '1 mg/tab',
+    manufacturer: 'Balkan Pharma',
+    activeSubstance: 'Anastrozole',
+    strength: '1 mg',
   },
   {
     name: 'Astralean',
-    casNumber: '21898-19-1',
-    price: 20,
-    description: 'Clenbuterol Hydrochloride 40mcg oral tablets, 50 tablets. CAS 21898-19-1. For laboratory research only.',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Pack (40 mcg tabs)', price: 180 },
+      { label: '3 Packs', price: 490 },
+      { label: '5 Packs', price: 780 },
+    ],
+    unit: '40 mcg tabs',
+    manufacturer: 'Alpha Pharma',
+    activeSubstance: 'Clenbuterol Hydrochloride',
+    strength: '40 mcg',
   },
   {
     name: 'Dianabol',
-    casNumber: '72-63-9',
-    price: 18,
-    description: 'Methandrostenolone 10mg oral tablets, 100 tablets. CAS 72-63-9. For laboratory research only.',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Pack (10 mg tabs)', price: 255 },
+      { label: '3 Packs', price: 700 },
+      { label: '5 Packs', price: 1100 },
+    ],
+    unit: '10 mg tabs',
+    manufacturer: 'Meditech Pharma',
+    activeSubstance: 'Methandienone',
+    strength: '10 mg',
   },
   {
-    name: 'Fentanyl Injection',
-    casNumber: '990-73-8',
-    price: 25,
-    description: 'Fentanyl Citrate injectable solution. CAS 990-73-8. For licensed laboratory/analytical research only.',
+    name: 'Fentanyl',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Box (500 mcg/10 mL)', price: 350 },
+      { label: '3 Boxes', price: 900 },
+      { label: '5 Boxes', price: 1400 },
+      { label: '10 Boxes', price: 2000 },
+    ],
+    unit: '500 mcg/10 mL injection',
+    manufacturer: 'N/A',
+    activeSubstance: 'Fentanyl Citrate',
+    strength: '500 mcg/10 mL',
   },
   {
     name: 'Induject-250',
     casNumber: 'N/A',
-    price: 55,
-    description: 'Testosterone blend (Sustanon 250) 250mg/ml, 10 ampoules. CAS N/A (testosterone mixture). For laboratory research only.',
+    variants: [
+      { label: '1 Ampoule (250 mg/mL)', price: 35 },
+      { label: '5 Ampoules', price: 160 },
+      { label: '10 Ampoules', price: 300 },
+      { label: '20 Ampoules', price: 550 },
+    ],
+    unit: '250 mg/mL ampoule',
+    manufacturer: 'Alpha Pharma',
+    activeSubstance: 'Testosterone Blend (Propionate 30 mg, Phenylpropionate 60 mg, Isocaproate 60 mg, Decanoate 100 mg)',
+    strength: '250 mg',
   },
   {
-    name: 'Scopolamine Hydrobromide',
-    casNumber: '114-49-8',
-    price: 40,
-    description: 'Scopolamine Hydrobromide injectable/lyophilized powder. CAS 114-49-8. For laboratory research only.',
+    name: 'Scopolamine Hydrobromide Capsules',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Bottle', price: 180 },
+      { label: '3 Bottles', price: 450 },
+      { label: '5 Bottles', price: 700 },
+    ],
+    unit: 'Capsules',
+    manufacturer: 'N/A',
+    activeSubstance: 'Scopolamine Hydrobromide',
+    strength: 'N/A',
   },
   {
     name: 'Winstrol',
-    casNumber: '10418-03-8',
-    price: 40,
-    description: 'Stanozolol 10mg oral tablets, 100 tablets. CAS 10418-03-8. For laboratory research only.',
+    casNumber: 'N/A',
+    variants: [
+      { label: '1 Vial (10 mL, 100 mg/mL)', price: 35 },
+      { label: '3 Vials', price: 95 },
+      { label: '5 Vials', price: 150 },
+      { label: '10 Vials', price: 280 },
+    ],
+    unit: '10 mL vial (100 mg/mL)',
+    manufacturer: 'Meditech Pharma',
+    activeSubstance: 'Stanozolol',
+    strength: '100 mg',
   },
 ];
 
@@ -153,7 +247,7 @@ async function addAnabolicSteroids() {
 
     const featuredSlugs = new Set([
       '1-test-cyp-200',
-      'primobolan-depot',
+      'alphabolin',
       'anadrol-50',
       'dianabol',
       'winstrol',
@@ -162,14 +256,21 @@ async function addAnabolicSteroids() {
 
     const productsData = anabolicProducts.map((item) => {
       const slug = slugify(item.name);
+      const priceVariants = item.variants.map((variant) => ({
+        _id: slugify(`${slug}-${variant.label}`),
+        label: variant.label,
+        quantity: 1,
+        price: variant.price,
+      }));
       return {
         name: item.name,
         slug,
         casNumber: item.casNumber,
         category: 'anabolic steroids',
-        images: ['/images/products/anabolic-steroid.jpg'],
-        description: buildDescription(item.name, item.casNumber),
-        price: item.price,
+        images: [`/images/products/${slug}.jpg`],
+        description: buildDescription(item),
+        price: priceVariants[0]?.price || 0,
+        priceVariants,
         countInStock: 100,
         rating: 0,
         numReviews: 0,

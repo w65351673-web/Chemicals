@@ -5,48 +5,71 @@
  */
 
 export const anabolicSteroidKeywords = [
-  'Testosterone Enanthate',
-  'Testosterone Cypionate',
-  'Testosterone Propionate',
-  'Sustanon 250',
-  'Trenbolone Acetate',
-  'Trenbolone Enanthate',
-  'Nandrolone Decanoate',
-  'Boldenone Undecylenate',
-  'Drostanolone Propionate',
-  'Methenolone Enanthate',
-  'Oxandrolone',
-  'Stanozolol',
-  'Methandienone',
-  'Oxymetholone',
+  '1-TEST CYP 200',
+  'AICAR',
+  'Alphabolin',
+  'Anadrol-50',
+  'Anapolon',
+  'Anastrozole',
+  'Astralean',
+  'Dianabol',
+  'Fentanyl',
+  'Induject-250',
+  'Scopolamine Hydrobromide',
+  'Winstrol',
 ];
 
 export const psychedelicKeywords = [
   '1P-LSD',
-  '1cP-LSD',
-  'LSZ',
-  'AL-LAD',
-  '4-ACO-DMT',
-  '4-HO-MET',
+  'Ayahuasca',
   'DMT',
-  '5-MeO-DMT',
-  'Mescaline HCl',
-  '2C-B',
-  '2C-E',
-  'DOC',
+  'DMT Changa',
+  'Golden Teacher Mushroom',
+  'Ibogaine',
+  'Ketamine',
+  'Kratom Powder',
+  'Liberty Cap Mushrooms',
+  'Liquid LSD',
+  'MDMA',
+  'Mescaline Powder',
+  'Morning Glory Seeds',
+  'Penis Envy Mushrooms',
+  'Psilocybe Cubensis',
+  'Iboga Rootbark',
 ];
 
 export const researchChemicalKeywords = [
+  '4-MMC',
   '3-MMC',
   '3-CMC',
-  '4-MMC',
-  '2-FDCK',
-  'MDPHP',
-  'alpha-PiHP',
+  '4-CMC',
   'A-PVP',
-  '4F-MPH',
-  'Hexen',
-  'NEP',
+  'Crystal Meth',
+  'a-PiHP',
+  '2-FDCK',
+  'U-47700',
+  'MDPV',
+  '2C-B',
+  '2C-C',
+  '2C-E',
+  '2C-H',
+  '2C-I',
+  '2C-T-2',
+  '25B-NBF',
+  '25I-NBMD',
+  '4-AcO-DMT',
+  '4-CEC',
+  '4-CL-PVP',
+  '4-CPRC',
+  '4-FMC',
+  '3-FMC',
+  '3-FPM',
+  '4F-PV-9',
+  '5F-SGT-151',
+  '2-NMC',
+  '2,3-MDPV',
+  '1H-indol-3-yl',
+  '2-Chlorophenyl',
 ];
 
 export const primaryKeywords = [
@@ -63,10 +86,7 @@ export const secondaryKeywords = [
   'buy psychedelics online',
   'buy research chemicals online',
   'laboratory chemicals',
-  'laboratory grade compounds',
-  'reference materials',
   'high purity compounds',
-  'analytical standards'
 ];
 
 export const allKeywords = [...primaryKeywords, ...secondaryKeywords];
@@ -81,7 +101,7 @@ export const getProductSchema = (product) => ({
   offers: {
     '@type': 'Offer',
     price: product.price,
-    priceCurrency: 'USD',
+    priceCurrency: 'EUR',
     availability: product.countInStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
   },
   aggregateRating: product.rating ? {
@@ -101,7 +121,7 @@ export const getOrganizationSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'ChemicalsSite',
-  description: 'Supplier of high-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research, including testosterone enanthate, trenbolone acetate, nandrolone decanoate, oxandrolone, 1P-LSD, 4-ACO-DMT, mescaline HCl, 2C-B, 3-MMC, 3-CMC and 2-FDCK',
+  description: 'Supplier of anabolic steroids, psychedelic drugs and research chemicals — Dianabol, Winstrol, Anadrol-50, 1P-LSD, DMT, MDMA, Ketamine, Golden Teacher Mushrooms, 4-MMC, 3-MMC, 2C-B, Crystal Meth, A-PVP and more.',
   url: getBaseUrl(),
 });
 
@@ -110,7 +130,7 @@ export const getWebsiteSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'ChemicalsSite',
-  description: 'High-purity anabolic steroids, psychedelic drugs and research chemicals for laboratory research, assayed and documented batch by batch',
+  description: 'Anabolic steroids, psychedelic drugs and research chemicals — assayed and discreetly dispatched.',
   url: getBaseUrl(),
 });
 
@@ -120,30 +140,6 @@ export default function SEOKeywords() {
   
   return (
     <>
-      {/* Hidden keywords for SEO - not visible to users */}
-      <div className="hidden" aria-hidden="true">
-        <h2>Anabolic Steroids Available</h2>
-        <ul>
-          {anabolicSteroidKeywords.map((k) => (
-            <li key={k}>{k} - Anabolic steroid reference compound</li>
-          ))}
-        </ul>
-
-        <h2>Psychedelic Drugs Available</h2>
-        <ul>
-          {psychedelicKeywords.map((k) => (
-            <li key={k}>{k} - Psychedelic research compound</li>
-          ))}
-        </ul>
-
-        <h2>Research Chemicals Available</h2>
-        <ul>
-          {researchChemicalKeywords.map((k) => (
-            <li key={k}>{k} - Laboratory research chemical</li>
-          ))}
-        </ul>
-      </div>
-
       {/* Schema.org structured data */}
       <script
         type="application/ld+json"

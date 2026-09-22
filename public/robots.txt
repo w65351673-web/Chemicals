@@ -1,5 +1,5 @@
-# robots.txt for DarkChemSite
-# Research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca, 
+# robots.txt for ChemicalsSite
+# Research chemicals: 5cl-adba, 5cladba, 5fadb, jwh-018, adb-butinaca, ab-pinaca,
 # 5F-EDMB-PINACA, ADB-FUBINACA, 4FADB, AMB-FUBINACA, MDMB-4en-PINACA
 
 User-agent: *
@@ -30,4 +30,4 @@ Disallow: /account/*
 Disallow: /auth/
 Disallow: /auth/*
 
-Sitemap: https://darkchemsite.com/sitemap.xml
+Sitemap: https://chemicalssite.com/sitemap.xml

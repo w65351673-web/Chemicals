@@ -37,6 +37,7 @@ const products = [
   { slug: '4-fmc', url: 'https://www.neochems.com/product/4-fmc-online10g/' },
   { slug: '4f-pv-9', url: 'https://www.neochems.com/product/4f-pv-9/' },
   { slug: '5f-sgt-151', url: 'https://www.neochems.com/product/5f-sgt-151/' },
+  { slug: 'mdphp', url: 'https://www.neochems.com/product/mdphp/' },
 ];
 
 async function downloadImage(imageUrl, filePath) {

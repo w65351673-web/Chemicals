@@ -12,6 +12,7 @@ export async function sendOrderEmail({
   buyer,
   shipping,
   paymentMethod,
+  orderChannel = 'email',
   items,
   totals,
   notes,
@@ -45,6 +46,7 @@ BUYER INFORMATION
 Name: ${buyer.fullName}
 Email: ${buyer.email}
 Phone: ${buyer.phone || 'Not provided'}
+Preferred Contact: ${orderChannel}
 
 SHIPPING ADDRESS
 ----------------
@@ -156,7 +158,8 @@ ${notes || 'No additional notes'}
                     <p style="margin:4px 0;font-size:14px;color:#4a4540;">
                       <a href="mailto:${buyer.email}" style="color:#C8A97E;text-decoration:none;">${buyer.email}</a>
                     </p>
-                    <p style="margin:0;font-size:14px;color:#4a4540;">${buyer.phone || 'No phone provided'}</p>
+                    <p style="margin:4px 0;font-size:14px;color:#4a4540;">${buyer.phone || 'No phone provided'}</p>
+                    <p style="margin:0;font-size:14px;color:#4a4540;">Contact: <span style="text-transform:capitalize;">${orderChannel}</span></p>
                   </td>
                   <td width="50%" style="vertical-align:top;padding-left:16px;">
                     <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#C8A97E;font-weight:600;">Ship To</p>

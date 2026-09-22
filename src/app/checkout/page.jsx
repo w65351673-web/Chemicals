@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { useCart } from '@/components/cart/CartProvider';
 import OrderSummary from '@/components/checkout/OrderSummary';
-import { FaLock, FaEnvelope, FaArrowLeft } from 'react-icons/fa';
+import { FaLock, FaEnvelope, FaWhatsapp, FaTelegram, FaArrowLeft } from 'react-icons/fa';
 
 function generateOrderRef() {
   return 'ORD-' + Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -33,6 +33,7 @@ export default function CheckoutPage() {
     postalCode: '',
     country: '',
     paymentMethod: 'bitcoin',
+    orderChannel: 'email',
     notes: '',
   });
   const [errors, setErrors] = useState({});
@@ -113,6 +114,7 @@ export default function CheckoutPage() {
             country: form.country,
           },
           paymentMethod: form.paymentMethod,
+          orderChannel: form.orderChannel,
           items: cart.map((item) => ({
             name: item.name,
             quantity: item.quantity,
@@ -127,6 +129,10 @@ export default function CheckoutPage() {
 
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong while sending the order.');
+      }
+
+      if (form.orderChannel === 'whatsapp' || form.orderChannel === 'telegram') {
+        openChatOrder(orderRef);
       }
 
       router.push(`/checkout/success?order=${orderRef}`);
@@ -151,6 +157,59 @@ export default function CheckoutPage() {
   const inputClass = (field) =>
     `w-full bg-bone border ${errors[field] ? 'border-red-400' : 'border-ink/10'} rounded-editorial px-4 py-3 text-ink placeholder:text-ink-faint focus:outline-none focus:border-amber transition-colors`;
 
+  const buildOrderMessage = (orderRef) => {
+    const itemLines = cart
+      .map((item, i) => `${i + 1}. ${item.name} x${item.quantity} — €${item.price.toFixed(2)}`)
+      .join('\n');
+
+    return [
+      `New Order: ${orderRef}`,
+      '',
+      `Name: ${form.fullName}`,
+      `Email: ${form.email}`,
+      `Phone: ${form.phone || 'N/A'}`,
+      '',
+      'Shipping Address:',
+      form.street,
+      `${form.city}, ${form.postalCode}`,
+      form.country,
+      '',
+      'Items:',
+      itemLines,
+      '',
+      `Subtotal: €${orderDetails.subtotal.toFixed(2)}`,
+      `Shipping: €${orderDetails.shipping.toFixed(2)}`,
+      `Total: €${orderDetails.total.toFixed(2)}`,
+      '',
+      `Payment: ${form.paymentMethod}`,
+      form.notes ? `Notes: ${form.notes}` : '',
+    ].join('\n');
+  };
+
+  const openChatOrder = (orderRef) => {
+    const message = encodeURIComponent(buildOrderMessage(orderRef));
+    const url =
+      form.orderChannel === 'whatsapp'
+        ? `https://wa.me/19062613088?text=${message}`
+        : `https://t.me/+19102279379`;
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const channelLabel = (channel) => {
+    switch (channel) {
+      case 'whatsapp': return 'WhatsApp';
+      case 'telegram': return 'Telegram';
+      default: return 'Email';
+    }
+  };
+
+  const channelDescription = {
+    email: "We'll email the order details to our team and reply with payment instructions.",
+    whatsapp: "We'll open WhatsApp with your order details pre-filled. Send the message to confirm.",
+    telegram: "We'll open Telegram so you can send your order details directly.",
+  };
+
   return (
     <div className="min-h-screen bg-bone pt-24 pb-16">
       <div className="container-editorial">
@@ -168,15 +227,31 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-bone-light border border-ink/10 rounded-editorial shadow-editorial p-6 lg:p-8">
-              <div className="flex items-start mb-6">
-                <div className="bg-amber-wash border border-amber/20 rounded-editorial p-4 flex-1">
-                  <h3 className="text-amber-dark font-medium text-base mb-1 flex items-center">
-                    <FaEnvelope className="mr-2" />
-                    Order by email
-                  </h3>
-                  <p className="text-ink-soft text-sm">
-                    Fill in your details below. We'll email the order details to our team and reply with payment and shipping instructions.
-                  </p>
+              <div className="bg-amber-wash border border-amber/20 rounded-editorial p-4 mb-6">
+                <h3 className="text-amber-dark font-medium text-base mb-1">
+                  How would you like to send your order?
+                </h3>
+                <p className="text-ink-soft text-sm mb-4">
+                  {channelDescription[form.orderChannel]}
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {['email', 'whatsapp', 'telegram'].map((channel) => (
+                    <button
+                      key={channel}
+                      type="button"
+                      onClick={() => setForm((prev) => ({ ...prev, orderChannel: channel }))}
+                      className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
+                        form.orderChannel === channel
+                          ? 'bg-ink text-bone-light border-ink'
+                          : 'bg-bone text-ink border-ink/10 hover:border-amber'
+                      }`}
+                    >
+                      {channel === 'email' && <FaEnvelope />}
+                      {channel === 'whatsapp' && <FaWhatsapp />}
+                      {channel === 'telegram' && <FaTelegram />}
+                      {channelLabel(channel)}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -354,7 +429,7 @@ export default function CheckoutPage() {
                     disabled={submitting}
                     className="btn-primary w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {submitting ? 'Sending...' : 'Send Order Request'}
+                    {submitting ? 'Sending...' : form.orderChannel === 'email' ? 'Send Order Request' : `Open ${channelLabel(form.orderChannel)}`}
                   </button>
                 </div>
               </form>
@@ -367,9 +442,19 @@ export default function CheckoutPage() {
             <div className="mt-6 bg-bone-light border border-ink/10 rounded-editorial shadow-editorial p-6">
               <h3 className="text-lg font-serif font-medium text-ink mb-4">What happens next?</h3>
               <ol className="space-y-3 text-sm text-ink-muted list-decimal list-inside">
-                <li>We receive your order request by email.</li>
-                <li>We reply with a Bitcoin wallet address and the exact amount.</li>
-                <li>Once your Bitcoin payment is confirmed, your order ships.</li>
+                {form.orderChannel === 'email' ? (
+                  <>
+                    <li>We receive your order request by email.</li>
+                    <li>We reply with a Bitcoin wallet address and the exact amount.</li>
+                    <li>Once your Bitcoin payment is confirmed, your order ships.</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Your order details are opened in {channelLabel(form.orderChannel)}.</li>
+                    <li>Send the pre-filled message to confirm your order.</li>
+                    <li>We reply with a Bitcoin wallet address and shipping details.</li>
+                  </>
+                )}
               </ol>
             </div>
           </div>

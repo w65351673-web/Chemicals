@@ -4,7 +4,7 @@ export default function WhatsAppButton() {
   const whatsappNumber = '19062613088'; // Your WhatsApp number
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
   const emailAddress = 'info@chemicalssite.com';
-  const telegramUrl = 'https://t.me/chemicalssite'; // Update with your Telegram username or group link
+  const telegramUrl = 'https://t.me/+19102279379'; // Telegram chat via phone number
 
   return (
     <div className="fixed left-6 bottom-6 z-40 flex flex-col gap-3 items-start">

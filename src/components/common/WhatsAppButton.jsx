@@ -1,7 +1,7 @@
 import { FaWhatsapp, FaEnvelope, FaTelegram } from 'react-icons/fa';
 
 export default function WhatsAppButton() {
-  const whatsappNumber = '19852913802'; // Your WhatsApp number
+  const whatsappNumber = '19062613088'; // Your WhatsApp number
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
   const emailAddress = 'info@chemicalssite.com';
   const telegramUrl = 'https://t.me/chemicalssite'; // Update with your Telegram username or group link
